@@ -3,7 +3,7 @@ Contributors: naifamoodi
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.5.2
 Tested up to: 3.5.2
-Stable tag: trunk
+Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

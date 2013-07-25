@@ -34,8 +34,8 @@ Currently the following types of fields are supported:
 * Checkbox
 * Radio
 * Select
-* Select_Posts - A select box containing posts of type post, page, attachments or any custom post type
-* Select_Terms - A select box contain terms from taxonomies like tags, categories or some custom taxonomy
+* Select_Posts - A select box which can contain posts of type post, page, attachments or any other custom post type
+* Select_Terms - A select box which can contain terms from taxonomies like tags, categories or some custom taxonomy
 * Editor - A WYSIWYG editor
 
 Most fields including the Group field can be made repeatable.

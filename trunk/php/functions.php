@@ -13,17 +13,17 @@ if(!function_exists('ff_create_section')) {
 		$uid = trim($uid);
 	
 		if(empty($uid)) {
-			trigger_error(__('Empty Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Empty Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 	
 		if(array_key_exists($uid, FF_Registry::$sections)) {
-			trigger_error(__('Duplicate Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Duplicate Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 	
 		$type = trim($type);
 	
 		if(empty($type)) {
-			trigger_error(__('Empty Section Type', 'ff'), E_USER_ERROR);
+			trigger_error(__('Empty Section Type', 'fields-framework'), E_USER_ERROR);
 		}
 
 		if($type == 'admin_menu' || $type == 'admin_sub_menu') {
@@ -39,7 +39,7 @@ if(!function_exists('ff_create_section')) {
 			$section = new $class_name($arguments);
 		}
 		else {
-			trigger_error(__('Invalid Section Type', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Section Type', 'fields-framework'), E_USER_ERROR);
 		}
 	
 		/* Add this to the Registry so that it can later be referenced */
@@ -58,11 +58,11 @@ if(!function_exists('ff_create_field')) {
 		$uid = trim($uid);
 	
 		if(empty($uid)) {
-			trigger_error(__('Empty Field UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Empty Field UID', 'fields-framework'), E_USER_ERROR);
 		}
 	
 		if(array_key_exists($uid, FF_Registry::$fields)) {
-			trigger_error(__('Duplicate Field UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Duplicate Field UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		$arguments['name'] = $uid;
@@ -70,7 +70,7 @@ if(!function_exists('ff_create_field')) {
 		$type = trim($type);
 	
 		if(empty($type)) {
-			trigger_error(__('Empty Section Type', 'ff'), E_USER_ERROR);
+			trigger_error(__('Empty Section Type', 'fields-framework'), E_USER_ERROR);
 		}
 
 		$class_name = "FF_Field_{$type}";
@@ -79,7 +79,7 @@ if(!function_exists('ff_create_field')) {
 			$field = new $class_name($arguments);
 		}
 		else {
-			trigger_error(__('Invalid Field Type', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Field Type', 'fields-framework'), E_USER_ERROR);
 		}
 		
 		/* Add this to the Registry so that it can later be referenced */
@@ -90,11 +90,11 @@ if(!function_exists('ff_create_field')) {
 if(!function_exists('ff_add_field_to_section')) {
 	function ff_add_field_to_section($section_uid, $field_uid) {
 		if(empty(FF_Registry::$sections[$section_uid])) {
-			trigger_error(__('Invalid Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 		
 		if(empty(FF_Registry::$fields[$field_uid])) {
-			trigger_error(__('Invalid Field UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Field UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		FF_Registry::$fields_by_sections[$section_uid][$field_uid] = FF_Registry::$fields[$field_uid];
@@ -104,11 +104,11 @@ if(!function_exists('ff_add_field_to_section')) {
 if(!function_exists('ff_add_field_to_field_group')) {
 	function ff_add_field_to_field_group($field_group_uid, $field_uid) {
 		if(empty(FF_Registry::$fields[$field_group_uid])) {
-			trigger_error(__('Invalid Field Group UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Field Group UID', 'fields-framework'), E_USER_ERROR);
 		}
 		
 		if(empty(FF_Registry::$fields[$field_uid])) {
-			trigger_error(__('Invalid Field UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Field UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		FF_Registry::$fields[$field_group_uid]->add_field(FF_Registry::$fields[$field_uid]);
@@ -220,7 +220,7 @@ if(!function_exists('ff_admin_section')) {
 		echo '<div class="wrap">';
 
 		if(!empty($_GET['ff-updated'])) {
-			echo '<div class="updated fade"><p>' . __('Settings saved.', 'ff') . '</p></div>';
+			echo '<div class="updated fade"><p>' . __('Settings saved.', 'fields-framework') . '</p></div>';
 		}
 
 		echo "<h2>{$section->page_title}</h2>";
@@ -400,15 +400,15 @@ if(!function_exists('ff_delete_term')) {
 if(!function_exists('ff_get_field_from_section')) {
 	function ff_get_field_from_section($section_uid, $field_uid, $source, $source_type = null, $object_id = null) {
 		if(empty(FF_Registry::$sections[$section_uid])) {
-			trigger_error(__('Invalid Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 		
 		if(empty(FF_Registry::$fields[$field_uid])) {
-			trigger_error(__('Invalid Field UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Field UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		if(empty(FF_Registry::$fields_by_sections[$section_uid][$field_uid])) {
-			trigger_error(__('Field UID does not exist in Section specified by Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Field UID does not exist in Section specified by Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		$field = FF_Registry::$fields_by_sections[$section_uid][$field_uid];
@@ -432,11 +432,11 @@ if(!function_exists('ff_get_field_from_section')) {
 if(!function_exists('ff_get_all_fields_from_section')) {
 	function ff_get_all_fields_from_section($section_uid, $source, $source_type = null, $object_id = null) {
 		if(empty(FF_Registry::$sections[$section_uid])) {
-			trigger_error(__('Invalid Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('Invalid Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		if(empty(FF_Registry::$fields_by_sections[$section_uid])) {
-			trigger_error(__('No Fields exist in Section specified by Section UID', 'ff'), E_USER_ERROR);
+			trigger_error(__('No Fields exist in Section specified by Section UID', 'fields-framework'), E_USER_ERROR);
 		}
 
 		$values = null;

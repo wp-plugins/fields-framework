@@ -35,7 +35,7 @@ if(!class_exists('FF_Taxonomy')) {
 
 			/* Atleast one taxonomy must be supplied */
 			if(empty($this->taxonomies)) {
-				trigger_error(__('Empty Taxonomies', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Taxonomies', 'fields-framework'), E_USER_ERROR);
 			}
 		}
 	}
@@ -68,12 +68,12 @@ if(!class_exists('FF_Post')) {
 
 			/* Post Types is required */
 			if(empty($this->post_types)) {
-				trigger_error(__('Empty Post Types', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Post Types', 'fields-framework'), E_USER_ERROR);
 			}
 
 			/* Title is required */
 			if(empty($this->title)) {
-				trigger_error(__('Empty Meta Section Title', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Meta Section Title', 'fields-framework'), E_USER_ERROR);
 			}
 		}
 	}
@@ -99,12 +99,12 @@ if(!class_exists('FF_Admin_Menu')) {
 	
 			/* Page Title is required */
 			if(empty($this->page_title)) {
-				trigger_error(__('Empty Menu Section Page Title', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Menu Section Page Title', 'fields-framework'), E_USER_ERROR);
 			}
 	
 			/* Menu Title is required */
 			if(empty($this->menu_title)) {
-				trigger_error(__('Empty Menu Section Menu Title', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Menu Section Menu Title', 'fields-framework'), E_USER_ERROR);
 			}
 		}
 	}
@@ -130,17 +130,17 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 	
 			/* Parent UID is required */
 			if(empty($this->parent_uid)) {
-				trigger_error(__('Empty Sub Menu Section Parent UID', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Sub Menu Section Parent UID', 'fields-framework'), E_USER_ERROR);
 			}
 
 			/* Page Title is required */
 			if(empty($this->page_title)) {
-				trigger_error(__('Empty Sub Menu Section Page Title', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Sub Menu Section Page Title', 'fields-framework'), E_USER_ERROR);
 			}
 	
 			/* Menu Title is required */
 			if(empty($this->menu_title)) {
-				trigger_error(__('Empty Sub Menu Section Menu Title', 'ff'), E_USER_ERROR);
+				trigger_error(__('Empty Sub Menu Section Menu Title', 'fields-framework'), E_USER_ERROR);
 			}
 		}
 	}
@@ -195,7 +195,7 @@ if(!class_exists('FF_Field')) {
 				
 									<th>Field</th>
 				
-									<th><img src="<?php echo plugins_url('images/add.png', dirname(__FILE__)); ?>" class="ff-add-row" alt="<?php _e('Add Row', 'ff'); ?>" /></th>
+									<th><img src="<?php echo plugins_url('images/add.png', dirname(__FILE__)); ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
 								</tr>
 							</thead>
 							<?php endif; ?>
@@ -210,7 +210,7 @@ if(!class_exists('FF_Field')) {
 										$original_id = $this->id;
 										?>
 										<tr class="ff-add-template">
-											<th><img src="<?php echo plugins_url('images/move.png', dirname(__FILE__)); ?>" class="ff-move-row" alt="<?php _e('Move Row', 'ff'); ?>" /></th>
+											<th><img src="<?php echo plugins_url('images/move.png', dirname(__FILE__)); ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
 						
 											<td>
 											<?php
@@ -224,7 +224,7 @@ if(!class_exists('FF_Field')) {
 											?>
 											</td>
 			
-											<td><img src="<?php echo plugins_url('images/remove.png', dirname(__FILE__)); ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'ff'); ?>" /></td>
+											<td><img src="<?php echo plugins_url('images/remove.png', dirname(__FILE__)); ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
 										</tr>
 										<?php
 										$values = $saved_value;
@@ -236,7 +236,7 @@ if(!class_exists('FF_Field')) {
 										foreach($values as $value) {
 											?>
 											<tr>
-												<th><img src="<?php echo plugins_url('images/move.png', dirname(__FILE__)); ?>" class="ff-move-row" alt="<?php _e('Move Row', 'ff'); ?>" /></th>
+												<th><img src="<?php echo plugins_url('images/move.png', dirname(__FILE__)); ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
 	
 												<td>
 												<?php
@@ -250,7 +250,7 @@ if(!class_exists('FF_Field')) {
 												?>
 												</td>
 	
-												<td><img src="<?php echo plugins_url('images/remove.png', dirname(__FILE__)); ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'ff'); ?>" /></td>
+												<td><img src="<?php echo plugins_url('images/remove.png', dirname(__FILE__)); ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
 											</tr>
 											<?php
 										}
@@ -281,7 +281,7 @@ if(!class_exists('FF_Field')) {
 		abstract public function html($saved_value = null);
 
 		public function get_default($value) {
-			if(empty($value)) {
+			if(empty($value) && $value !== 0 && $value !== '0') {
 				$value = $this->value;
 			}
 
@@ -330,7 +330,7 @@ if(!class_exists('FF_Field')) {
 					$name = "ttid_{$object_id}_{$name}";
 				}
 
-				if(!empty($value)) {
+				if(!empty($value) || $value === 0 && $value === '0') {
 					update_option($name, $value);
 				}
 				else {
@@ -348,7 +348,7 @@ if(!class_exists('FF_Field')) {
 			if(isset($_POST[$name])) {
 				$value = ff_sanitize($_POST[$name]);
 			
-				if(!empty($value)) {
+				if(!empty($value) || $value === 0 && $value === '0') {
 					update_metadata($meta_type, $object_id, $name, $value);
 				}
 				else {
@@ -467,7 +467,7 @@ if(!class_exists('FF_Field_Media')) {
 		public function html($saved_value = null) {
 			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
 
-			echo '<input type="image" data-to="' . esc_attr($this->id) . '"' . (!empty($this->library) ? (' data-library="' . esc_attr(json_encode($this->library)) . '"') : null) . ' src="' . plugins_url('images/upload.png', dirname(__FILE__)) . '" alt="' . __('Upload', 'ff') . '" class="ff_upload_media" />';
+			echo '<p><img data-to="' . esc_attr($this->id) . '"' . (!empty($this->library) ? (' data-library="' . esc_attr(json_encode($this->library)) . '"') : null) . ' src="' . plugins_url('images/upload.png', dirname(__FILE__)) . '" alt="' . __('Upload', 'fields-framework') . '" class="ff_upload_media" /></p>';
 		}
 	}
 }
@@ -484,18 +484,36 @@ if(!class_exists('FF_Field_Textarea')) {
 
 if(!class_exists('FF_Field_Checkbox')) {
 	class FF_Field_Checkbox extends FF_Field {
-		protected $options = array(), $multiple = false;
+		protected $options = array(), $multiple = true;
 
 		public function html($saved_value = null) {
+			$name = $this->name;
+
 			if($this->multiple == true) {
-				$this->name .= '[]';
+				$name .= '[]';
 			}
 
 			$options = $this->options;
 
 			if(!empty($options)) {
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="checkbox" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $saved_value)) ? ' checked="checked"' : null) . '  /> ' . $option_value . '<br />';
+					echo '<input type="checkbox" name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $saved_value)) ? ' checked="checked"' : null) . '  /> ' . $option_value . '<br />';
+				}
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_Field_Radio')) {
+	class FF_Field_Radio extends FF_Field {
+		protected $options = array();
+
+		public function html($saved_value = null) {
+			$options = $this->options;
+
+			if(!empty($options)) {
+				foreach($options as $option_name => $option_value) {
+					echo '<input type="radio" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $saved_value)) ? ' checked="checked"' : null) . '  /> ' . $option_value . '<br />';
 				}
 			}
 		}
@@ -507,11 +525,13 @@ if(!class_exists('FF_Field_Select')) {
 		protected $options = array(), $multiple = false, $size = 5;
 
 		public function html($saved_value = null) {
+			$name = $this->name;
+
 			if($this->multiple == true) {
-				$this->name .= '[]';
+				$name .= '[]';
 			}
 
-			echo '<select name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" class="' . esc_attr($this->class) . '"' . (($this->multiple == true) ? ' multiple="multiple" size="' . $this->size . '"' : null) . '>';
+			echo '<select name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '" class="' . esc_attr($this->class) . '"' . (($this->multiple == true) ? ' multiple="multiple" size="' . $this->size . '"' : null) . '>';
 
 			$options = $this->options;
 

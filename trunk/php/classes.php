@@ -70,12 +70,7 @@ if(!class_exists('FF_Post')) {
 			if(empty($this->post_types)) {
 				trigger_error(__('Empty Post Types', 'ff'), E_USER_ERROR);
 			}
-	
-			/* ID is required */
-			if(empty($this->id)) {
-				trigger_error(__('Empty Meta Section ID', 'ff'), E_USER_ERROR);
-			}
-	
+
 			/* Title is required */
 			if(empty($this->title)) {
 				trigger_error(__('Empty Meta Section Title', 'ff'), E_USER_ERROR);
@@ -86,7 +81,7 @@ if(!class_exists('FF_Post')) {
 
 if(!class_exists('FF_Admin_Menu')) {	
 	class FF_Admin_Menu extends FF_Section {
-		public $page_title, $menu_title, $capability = 'manage_options', $menu_slug, $icon_url, $position;
+		public $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
 		
 		public function __construct($arguments) {
 			$properties = get_class_vars(get_class($this));
@@ -111,18 +106,13 @@ if(!class_exists('FF_Admin_Menu')) {
 			if(empty($this->menu_title)) {
 				trigger_error(__('Empty Menu Section Menu Title', 'ff'), E_USER_ERROR);
 			}
-
-			/* Menu Slug is required */
-			if(empty($this->menu_slug)) {
-				trigger_error(__('Empty Menu Section Menu Slug', 'ff'), E_USER_ERROR);
-			}
 		}
 	}
 }
 
 if(!class_exists('FF_Admin_Sub_Menu')) {
 	class FF_Admin_Sub_Menu extends FF_Section {
-		public $menu_slug, $parent_slug, $page_title, $menu_title, $capability = 'manage_options';
+		public $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
 	
 		public function __construct($arguments) {
 			$properties = get_class_vars(get_class($this));
@@ -138,9 +128,9 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 				}
 			}
 	
-			/* Parent Slug is required */
-			if(empty($this->parent_slug)) {
-				trigger_error(__('Empty Sub Menu Section Parent Slug', 'ff'), E_USER_ERROR);
+			/* Parent UID is required */
+			if(empty($this->parent_uid)) {
+				trigger_error(__('Empty Sub Menu Section Parent UID', 'ff'), E_USER_ERROR);
 			}
 
 			/* Page Title is required */
@@ -151,11 +141,6 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 			/* Menu Title is required */
 			if(empty($this->menu_title)) {
 				trigger_error(__('Empty Sub Menu Section Menu Title', 'ff'), E_USER_ERROR);
-			}
-			
-			/* Menu Slug is required */
-			if(empty($this->menu_slug)) {
-				trigger_error(__('Empty Menu Section Menu Slug', 'ff'), E_USER_ERROR);
 			}
 		}
 	}
@@ -179,14 +164,10 @@ if(!class_exists('FF_Field')) {
 				}
 			}
 
-			if(empty($this->name)) {
-				trigger_error(__('Empty Field Name', 'ff'), E_USER_ERROR);
-			}
-
 			if(empty($this->id)) {
 				$this->id = $this->name;
 			}
-	
+
 			if($this->repeatable == true) {
 				add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));		
 			}
@@ -198,7 +179,7 @@ if(!class_exists('FF_Field')) {
 			wp_enqueue_script('ff-dynotable', plugins_url('js/jquery.dynotable.js', dirname(__FILE__)));
 		}
 	
-		public function container() {
+		public function container($saved_value = null) {
 			?>
 			<div class="ff-fields">
 				<table>
@@ -223,9 +204,7 @@ if(!class_exists('FF_Field')) {
 								<?php
 									if($this->repeatable == true) {
 										$i = 0;
-	
-										$original_value = $this->value;
-	
+
 										$original_name = $this->name;
 	
 										$original_id = $this->id;
@@ -235,25 +214,23 @@ if(!class_exists('FF_Field')) {
 						
 											<td>
 											<?php
-												$this->value = null;
-			
 												$this->name = "{$original_name}[{$i}]";
 	
 												$this->id = "{$original_id}[{$i}]";
 	
 												$i++;
-	
-												$this->html();
+
+												$this->html($this->value);
 											?>
 											</td>
 			
 											<td><img src="<?php echo plugins_url('images/remove.png', dirname(__FILE__)); ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'ff'); ?>" /></td>
 										</tr>
 										<?php
-										$values = (array) $original_value;
-				
+										$values = $saved_value;
+
 										if(empty($values)) {
-											$values[] = null;
+											$values[] = $this->value;
 										}
 				
 										foreach($values as $value) {
@@ -263,15 +240,13 @@ if(!class_exists('FF_Field')) {
 	
 												<td>
 												<?php
-													$this->value = $value;
-			
 													$this->name = "{$original_name}[{$i}]";
 			
 													$this->id = "{$original_id}[{$i}]";
 	
 													$i++;
 	
-													$this->html();
+													$this->html($value);
 												?>
 												</td>
 	
@@ -279,9 +254,7 @@ if(!class_exists('FF_Field')) {
 											</tr>
 											<?php
 										}
-										
-										$this->value = $original_value;
-										
+
 										$this->name = $original_name;
 	
 										$this->id = $original_id;
@@ -289,7 +262,7 @@ if(!class_exists('FF_Field')) {
 									else {
 										echo '<tr><td>';
 	
-										$this->html();
+										$this->html($saved_value);
 				
 										echo '</td></tr>';
 									}
@@ -305,9 +278,21 @@ if(!class_exists('FF_Field')) {
 			<?php
 		}
 
-		abstract public function html();
-	
-		public function get_from_options($option_type = null, $object_id = null) {
+		abstract public function html($saved_value = null);
+
+		public function get_default($value) {
+			if(empty($value)) {
+				$value = $this->value;
+			}
+
+			if($this->repeatable == true && !is_array($value)) {
+				$value = (array) $value;
+			}
+
+			return $value;
+		}
+
+		public function get_from_options($option_type = null, $object_id = null, $load_default = false) {
 			$name = $this->name;
 	
 			if($option_type == 'taxonomy') {
@@ -315,26 +300,32 @@ if(!class_exists('FF_Field')) {
 			}
 	
 			$value = get_option($name, null);
-			
-			if(!empty($value)) {
-				$this->value = $value;
-			}
-		}
-	
-		public function get_from_meta($meta_type, $object_id) {
-			$value = get_metadata($meta_type, $object_id, $this->name, true);
 
-			if(!empty($value)) {
-				$this->value = $value;
+			if($load_default == true) {
+				$value = $this->get_default($value);
 			}
+
+			return $value;
 		}
 	
+		public function get_from_meta($meta_type, $object_id, $load_default = false) {
+			$name = $this->name;
+
+			$value = get_metadata($meta_type, $object_id, $name, true);
+
+			if($load_default == true) {
+				$value = $this->get_default($value);
+			}
+
+			return $value;
+		}
+
 		public function save_to_options($option_type = null, $object_id = null) {
 			$name = $this->name;
 
 			if(isset($_POST[$name])) {
 				$value = ff_sanitize($_POST[$name]);
-	
+
 				if($option_type == 'taxonomy') {
 					$name = "ttid_{$object_id}_{$name}";
 				}
@@ -383,25 +374,25 @@ if(!class_exists('FF_Field_Group')) {
 	class FF_Field_Group extends FF_Field {
 		protected $fields = array();
 
-		public function html() {
+		public function html($saved_value = null) {
 			$field_group_name = $this->name;
 
 			foreach($this->fields as $field) {
-				$original_field_value = $field->value;
-
 				$original_field_name = $field->name;
 
 				$original_field_id = $field->id;
 
-				$field->value = $this->value[$original_field_name];
+				$field_value = $saved_value[$original_field_name];
+
+				if($field->repeatable == true && !is_array($field_value)) {
+					$field_value = (array) $field_value;
+				}
 
 				$field->name = "{$field_group_name}[{$original_field_name}]";
 
 				$field->id = "{$field_group_name}[{$original_field_id}]";
 
-				$field->container();
-
-				$field->value = $original_field_value;
+				$field->container($field_value);
 
 				$field->name = $original_field_name;
 
@@ -419,8 +410,8 @@ if(!class_exists('FF_Field_Text')) {
 	class FF_Field_Text extends FF_Field {
 		protected $class = 'large-text';
 	
-		public function html() {
-			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+		public function html($saved_value = null) {
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
 		}
 	}
 }
@@ -429,8 +420,8 @@ if(!class_exists('FF_Field_URL')) {
 	class FF_Field_URL extends FF_Field {
 		protected $class = 'large-text';
 	
-		public function html() {
-			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_url($this->value) . '" class="' . esc_attr($this->class) . '" />';
+		public function html($saved_value = null) {
+			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_url($saved_value) . '" class="' . esc_attr($this->class) . '" />';
 		}
 	}
 }
@@ -439,20 +430,20 @@ if(!class_exists('FF_Field_Email')) {
 	class FF_Field_Email extends FF_Field {
 		protected $class = 'large-text';
 	
-		public function html() {
-			echo '<input type="email" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+		public function html($saved_value = null) {
+			echo '<input type="email" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
 		}
 	}
 }
 
 if(!class_exists('FF_Field_Hidden')) {
 	class FF_Field_Hidden extends FF_Field {
-		public function container() {
-			$this->html();
+		public function container($saved_value) {
+			$this->html($saved_value);
 		}
 		
-		public function html() {
-			echo '<input type="hidden" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($this->value) . '" />';
+		public function html($saved_value = null) {
+			echo '<input type="hidden" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($saved_value) . '" />';
 		}
 	}
 }
@@ -473,8 +464,8 @@ if(!class_exists('FF_Field_Media')) {
 			wp_enqueue_script('ff-media-uploader', plugins_url('js/media-uploader.js', dirname(__FILE__)));
 		}
 	
-		public function html() {
-			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+		public function html($saved_value = null) {
+			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
 
 			echo '<input type="image" data-to="' . esc_attr($this->id) . '"' . (!empty($this->library) ? (' data-library="' . esc_attr(json_encode($this->library)) . '"') : null) . ' src="' . plugins_url('images/upload.png', dirname(__FILE__)) . '" alt="' . __('Upload', 'ff') . '" class="ff_upload_media" />';
 		}
@@ -485,8 +476,8 @@ if(!class_exists('FF_Field_Textarea')) {
 	class FF_Field_Textarea extends FF_Field {
 		protected $class = 'large-text', $rows = 5, $cols = 50;
 
-		public function html() {
-			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>>';
+		public function html($saved_value = null) {
+			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($saved_value) . '</textarea>>';
 		}
 	}
 }
@@ -495,7 +486,7 @@ if(!class_exists('FF_Field_Checkbox')) {
 	class FF_Field_Checkbox extends FF_Field {
 		protected $options = array(), $multiple = false;
 
-		public function html() {
+		public function html($saved_value = null) {
 			if($this->multiple == true) {
 				$this->name .= '[]';
 			}
@@ -504,7 +495,7 @@ if(!class_exists('FF_Field_Checkbox')) {
 
 			if(!empty($options)) {
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="checkbox" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . '  /> ' . $option_value . '<br />';
+					echo '<input type="checkbox" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $saved_value)) ? ' checked="checked"' : null) . '  /> ' . $option_value . '<br />';
 				}
 			}
 		}
@@ -515,7 +506,7 @@ if(!class_exists('FF_Field_Select')) {
 	class FF_Field_Select extends FF_Field {
 		protected $options = array(), $multiple = false, $size = 5;
 
-		public function html() {
+		public function html($saved_value = null) {
 			if($this->multiple == true) {
 				$this->name .= '[]';
 			}
@@ -526,7 +517,7 @@ if(!class_exists('FF_Field_Select')) {
 
 			if(!empty($options)) {
 				foreach($options as $option_name => $option_value) {
-					echo '<option value="' . $option_name  . '"' . ((in_array($option_name, (array) $this->value)) ? ' selected="selected"' : null) . '>' . $option_value  . '</option>';
+					echo '<option value="' . $option_name  . '"' . ((in_array($option_name, (array) $saved_value)) ? ' selected="selected"' : null) . '>' . $option_value  . '</option>';
 				}
 			}
 
@@ -546,7 +537,7 @@ if(!class_exists('FF_Field_Editor')) {
 			$this->repeatable = false;
 		}
 
-		public function html() {
+		public function html($saved_value = null) {
 			$id = null;
 
 			for ($i = 0; $i < strlen($this->id); $i++)  {
@@ -573,7 +564,7 @@ if(!class_exists('FF_Field_Editor')) {
 				'quicktags' => $this->quicktags,
 			);
 
-			wp_editor($this->value, $this->id, $arguments);
+			wp_editor($saved_value, $this->id, $arguments);
 		}
 	}
 }

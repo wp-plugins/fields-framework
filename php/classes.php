@@ -35,7 +35,7 @@ if(!class_exists('FF_Taxonomy')) {
 
 			/* Atleast one taxonomy must be supplied */
 			if(empty($this->taxonomies)) {
-				trigger_error(__('Empty Taxonomies', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
 			}
 		}
 	}
@@ -50,7 +50,7 @@ if(!class_exists('FF_Post')) {
 	class FF_Post extends FF_Section {
 		public $id, $title, $context = 'advanced', $priority = 'default';
 		
-		public $post_types = array(), $page_templates = array();
+		public $post_types = array(), $page_templates = array(), $post_formats = array();
 	
 		public function __construct($arguments) {
 			$properties = get_class_vars(get_class($this));
@@ -68,12 +68,12 @@ if(!class_exists('FF_Post')) {
 
 			/* Post Types is required */
 			if(empty($this->post_types)) {
-				trigger_error(__('Empty Post Types', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
 			}
 
 			/* Title is required */
 			if(empty($this->title)) {
-				trigger_error(__('Empty Meta Section Title', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
 			}
 		}
 	}
@@ -96,15 +96,15 @@ if(!class_exists('FF_Admin_Menu')) {
 					}
 				}
 			}
-	
+
 			/* Page Title is required */
 			if(empty($this->page_title)) {
-				trigger_error(__('Empty Menu Section Page Title', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Menu Section Page Title', 'fields-framework'));
 			}
 	
 			/* Menu Title is required */
 			if(empty($this->menu_title)) {
-				trigger_error(__('Empty Menu Section Menu Title', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Menu Section Menu Title', 'fields-framework'));
 			}
 		}
 	}
@@ -127,20 +127,20 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 					}
 				}
 			}
-	
+
 			/* Parent UID is required */
 			if(empty($this->parent_uid)) {
-				trigger_error(__('Empty Sub Menu Section Parent UID', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Sub Menu Section Parent UID', 'fields-framework'));
 			}
 
 			/* Page Title is required */
 			if(empty($this->page_title)) {
-				trigger_error(__('Empty Sub Menu Section Page Title', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Sub Menu Section Page Title', 'fields-framework'));
 			}
 	
 			/* Menu Title is required */
 			if(empty($this->menu_title)) {
-				trigger_error(__('Empty Sub Menu Section Menu Title', 'fields-framework'), E_USER_ERROR);
+				ff_throw_exception(__('Empty Sub Menu Section Menu Title', 'fields-framework'));
 			}
 		}
 	}
@@ -390,7 +390,7 @@ if(!class_exists('FF_Field_Group')) {
 
 				$field->name = "{$field_group_name}[{$original_field_name}]";
 
-				$field->id = "{$field_group_name}[{$original_field_id}]";
+				$field->id = "{$field_group_name}-{$original_field_id}";
 
 				$field->container($field_value);
 
@@ -542,6 +542,55 @@ if(!class_exists('FF_Field_Select')) {
 			}
 
 			echo '</select>';
+		}
+	}
+}
+
+if(!class_exists('FF_Field_Select_Posts')) {
+	class FF_Field_Select_Posts extends FF_Field_Select {
+		protected $query_parameters = array();
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			$posts = get_posts($this->query_parameters);
+
+			if(empty($posts)) {
+				return;
+			}
+
+			foreach($posts as $post) {
+				$this->options[$post->ID] = $post->post_title;
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_Field_Select_Terms')) {
+	class FF_Field_Select_Terms extends FF_Field_Select {
+		protected $taxonomies, $parameters = array();
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Atleast one taxonomy must be supplied */
+			if(empty($this->taxonomies)) {
+				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
+			}
+
+			$terms = get_terms($this->taxonomies, $this->parameters);
+
+			if(empty($terms)) {
+				return;
+			}
+
+			if(is_wp_error($terms)) {
+				ff_throw_exception(__('One of the Specified Taxonomy is not valid', 'fields-framework'));
+			}
+
+			foreach($terms as $term) {
+				$this->options[$term->term_id] = $term->name;
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@ Contributors: naifamoodi
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.3
+Stable tag: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,26 +24,21 @@ This includes the ability of adding fields to:
 
 Currently the following types of fields are supported:
 
+* **Group** - A group of fields
 * Text Field
 * URL Field
 * Email Field
 * Hidden Field
-* Media Field (let's you upload an attachment or enter a custom URL. You can use this field for uploading of any type of file)
+* Media Field - Let's you upload an attachment or enter a custom URL. You can use this field for uploading of any type of file
 * Textarea
 * Checkbox
 * Radio
 * Select
-* Editor (A WYSIWYG editor)
+* Select_Posts - A select box containing posts of type post, page, attachments or any custom post type
+* Select_Terms - A select box contain terms from taxonomies like tags, categories or some custom taxonomy
+* Editor - A WYSIWYG editor
 
-Another special field type is a Group field which let's you basically create a group of fields.
-
-Most fields including the Group field can be made repeatable
-
-= Coming Soon =
-
-A future release will also feature the following fields:
-
-* Select Dropdown which let's you select post type entries and taxonomy terms
+Most fields including the Group field can be made repeatable.
 
 == Installation ==
 
@@ -55,7 +50,7 @@ A future release will also feature the following fields:
 
 = Where is the documentation for this plugin located? =
 
-[@Rhyzz](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
+[WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
 == Screenshots ==
 
@@ -66,6 +61,10 @@ A future release will also feature the following fields:
 5. User Profile Page
 
 == Changelog ==
+
+= 0.4 =
+* Added support for displaying of fields conditionally depending on post format or page template
+* Error are now thrown as Exceptions instead of using trigger_error. This will help developers pin out the exact location which caused an error
 
 = 0.3 =
 * Added new Radio field

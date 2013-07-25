@@ -1,9 +1,9 @@
 === Fields Framework ===
 Contributors: naifamoodi
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
-Requires at least: 3.5.2
+Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.1.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,9 +28,10 @@ Currently the following types of fields are supported:
 * URL Field
 * Email Field
 * Hidden Field
-* Media Field (let's you upload an attachment or enter a custom URL)
+* Media Field (let's you upload an attachment or enter a custom URL. You can use this field for uploading of any type of file)
 * Textarea
 * Checkbox
+* Radio
 * Select
 * Editor (A WYSIWYG editor)
 
@@ -42,7 +43,6 @@ Most fields including the Group field can be made repeatable
 
 A future release will also feature the following fields:
 
-* Radio
 * Select Dropdown which let's you select post type entries and taxonomy terms
 
 == Installation ==
@@ -66,6 +66,13 @@ A future release will also feature the following fields:
 5. User Profile Page
 
 == Changelog ==
+
+= 0.3 =
+* Added new Radio field
+
+= 0.2 =
+* Added 3 functions to be used on the frontend to retrieve a particular field or all fields from a certain section. Refer to the documentation for more information
+* Took care of some refactoring of code
 
 = 0.1 =
 * Initial release

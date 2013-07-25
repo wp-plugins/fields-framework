@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Fields Framework\n"
+"POT-Creation-Date: 2013-07-24 06:40+0530\n"
+"PO-Revision-Date: 2013-07-24 06:40+0530\n"
+"Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
+"Language-Team: Rhyzz <support@rhyzz.com>\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../php/classes.php:38
+msgid "Empty Taxonomies"
+msgstr ""
+
+#: ../php/classes.php:71
+msgid "Empty Post Types"
+msgstr ""
+
+#: ../php/classes.php:76
+msgid "Empty Meta Section ID"
+msgstr ""
+
+#: ../php/classes.php:81
+msgid "Empty Meta Section Title"
+msgstr ""
+
+#: ../php/classes.php:107
+msgid "Empty Menu Section Page Title"
+msgstr ""
+
+#: ../php/classes.php:112
+msgid "Empty Menu Section Menu Title"
+msgstr ""
+
+#: ../php/classes.php:117 ../php/classes.php:158
+msgid "Empty Menu Section Menu Slug"
+msgstr ""
+
+#: ../php/classes.php:143
+msgid "Empty Sub Menu Section Parent Slug"
+msgstr ""
+
+#: ../php/classes.php:148
+msgid "Empty Sub Menu Section Page Title"
+msgstr ""
+
+#: ../php/classes.php:153
+msgid "Empty Sub Menu Section Menu Title"
+msgstr ""
+
+#: ../php/classes.php:183
+msgid "Empty Field Name"
+msgstr ""
+
+#: ../php/classes.php:217
+msgid "Add Row"
+msgstr ""
+
+#: ../php/classes.php:234 ../php/classes.php:262
+msgid "Move Row"
+msgstr ""
+
+#: ../php/classes.php:250 ../php/classes.php:278
+msgid "Remove Row"
+msgstr ""
+
+#: ../php/classes.php:479
+msgid "Upload"
+msgstr ""
+
+#: ../php/functions.php:16
+msgid "Empty Section UID"
+msgstr ""
+
+#: ../php/functions.php:20
+msgid "Duplicate Section UID"
+msgstr ""
+
+#: ../php/functions.php:26 ../php/functions.php:74
+msgid "Empty Section Type"
+msgstr ""
+
+#: ../php/functions.php:41
+msgid "Invalid Section Type"
+msgstr ""
+
+#: ../php/functions.php:60
+msgid "Empty Field UID"
+msgstr ""
+
+#: ../php/functions.php:64
+msgid "Duplicate Field UID"
+msgstr ""
+
+#: ../php/functions.php:83
+msgid "Invalid Field Type"
+msgstr ""
+
+#: ../php/functions.php:218
+msgid "Settings saved."
+msgstr ""

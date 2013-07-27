@@ -3,7 +3,7 @@
 Plugin Name: Fields Framework
 Plugin URI: http://www.rhyzz.com/fields-framework.html
 Description: A framework which can be used by developers to add fields to various sections of the administration panel.
-Version: 0.51
+Version: 0.53
 Author: Naif Amoodi
 Author URI: http://www.rhyzz.com/
 */

@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.5
+Stable tag: 0.52
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,7 @@ Most fields including the Group field can be made repeatable.
 
 == Changelog ==
 
-= 0.5 =
+= 0.52 =
 * Added new DateTime field
 * Fixed few bugs pertaining to a variable not set warning
 * Added new Select Field for displaying a list of Posts or Terms

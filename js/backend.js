@@ -1,7 +1,15 @@
 jQuery(function() {
+	if(jQuery.ui.timepicker !== undefined) {
+		jQuery('.ff-datetime').each(function() {
+			jQuery(this).datetimepicker({dateFormat: jQuery(this).data('date-format'), timeFormat: jQuery(this).data('time-format')});
+		});
+	}
+
 	jQuery('.ff-repeatable').each(function() {
 		ff_repeatable(this);
 	});
+
+	jQuery('input, textarea').placeholder();
 });
 
 function ff_repeatable(ff_table) {

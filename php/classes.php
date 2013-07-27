@@ -12,13 +12,6 @@ if(!class_exists('FF_Registry')) {
 
 if(!class_exists('FF_Section')) {
 	abstract class FF_Section {
-	}
-}
-
-if(!class_exists('FF_Taxonomy')) {
-	class FF_Taxonomy extends FF_Section {
-		public $taxonomies;
-	
 		public function __construct($arguments) {
 			$properties = get_class_vars(get_class($this));
 
@@ -32,6 +25,16 @@ if(!class_exists('FF_Taxonomy')) {
 					}
 				}
 			}
+		}
+	}
+}
+
+if(!class_exists('FF_Taxonomy')) {
+	class FF_Taxonomy extends FF_Section {
+		public $taxonomies;
+	
+		public function __construct($arguments) {
+			parent::__construct($arguments);
 
 			/* Atleast one taxonomy must be supplied */
 			if(empty($this->taxonomies)) {
@@ -53,18 +56,7 @@ if(!class_exists('FF_Post')) {
 		public $post_types = array(), $page_templates = array(), $post_formats = array();
 	
 		public function __construct($arguments) {
-			$properties = get_class_vars(get_class($this));
-
-			foreach($properties as $property_name => $property_value) {
-				if(isset($arguments[$property_name])) {
-					if(is_array($arguments[$property_name])) {
-						$this->$property_name = $arguments[$property_name];
-					}
-					else {
-						$this->$property_name = trim($arguments[$property_name]);
-					}
-				}
-			}
+			parent::__construct($arguments);
 
 			/* Post Types is required */
 			if(empty($this->post_types)) {
@@ -84,18 +76,7 @@ if(!class_exists('FF_Admin_Menu')) {
 		public $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
 		
 		public function __construct($arguments) {
-			$properties = get_class_vars(get_class($this));
-
-			foreach($properties as $property_name => $property_value) {
-				if(isset($arguments[$property_name])) {
-					if(is_array($arguments[$property_name])) {
-						$this->$property_name = $arguments[$property_name];
-					}
-					else {
-						$this->$property_name = trim($arguments[$property_name]);
-					}
-				}
-			}
+			parent::__construct($arguments);
 
 			/* Page Title is required */
 			if(empty($this->page_title)) {
@@ -115,18 +96,7 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 		public $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
 	
 		public function __construct($arguments) {
-			$properties = get_class_vars(get_class($this));
-
-			foreach($properties as $property_name => $property_value) {
-				if(isset($arguments[$property_name])) {
-					if(is_array($arguments[$property_name])) {
-						$this->$property_name = $arguments[$property_name];
-					}
-					else {
-						$this->$property_name = trim($arguments[$property_name]);
-					}
-				}
-			}
+			parent::__construct($arguments);
 
 			/* Parent UID is required */
 			if(empty($this->parent_uid)) {
@@ -173,10 +143,8 @@ if(!class_exists('FF_Field')) {
 			}
 		}
 	
-		public function admin_enqueue_scripts() {
-			wp_enqueue_script('jquery-ui-sortable');
-	
-			wp_enqueue_script('ff-dynotable', plugins_url('js/jquery.dynotable.js', dirname(__FILE__)));
+		public function admin_enqueue_scripts() {	
+			wp_enqueue_script('ff-dynotable', plugins_url('js/jquery.dynotable.js', dirname(__FILE__)), array('jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-mouse', 'jquery-ui-sortable'));
 		}
 	
 		public function container($saved_value = null) {
@@ -412,6 +380,26 @@ if(!class_exists('FF_Field_Text')) {
 	
 		public function html($saved_value = null) {
 			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
+		}
+	}
+}
+
+if(!class_exists('FF_Field_DateTime')) {
+	class FF_Field_DateTime extends FF_Field {
+		protected $class = 'ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			wp_enqueue_style('ff-ui-custom', plugins_url('css/jquery-ui.custom.css', dirname(__FILE__)));
+
+			wp_enqueue_style('ff-ui-timepicker', plugins_url('css/jquery-ui-timepicker-addon.css', dirname(__FILE__)));
+
+			wp_enqueue_script('ff-ui-timepicker', plugins_url('js/jquery-ui-timepicker-addon.js', dirname(__FILE__)), array('jquery-ui-core', 'jquery-ui-datepicker'));
+		}
+
+		public function html($saved_value = null) {
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" data-date-format="' . esc_attr($this->date_format) . '" data-time-format="' . esc_attr($this->time_format) . '" />';
 		}
 	}
 }

@@ -1,9 +1,10 @@
 === Fields Framework ===
 Contributors: naifamoodi
+Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.4
+Stable tag: 0.42
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,10 +16,12 @@ A framework which can be used by developers to add fields to various sections of
 
 This includes the ability of adding fields to:
 
-* Posts, Pages, Attachments and Custom Post Types
-* Categories, Tags and Custom Taxonomies
+* Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
+* Categories, Tags and [Custom Taxonomies](http://codex.wordpress.org/Taxonomies)
 * Custom Administration Menus and Sub Menus
 * Users Profile
+
+Sections for Posts and Pages can also be loaded conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or if a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
 
 = Fields Supported =
 
@@ -34,9 +37,10 @@ Currently the following types of fields are supported:
 * Checkbox
 * Radio
 * Select
-* Select_Posts - A select box containing posts of type post, page, attachments or any custom post type
-* Select_Terms - A select box contain terms from taxonomies like tags, categories or some custom taxonomy
+* Select_Posts - A select box which can contain posts of type post, page, attachments or any other custom post type
+* Select_Terms - A select box which can contain terms from taxonomies like tags, categories or some custom taxonomy
 * Editor - A WYSIWYG editor
+* DateTime
 
 Most fields including the Group field can be made repeatable.
 
@@ -62,6 +66,11 @@ Most fields including the Group field can be made repeatable.
 
 == Changelog ==
 
+= 0.5 =
+* Added new DateTime field
+* Fixed few bugs pertaining to a variable not set warning
+* Added new Select Field for displaying a list of Posts or Terms
+
 = 0.4 =
 * Added support for displaying of fields conditionally depending on post format or page template
 * Error are now thrown as Exceptions instead of using trigger_error. This will help developers pin out the exact location which caused an error
@@ -75,3 +84,7 @@ Most fields including the Group field can be made repeatable.
 
 = 0.1 =
 * Initial release
+
+== Upgrade Notice ==
+
+None

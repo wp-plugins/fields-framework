@@ -1,0 +1,34 @@
+.ff-fields:not(:last-child) {
+	margin: 0 0 1em 0;
+}
+.ff-fields table {
+	width: 100%;
+	border: 0.1em solid;
+	border-radius: 0.5em;
+}
+.ff-fields table, .ff-fields table table table, .ff-fields table table table table table {
+	background-color: #fff;
+	border-color: #e5e5e5;
+}
+.ff-fields table table, .ff-fields table table table table, .ff-fields table table table table table table {
+	background-color: #f3f3f3;
+	border-color: #dadada;
+}
+.ff-fields > table > tbody > tr > th {
+	width: 20%;
+}
+.ff-fields > table > tbody > tr > td {
+	width: 80%;
+}
+.ff-fields > table > tbody > tr > td > p {
+	font-style: italic;
+}
+.ff-fields th, .ff-fields td {
+	padding: 0.75em;
+	text-align: left;
+	vertical-align: top;
+}
+.ff-fields img {
+	vertical-align: middle;
+	cursor: pointer;
+}

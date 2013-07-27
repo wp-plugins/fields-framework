@@ -67,7 +67,7 @@ Most fields including the Group field can be made repeatable.
 == Changelog ==
 
 = 0.51 =
-* Added new DateTime field
+* Added a new DateTime field
 * Fixed few bugs pertaining to a variable not set warning
 * Added new Select Field for displaying a list of Posts or Terms
 

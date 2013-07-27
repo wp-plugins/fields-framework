@@ -20,6 +20,9 @@
 .ff-fields > table > tbody > tr > td {
 	width: 80%;
 }
+.ff-fields > table > tbody > tr > td > p {
+	font-style: italic;
+}
 .ff-fields th, .ff-fields td {
 	padding: 0.75em;
 	text-align: left;

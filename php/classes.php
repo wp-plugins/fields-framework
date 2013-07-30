@@ -404,22 +404,20 @@ if(!class_exists('FF_Field_DateTime')) {
 	}
 }
 
-if(!class_exists('FF_Field_URL')) {
-	class FF_Field_URL extends FF_Field {
-		protected $class = 'large-text';
-	
-		public function html($saved_value = null) {
-			echo '<input type="url" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_url($saved_value) . '" class="' . esc_attr($this->class) . '" />';
-		}
-	}
-}
+if(!class_exists('FF_Field_ColorPicker')) {
+	class FF_Field_ColorPicker extends FF_Field {
+		protected $class = 'ff-colorpicker';
 
-if(!class_exists('FF_Field_Email')) {
-	class FF_Field_Email extends FF_Field {
-		protected $class = 'large-text';
-	
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			wp_enqueue_style('ff-colorpicker', plugins_url('css/colorpicker.css', dirname(__FILE__)));
+
+			wp_enqueue_script('ff-colorpicker', plugins_url('js/colorpicker.js', dirname(__FILE__)), array('jquery'));
+		}
+
 		public function html($saved_value = null) {
-			echo '<input type="email" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" />';
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($saved_value) . '" class="' . esc_attr($this->class) . '" data-date-format="' . esc_attr($this->date_format) . '" data-time-format="' . esc_attr($this->time_format) . '" />';
 		}
 	}
 }

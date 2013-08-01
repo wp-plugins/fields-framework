@@ -36,7 +36,7 @@ if(!class_exists('FF_Taxonomy')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			/* Atleast one taxonomy must be supplied */
+			/* Taxonomies are required. Atleast one must be provided. */
 			if(empty($this->taxonomies)) {
 				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
 			}
@@ -58,7 +58,7 @@ if(!class_exists('FF_Post')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			/* Post Types is required */
+			/* Post Types are required. Atleast one must be provided. */
 			if(empty($this->post_types)) {
 				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
 			}
@@ -249,7 +249,7 @@ if(!class_exists('FF_Field')) {
 		abstract public function html($saved_value = null);
 
 		public function get_default($value) {
-			if(empty($value) && $value !== 0 && $value !== '0') {
+			if(ff_empty($value)) {
 				$value = $this->value;
 			}
 
@@ -298,7 +298,7 @@ if(!class_exists('FF_Field')) {
 					$name = "ttid_{$object_id}_{$name}";
 				}
 
-				if(!empty($value) || $value === 0 && $value === '0') {
+				if(!ff_empty($value)) {
 					update_option($name, $value);
 				}
 				else {
@@ -316,7 +316,7 @@ if(!class_exists('FF_Field')) {
 			if(isset($_POST[$name])) {
 				$value = ff_sanitize($_POST[$name]);
 			
-				if(!empty($value) || $value === 0 && $value === '0') {
+				if(!ff_empty($value)) {
 					update_metadata($meta_type, $object_id, $name, $value);
 				}
 				else {
@@ -350,7 +350,15 @@ if(!class_exists('FF_Field_Group')) {
 
 				$original_field_id = $field->id;
 
-				$field_value = $saved_value[$original_field_name];
+				$field_value = null;
+
+				if(is_array($saved_value) && array_key_exists($original_field_name, $saved_value)) {
+					$field_value = $saved_value[$original_field_name];
+				}
+
+				if(ff_empty($field_value)) {
+					$field_value = $field->value;
+				}
 
 				if($field->repeatable == true && !is_array($field_value)) {
 					$field_value = (array) $field_value;

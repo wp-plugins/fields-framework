@@ -5,24 +5,30 @@ jQuery(function() {
 		});
 	}
 
-	jQuery('.ff-colorpicker').ColorPicker({
-		onSubmit: function(hsb, hex, rgb, el) {
-			jQuery(el).val('#' + hex);
-
-			jQuery(el).ColorPickerHide();
-		},
-		onBeforeShow: function () {
+	if(jQuery.fn.ColorPicker !== undefined) {
+		jQuery('.ff-colorpicker').ColorPicker({
+			onSubmit: function(hsb, hex, rgb, el) {
+				jQuery(el).val('#' + hex);
+	
+				jQuery(el).ColorPickerHide();
+			},
+			onBeforeShow: function () {
+				jQuery(this).ColorPickerSetColor(this.value);
+			}
+		}).bind('keyup', function() {
 			jQuery(this).ColorPickerSetColor(this.value);
-		}
-	}).bind('keyup', function() {
-		jQuery(this).ColorPickerSetColor(this.value);
-	});
+		});
+	}
 
-	jQuery('.ff-repeatable').each(function() {
-		ff_repeatable(this);
-	});
+	if(jQuery.fn.dynoTable !== undefined) {
+		jQuery('.ff-repeatable').each(function() {
+			ff_repeatable(this);
+		});
+	}
 
-	jQuery('input, textarea').placeholder();
+	if(jQuery.fn.placeholder !== undefined) {
+		jQuery('input, textarea').placeholder();
+	}
 });
 
 function ff_repeatable(ff_table) {

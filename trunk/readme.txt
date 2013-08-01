@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.6
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,7 +49,7 @@ Most fields including the Group field can be made repeatable.
 
 Please show your support towards the development of this plugin by giving it a rating!
 
-And if you feel the need for an additional type of field then please use the [support form](http://wordpress.org/support/plugin/fields-framework) and leave a message.
+And if you feel the need for an additional type of field then please use the [support forum](http://wordpress.org/support/plugin/fields-framework) and leave a message.
 
 == Installation ==
 
@@ -72,6 +72,9 @@ And if you feel the need for an additional type of field then please use the [su
 5. User Profile Page
 
 == Changelog ==
+
+= 0.6.1 =
+* Fixed minor bugs, one pertaining to a JS error and another pertaining to default values associated with fields created
 
 = 0.6 =
 * Added ColorPicker Field

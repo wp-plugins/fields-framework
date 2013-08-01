@@ -582,13 +582,19 @@ if(!function_exists('ff_admin_enqueue_scripts')) {
 	}
 }
 
+if(!function_exists('ff_empty')) {
+	function ff_empty($variable) {
+		return empty($variable) && $variable !== 0 && $variable !== '0';
+	}
+}
+
 if(!function_exists('ff_sanitize')) {
 	function ff_sanitize($variable) {
 		if(is_array($variable)) {
 			foreach($variable as $key => $value) {
 				$variable[$key] = ff_sanitize($value);
 
-				if(empty($variable[$key]) && $variable[$key] !== 0 && $variable[$key] !== '0') {
+				if(ff_empty($variable[$key])) {
 					unset($variable[$key]);
 				}
 			}
@@ -599,7 +605,7 @@ if(!function_exists('ff_sanitize')) {
 			$variable = stripslashes($variable);
 		}
 
-		if(empty($variable) && $variable !== 0 && $variable !== '0') {
+		if(ff_empty($variable)) {
 			unset($variable);
 		}
 		else {	

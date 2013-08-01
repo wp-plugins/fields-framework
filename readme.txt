@@ -4,13 +4,15 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.5.2
-Stable tag: 0.5
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A framework which can be used by developers to add fields to various sections of the administration panel.
 
 == Description ==
+
+[WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
 A framework which can be used by developers to add fields to various sections of the administration panel.
 
@@ -19,7 +21,7 @@ This includes the ability of adding fields to:
 * Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
 * Categories, Tags and [Custom Taxonomies](http://codex.wordpress.org/Taxonomies)
 * Custom Administration Menus and Sub Menus
-* Users Profile
+* User Profiles
 
 Sections for Posts and Pages can also be loaded conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or if a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
 
@@ -29,8 +31,6 @@ Currently the following types of fields are supported:
 
 * **Group** - A group of fields
 * Text Field
-* URL Field
-* Email Field
 * Hidden Field
 * Media Field - Let's you upload an attachment or enter a custom URL. You can use this field for uploading of any type of file
 * Textarea
@@ -41,8 +41,15 @@ Currently the following types of fields are supported:
 * Select_Terms - A select box which can contain terms from taxonomies like tags, categories or some custom taxonomy
 * Editor - A WYSIWYG editor
 * DateTime
+* ColorPicker
 
 Most fields including the Group field can be made repeatable.
+
+= Support =
+
+Please show your support towards the development of this plugin by giving it a rating!
+
+And if you feel the need for an additional type of field then please use the [support forum](http://wordpress.org/support/plugin/fields-framework) and leave a message.
 
 == Installation ==
 
@@ -66,7 +73,14 @@ Most fields including the Group field can be made repeatable.
 
 == Changelog ==
 
-= 0.5 =
+= 0.6.1 =
+* Fixed minor bugs, one pertaining to a JS error and another pertaining to default values associated with fields created
+
+= 0.6 =
+* Added ColorPicker Field
+* Removed URL and Email fields because a regular Text Field seems to serve just fine for any such field
+
+= 0.51 =
 * Added new DateTime field
 * Fixed few bugs pertaining to a variable not set warning
 * Added new Select Field for displaying a list of Posts or Terms

@@ -2,22 +2,38 @@
 /*
 Plugin Name: Fields Framework
 Plugin URI: http://www.rhyzz.com/fields-framework.html
-Description: A framework which can be used by developers to add fields to various sections of the administration panel.
-Version: 0.6.1
+Description: A framework which can be used by developers to add fields to various areas of the administration panel.
+Version: 0.7
 Author: Naif Amoodi
 Author URI: http://www.rhyzz.com/
 */
+
+if(defined('FF_INSTALLED')) {
+	return;
+}
+
+define('FF_INSTALLED', true);
 
 /* Load this after all plugins and the active theme has been loaded so that users can override functions or classes if they wish to */
 add_action('after_setup_theme', 'ff_load');
 
 if(!function_exists('ff_load')) {
 	function ff_load() {
-		foreach(array('classes.php', 'functions.php') as $file) {
-			require_once(plugin_dir_path(__FILE__) . '/php/' . $file);
+		$files = array('classes.php', 'functions.php');
+
+		foreach($files as $file) {
+			require_once(plugin_dir_path(__FILE__) . 'php/' . $file);
 		}
 
-		load_plugin_textdomain('fields-framework', false, dirname(plugin_basename(dirname(__FILE__))) . '/languages/');
+		if(strpos(plugins_url(__FILE__), str_replace(ABSPATH, null, get_template_directory())) !== false) {
+			// This must be loading as a standlone plugin from within a theme
+			FF_Registry::$plugins_url = get_template_directory_uri() . '/' . basename(dirname(__FILE__));
+		}
+		else {
+			FF_Registry::$plugins_url = plugins_url(null, __FILE__);
+		}
+
+		load_plugin_textdomain('fields-framework', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 
 		/* This actions are only used in the backend so putting them inside a conditional */
 		if(is_admin()) {

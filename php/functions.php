@@ -126,13 +126,13 @@ if(!function_exists('ff_render_fields')) {
 	function ff_render_fields($fields, $source, $source_type = null, $object_id = null) {
 		foreach($fields as $field) {
 			if($source == 'options') {
-				$value = $field->get_from_options($source_type, $object_id, true);
+				$field->get_from_options($source_type, $object_id);
 			}
 			elseif($source == 'meta') {
-				$value = $field->get_from_meta($source_type, $object_id, true);
+				$field->get_from_meta($source_type, $object_id);
 			}
 
-			$field->container($value);
+			$field->container();
 		}
 	}
 }
@@ -574,11 +574,36 @@ if(!function_exists('ff_exception_handler')) {
 
 if(!function_exists('ff_admin_enqueue_scripts')) {
 	function ff_admin_enqueue_scripts() {
-		wp_enqueue_style('ff-backend', plugins_url('css/backend.css', dirname(__FILE__)));
+		wp_enqueue_style('ff-backend', FF_Registry::$plugins_url . '/css/backend.css');
 
-		wp_enqueue_script('ff-placeholder', plugins_url('js/jquery.placeholder.js', dirname(__FILE__)), array('jquery'));
+		wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
 
-		wp_enqueue_script('ff-backend', plugins_url('js/backend.js', dirname(__FILE__)), array('jquery'));
+		wp_enqueue_script('ff-backend', FF_Registry::$plugins_url . '/js/backend.js', array('jquery'));
+	}
+}
+
+if(!function_exists('ff_set_class_defaults')) {
+	function ff_set_object_defaults($object, $arguments) {
+		$reflection = new ReflectionClass($object); 
+
+		$properties = $reflection->getProperties();
+
+		foreach($properties as $property) {
+			$property->setAccessible(true);
+
+			$property_name = $property->getName();
+
+			if(isset($arguments[$property_name])) {
+				if(is_array($arguments[$property_name])) {
+					$property_value = $arguments[$property_name];
+				}
+				else {
+					$property_value = trim($arguments[$property_name]);
+				}
+
+				$property->setValue($object, $property_value);
+			}
+		}
 	}
 }
 

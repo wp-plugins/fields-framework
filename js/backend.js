@@ -5,69 +5,100 @@ jQuery(function() {
 		});
 	}
 
+	if(jQuery.fn.ColorPicker !== undefined) {
+		jQuery('.ff-colorpicker').ColorPicker({
+			onSubmit: function(hsb, hex, rgb, el) {
+				jQuery(el).val('#' + hex);
+	
+				jQuery(el).ColorPickerHide();
+			},
+			onBeforeShow: function () {
+				jQuery(this).ColorPickerSetColor(this.value);
+			}
+		}).bind('keyup', function() {
+			jQuery(this).ColorPickerSetColor(this.value);
+		});
+	}
+
 	jQuery('.ff-repeatable').each(function() {
 		ff_repeatable(this);
 	});
 
-	jQuery('input, textarea').placeholder();
+	if(jQuery.fn.placeholder !== undefined) {
+		jQuery('input, textarea').placeholder();
+	}
 });
 
 function ff_repeatable(ff_table) {
-	var ff_rows = 0;
+	var table_class = '.ff-repeatable';
+	
+	var add_row = '.ff-add-row';
+	
+	var template_class = '.ff-add-template';
+	
+	var remove_row = '.ff-remove-row';
 
-	jQuery('> tbody > tr', ff_table).each(function() {
-		ff_rows++;
+	var move_class = '.ff-move-row';
+
+	if(jQuery.ui.sortable !== undefined) {
+		jQuery(table_class).find('tbody').each(function() {
+			jQuery(this).sortable({
+					handle: move_class,
+					helper: function(e, ui) {
+						ui.children().each(function() {
+							jQuery(this).width(jQuery(this).width());
+						});
+
+						return ui;
+					},
+					items: '> tr',
+			});
+		});
+	}
+
+	jQuery(table_class).on('click', add_row, function(event) {
+		event.stopImmediatePropagation();
+
+		var table = jQuery(this).parents('table').first();
+
+		var table_body = jQuery(table).children('tbody');
+
+		var row_template = JSON.parse(jQuery(table_body).children(template_class).html());
+
+		var new_row = jQuery(row_template).appendTo(table_body);
+
+		var row_count = jQuery(table_body).children('tr').length;
+
+		jQuery('> td :input', new_row).each(function() {
+			var ff_name = jQuery(this).attr('name');
+
+			ff_name = ff_name.replace(/\[0\]/, '[' + row_count + ']');
+
+			jQuery(this).attr('name', ff_name);
+
+			var ff_id = jQuery(this).attr('id');
+
+			ff_id = ff_id.replace(/-0/, '-' + row_count);
+			
+			jQuery(this).attr('id', ff_id);
+		});
+
+		jQuery('> td label', new_row).each(function() {
+			var ff_for = jQuery(this).attr('for');
+
+			ff_for = ff_for.replace(/-0/, '-' + row_count);
+
+			jQuery(this).attr('for', ff_for);
+		});
 	});
 
-	jQuery(ff_table).dynoTable({
-		removeClass: jQuery('> tbody > tr > td > .ff-remove-row', ff_table),
-		addRowTemplateClass: jQuery('> tbody > .ff-add-template', ff_table),
-		addRowButtonClass: jQuery('> thead > tr > th > .ff-add-row', ff_table),
-		lastRowRemovable: true,
-		orderable: true,
-		dragHandleClass: jQuery('> tbody > tr > th > .ff-move-row', ff_table),
-		hideTableOnEmpty: false,
-		afterRowAdd: function() {
-			ff_repeatable(ff_table);
-		},
-		onRowAdd: function() {
-			jQuery('> tbody > tr:last > td :input', ff_table).each(function() {
-				var ff_name = jQuery(this).attr('name');
+	jQuery(table_class).on('click', remove_row, function(event) {
+		event.stopImmediatePropagation();
 
-				ff_name = ff_name.replace(/\[(\d+)\]$/, '[' + ff_rows + ']');
+		var row = jQuery(this).parents('tr').first();
 
-				if(ff_name == jQuery(this).attr('name')) {
-					ff_name = ff_name.replace(/\[(\d+)\]\[/, '[' + ff_rows + '][');
-				}
+		row.remove();
 
-				jQuery(this).attr('name', ff_name);
-			});
-
-			jQuery('> tbody > tr:last > td :input', ff_table).each(function() {
-				var ff_id = jQuery(this).attr('id');
-
-				ff_id = ff_id.replace(/\[(\d+)\]__c$/, '[' + ff_rows + ']__c');
-
-				if(ff_id == jQuery(this).attr('id')) {
-					ff_id = ff_id.replace(/\[(\d+)\]\[/, '[' + ff_rows + '][');
-				}
-
-				jQuery(this).attr('id', ff_id);
-			});
-
-			jQuery('> tbody > tr:last > td label', ff_table).each(function() {
-				var ff_for = jQuery(this).attr('for');
-
-				ff_for = ff_for.replace(/\[(\d+)\]$/, '[' + ff_rows + ']');
-
-				if(ff_for == jQuery(this).attr('for')) {
-					ff_for = ff_for.replace(/\[(\d+)\]\[/, '[' + ff_rows + '][');
-				}
-
-				jQuery(this).attr('for', ff_for);
-			});
-
-			ff_rows++;
-		}
+		event.stopImmediatePropagation();
 	});
 }

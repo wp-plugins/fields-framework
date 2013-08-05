@@ -6,11 +6,21 @@
 	border: 0.1em solid;
 	border-radius: 0.5em;
 }
-.ff-fields table, .ff-fields table table table, .ff-fields table table table table table {
+.ff-fields table,
+.ff-fields table table table,
+.ff-fields table table table table table,
+.ff-fields table table table table table table table,
+.ff-fields table table table table table table table table table
+{
 	background-color: #fff;
 	border-color: #e5e5e5;
 }
-.ff-fields table table, .ff-fields table table table table, .ff-fields table table table table table table {
+.ff-fields table table,
+.ff-fields table table table table,
+.ff-fields table table table table table table,
+.ff-fields table table table table table table table table,
+.ff-fields table table table table table table table table table table
+{
 	background-color: #f3f3f3;
 	border-color: #dadada;
 }

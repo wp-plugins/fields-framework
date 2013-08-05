@@ -356,17 +356,21 @@ if(!class_exists('FF_Field_Group')) {
 		public function set_saved_value($saved_value) {
 			$saved_value = parent::set_saved_value($saved_value);
 
-			foreach($saved_value as &$value) {
-				foreach($this->fields as $field) {
-					$set_saved_value = null;
+			if(ff_empty($saved_value)) {
+				$saved_value = array();
 
-					if(!ff_empty($value) && is_array($value) && array_key_exists($field->name, $value)) {
-						$set_saved_value = $value[$field->name];
+				foreach($saved_value as &$value) {
+					foreach($this->fields as $field) {
+						$set_saved_value = null;
+	
+						if(!ff_empty($value) && is_array($value) && array_key_exists($field->name, $value)) {
+							$set_saved_value = $value[$field->name];
+						}
+	
+						$field->set_saved_value($set_saved_value);
+	
+						$value[$field->name] = $field->use_value();
 					}
-
-					$field->set_saved_value($set_saved_value);
-
-					$value[$field->name] = $field->use_value();
 				}
 			}
 

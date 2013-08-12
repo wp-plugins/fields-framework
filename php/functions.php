@@ -65,7 +65,13 @@ if(!function_exists('ff_create_field')) {
 			ff_throw_exception(__('Duplicate Field UID', 'fields-framework'));
 		}
 
-		$arguments['name'] = $uid;
+		if(empty($arguments['name'])) {
+			$arguments['name'] = $uid;
+		}
+
+		if(empty($arguments['id'])) {
+			$arguments['id'] = $uid;
+		}
 
 		$type = trim($type);
 	
@@ -124,7 +130,7 @@ if(!function_exists('ff_add_field_to_field_group')) {
 */
 if(!function_exists('ff_render_fields')) {
 	function ff_render_fields($fields, $source, $source_type = null, $object_id = null) {
-		foreach($fields as $field) {
+		foreach($fields as $field_uid => $field) {
 			if($source == 'options') {
 				$field->get_from_options($source_type, $object_id);
 			}
@@ -132,7 +138,11 @@ if(!function_exists('ff_render_fields')) {
 				$field->get_from_meta($source_type, $object_id);
 			}
 
+			do_action("ff_field_before", $field_uid);
+
 			$field->container();
+
+			do_action("ff_field_after", $field_uid);
 		}
 	}
 }
@@ -216,12 +226,9 @@ if(!function_exists('ff_admin_menu')) {
 		}
 
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			/* If the selected section has no fields then no point in displaying it. Continue to the next one. */
-			if(empty(FF_Registry::$fields_by_sections[$section_uid])) {
-				continue;
-			}
-
 			$class_name = get_class($section);
+
+			do_action("ff_section_before", $section_uid);
 
 			switch($class_name) {
 				case 'FF_Admin_Menu':
@@ -299,6 +306,8 @@ if(!function_exists('ff_admin_menu')) {
 					add_action('edit_user_profile', 'ff_user_section');
 				break;
 			}
+
+			do_action("ff_section_after", $section_uid);
 		}
 	}
 }
@@ -315,8 +324,6 @@ if(!function_exists('ff_admin_section')) {
 			echo '<div class="updated fade"><p>' . __('Settings saved.', 'fields-framework') . '</p></div>';
 		}
 
-		echo "<h2>{$section->page_title}</h2>";
-	
 		echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
 	
 		wp_nonce_field('ff-options', 'ff-options-nonce');

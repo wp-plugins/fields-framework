@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-08-05 23:34+0530\n"
-"PO-Revision-Date: 2013-08-05 23:34+0530\n"
+"POT-Creation-Date: 2013-08-12 15:49+0530\n"
+"PO-Revision-Date: 2013-08-12 15:49+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../php/classes.php:32 ../php/classes.php:633
+#: ../php/classes.php:32 ../php/classes.php:636
 msgid "Empty Taxonomies"
 msgstr ""
 
@@ -46,23 +46,23 @@ msgstr ""
 msgid "Empty Sub Menu Section Menu Title"
 msgstr ""
 
-#: ../php/classes.php:249
+#: ../php/classes.php:247
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:266 ../php/classes.php:304
+#: ../php/classes.php:264 ../php/classes.php:302
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:283 ../php/classes.php:320
+#: ../php/classes.php:281 ../php/classes.php:318
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:493
+#: ../php/classes.php:496
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:643
+#: ../php/classes.php:646
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Duplicate Section UID"
 msgstr ""
 
-#: ../php/functions.php:26 ../php/functions.php:73
+#: ../php/functions.php:26 ../php/functions.php:79
 msgid "Empty Section Type"
 msgstr ""
 
@@ -90,30 +90,30 @@ msgstr ""
 msgid "Duplicate Field UID"
 msgstr ""
 
-#: ../php/functions.php:82
+#: ../php/functions.php:88
 msgid "Invalid Field Type"
 msgstr ""
 
-#: ../php/functions.php:93 ../php/functions.php:151 ../php/functions.php:183
+#: ../php/functions.php:99 ../php/functions.php:161 ../php/functions.php:193
 msgid "Invalid Section UID"
 msgstr ""
 
-#: ../php/functions.php:97 ../php/functions.php:111 ../php/functions.php:155
+#: ../php/functions.php:103 ../php/functions.php:117 ../php/functions.php:165
 msgid "Invalid Field UID"
 msgstr ""
 
-#: ../php/functions.php:107
+#: ../php/functions.php:113
 msgid "Invalid Field Group UID"
 msgstr ""
 
-#: ../php/functions.php:159
+#: ../php/functions.php:169
 msgid "Field UID does not exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:187
+#: ../php/functions.php:197
 msgid "No Fields exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:315
+#: ../php/functions.php:324
 msgid "Settings saved."
 msgstr ""

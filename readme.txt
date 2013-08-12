@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.7.1
+Stable tag: 0.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,13 @@ Also please show your support for this plugin by giving it a rating!
 5. User Profile Page
 
 == Changelog ==
+
+= 0.8.1 =
+* Field names no longer need to be the same as the field's unique id. Instead, they can be set manually by passing a variable with key 'name' to the arguments array.
+* Registered sections will now be rendered even if they don't have any fields associated to them.
+* Added actions ff_section_before and ff_section_after which get called respestively before and after a section is rendered. section_uid is passed as an argument to the Action.
+* Added actions ff_field_before and ff_field_after which get called respestively before and after a field is rendered. field_uid is passed as an argument to the Action.
+* Added new boolean field argument named minimal which if set renders the field using minimal HTML. Specially useful for groups which you would like to use as containers
 
 = 0.7.1 =
 * Minor bug fix

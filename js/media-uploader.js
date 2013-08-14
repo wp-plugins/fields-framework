@@ -9,13 +9,13 @@
 
 	$( function() {
 		// Build the choose from library frame.
-		$('.ff_upload_media').click( function( event ) {
+		$('.ff-fields').on('click', '.ff_upload_media', function(event) {
 			var $el = $(this);
 
 			event.preventDefault();
 
 			// If the media frame already exists, reopen it.
-			if ( frame ) {
+			if (frame) {
 				frame.open();
 				return;
 			}

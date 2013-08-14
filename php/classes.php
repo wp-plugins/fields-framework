@@ -114,14 +114,10 @@ if(!class_exists('FF_Field')) {
 		default_value is a property which holds the field's default value
 		value is a property which is either set to use saved_value or if that's empty then it uses default_value
 		*/
-		protected $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false;
+		protected $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false, $minimal = false;
 	
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
-
-			if(empty($this->id)) {
-				$this->id = $this->name;
-			}
 
 			/* While constructing the object for the first time, if the value property is set then it will be assigned to the default_value property */
 			if(!ff_empty($this->value)) {
@@ -233,114 +229,117 @@ if(!class_exists('FF_Field')) {
 		public function container() {
 			?>
 			<div class="ff-fields">
+				<?php if($this->minimal == false) : ?>
 				<table>
-				<tr>
-					<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
-					
-					<td>
-						<table <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
-							<?php if($this->repeatable == true) : ?>
-							<thead>
-								<tr>
-									<th>Move</th>
-				
-									<th>Field</th>
-				
-									<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
-								</tr>
-							</thead>
-							<?php endif; ?>
-	
-							<tbody>
-								<?php
-									if($this->repeatable == true) {
-										$i = 0;
-
-										$original_name = $this->name;
-	
-										$original_id = $this->id;
-										
-										ob_start();
-										?>
-										<tr>
-											<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+					<tr>
+						<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
 						
-											<td>
-											<?php
-												$this->name = "{$original_name}[{$i}]";
+						<td>
+				<?php endif; ?>
+							<table <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
+								<?php if($this->repeatable == true) : ?>
+								<thead>
+									<tr>
+										<th>Move</th>
+					
+										<th>Field</th>
+					
+										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
+									</tr>
+								</thead>
+								<?php endif; ?>
+		
+								<tbody>
+									<?php
+										if($this->repeatable == true) {
+											$i = 0;
 	
-												$this->id = "{$original_id}-{$i}";
-	
-												$i++;
-
-												/* Reset this object's instance to the default value */
-												$this->use_value('default');
-
-												$this->html();
-											?>
-											</td>
-			
-											<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-										</tr>
-										<?php
-										$content = ob_get_contents();
-										
-										ob_end_clean();
-
-										echo '<script type="application/json" class="ff-add-template">' . json_encode($content) . '</script>';
-
-										$values = $this->saved_value;
-
-										if(ff_empty($values)) {
-											$values = array(null);
-										}
-										elseif(!is_array($values)) {
-											$values = array($values);
-										}
-
-										foreach($values as $value) {
+											$original_name = $this->name;
+		
+											$original_id = $this->id;
+											
+											ob_start();
 											?>
 											<tr>
 												<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-	
+							
 												<td>
 												<?php
 													$this->name = "{$original_name}[{$i}]";
-			
+		
 													$this->id = "{$original_id}-{$i}";
-	
+		
 													$i++;
-
-													$this->set_saved_value($value);
-
+	
+													/* Reset this object's instance to the default value */
+													$this->use_value('default');
+	
 													$this->html();
 												?>
 												</td>
-	
+				
 												<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
 											</tr>
 											<?php
-										}
-
-										$this->name = $original_name;
+											$content = ob_get_contents();
+											
+											ob_end_clean();
 	
-										$this->id = $original_id;
-									}
-									else {
-										echo '<tr><td>';
-
-										$this->html();
+											echo '<script type="application/json" class="ff-add-template">' . json_encode($content) . '</script>';
+	
+											$values = $this->saved_value;
+	
+											if(ff_empty($values)) {
+												$values = array(null);
+											}
+											elseif(!is_array($values)) {
+												$values = array($values);
+											}
+	
+											foreach($values as $value) {
+												?>
+												<tr>
+													<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+		
+													<td>
+													<?php
+														$this->name = "{$original_name}[{$i}]";
 				
-										echo '</td></tr>';
-									}
-								?>
-							</tbody>
-						</table>
+														$this->id = "{$original_id}-{$i}";
+		
+														$i++;
 	
-						<?php echo wpautop($this->description); ?>
-					</td>
-				</tr>
+														$this->set_saved_value($value);
+	
+														$this->html();
+													?>
+													</td>
+		
+													<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+												</tr>
+												<?php
+											}
+	
+											$this->name = $original_name;
+		
+											$this->id = $original_id;
+										}
+										else {
+											echo '<tr><td>';
+	
+											$this->html();
+					
+											echo '</td></tr>';
+										}
+									?>
+								</tbody>
+							</table>
+				<?php if($this->minimal == false) : ?>
+							<?php echo wpautop($this->description); ?>
+						</td>
+					</tr>
 				</table>
+				<?php endif; ?>
 			</div>
 			<?php
 		}
@@ -504,7 +503,7 @@ if(!class_exists('FF_Field_Textarea')) {
 		protected $class = 'large-text', $rows = 5, $cols = 50;
 
 		public function html() {
-			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>>';
+			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>';
 		}
 	}
 }

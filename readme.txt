@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.7.1
+Stable tag: 0.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,13 +67,38 @@ Also please show your support for this plugin by giving it a rating!
 
 == Screenshots ==
 
-1. Administration Menu
-2. Administration Sub Menu
-3. Posts Page
-4. Category Page
-5. User Profile Page
+1. An Administration Menu
+2. An Administration Sub Menu
+3. Repeatable Field Groups and Nested Field Groups
+4. A section assigned to a page with a page template named 'Showcase Page'
+5. A Repeatable Field Group with two fields
+6. A dump of values from a particular section
+7. A custom post type named 'Slide' with a section associated to it
+8. A custom post type named 'Service' with a section associated to it
+9. A custom post type named 'Member' with a section associated to it
+10. A custom post type named 'Testimonial' with a section associated to it
+11. An Administration Sub Menu with a bunch of fields
+12. A section assigned to posts using the audio post format
+13. A section assigned to posts using the video post format
+14. A section assigned to posts using the gallery post format
+15. A section assigned to posts using the image post format
+16. A section assigned to a page with a page template named 'About Page'
+17. Two individual fields
+18. A section assigned to a page with a page template named 'Contact Page'
 
 == Changelog ==
+
+= 0.8.2 =
+* Minor bug fixes related to delegation of events
+* Fixed an orphaned HTML right angle bracket
+* Screenshots updated
+
+= 0.8.1 =
+* Field names no longer need to be the same as the field's unique id. Instead, they can be set manually by passing a variable with key 'name' to the arguments array.
+* Registered sections will now be rendered even if they don't have any fields associated to them.
+* Added actions ff_section_before and ff_section_after which get called respestively before and after a section is rendered. section_uid is passed as an argument to the Action.
+* Added actions ff_field_before and ff_field_after which get called respestively before and after a field is rendered. field_uid is passed as an argument to the Action.
+* Added new boolean field argument named minimal which if set renders the field using minimal HTML. Specially useful for groups which you would like to use as containers
 
 = 0.7.1 =
 * Minor bug fix

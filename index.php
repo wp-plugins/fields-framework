@@ -3,7 +3,7 @@
 Plugin Name: Fields Framework
 Plugin URI: http://www.rhyzz.com/fields-framework.html
 Description: A framework which can be used by developers to add fields to various areas of the administration panel.
-Version: 0.7.1
+Version: 0.8.2
 Author: Naif Amoodi
 Author URI: http://www.rhyzz.com/
 */
@@ -37,7 +37,8 @@ if(!function_exists('ff_load')) {
 
 		/* This actions are only used in the backend so putting them inside a conditional */
 		if(is_admin()) {
-			add_action('admin_menu', 'ff_admin_menu');
+			/* Priority set to 1 so that this is called before any other call */
+			add_action('admin_menu', 'ff_admin_menu', 1);
 
 			add_action('wp_loaded', 'ff_save_options');
 

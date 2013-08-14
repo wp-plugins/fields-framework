@@ -1,22 +1,24 @@
 jQuery(function() {
 	if(jQuery.ui.timepicker !== undefined) {
-		jQuery('.ff-datetime').each(function() {
+		jQuery('.ff-fields').on('click', '.ff-datetime', function() {
 			jQuery(this).datetimepicker({dateFormat: jQuery(this).data('date-format'), timeFormat: jQuery(this).data('time-format')});
 		});
 	}
 
 	if(jQuery.fn.ColorPicker !== undefined) {
-		jQuery('.ff-colorpicker').ColorPicker({
-			onSubmit: function(hsb, hex, rgb, el) {
-				jQuery(el).val('#' + hex);
-	
-				jQuery(el).ColorPickerHide();
-			},
-			onBeforeShow: function () {
+		jQuery('.ff-fields').on('click', '.ff-colorpicker', function() {
+			jQuery(this).ColorPicker({
+				onSubmit: function(hsb, hex, rgb, el) {
+					jQuery(el).val('#' + hex);
+		
+					jQuery(el).ColorPickerHide();
+				},
+				onBeforeShow: function () {
+					jQuery(this).ColorPickerSetColor(this.value);
+				}
+			}).bind('keyup', function() {
 				jQuery(this).ColorPickerSetColor(this.value);
-			}
-		}).bind('keyup', function() {
-			jQuery(this).ColorPickerSetColor(this.value);
+			});
 		});
 	}
 
@@ -69,6 +71,14 @@ function ff_repeatable(ff_table) {
 
 		var row_count = jQuery(table_body).children('tr').length;
 
+		jQuery('> td label', new_row).each(function() {
+			var ff_for = jQuery(this).attr('for');
+
+			ff_for = ff_for.replace(/-0/, '-' + row_count);
+
+			jQuery(this).attr('for', ff_for);
+		});
+
 		jQuery('> td :input', new_row).each(function() {
 			var ff_name = jQuery(this).attr('name');
 
@@ -83,12 +93,12 @@ function ff_repeatable(ff_table) {
 			jQuery(this).attr('id', ff_id);
 		});
 
-		jQuery('> td label', new_row).each(function() {
-			var ff_for = jQuery(this).attr('for');
+		jQuery('> td .ff_upload_media', new_row).each(function() {
+			var ff_id = jQuery(this).data('to');
 
-			ff_for = ff_for.replace(/-0/, '-' + row_count);
-
-			jQuery(this).attr('for', ff_for);
+			ff_id = ff_id.replace(/-0/, '-' + row_count);
+			
+			jQuery(this).data('to', ff_id);
 		});
 	});
 

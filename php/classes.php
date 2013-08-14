@@ -503,7 +503,7 @@ if(!class_exists('FF_Field_Textarea')) {
 		protected $class = 'large-text', $rows = 5, $cols = 50;
 
 		public function html() {
-			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>>';
+			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>';
 		}
 	}
 }

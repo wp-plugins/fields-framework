@@ -14,50 +14,10 @@ if(!class_exists('FF_Registry')) {
 
 if(!class_exists('FF_Section')) {
 	abstract class FF_Section {
+		public $skip_save = false;
+
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
-		}
-	}
-}
-
-if(!class_exists('FF_Taxonomy')) {
-	class FF_Taxonomy extends FF_Section {
-		public $taxonomies;
-	
-		public function __construct($arguments) {
-			parent::__construct($arguments);
-
-			/* Taxonomies are required. Atleast one must be provided. */
-			if(empty($this->taxonomies)) {
-				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
-			}
-		}
-	}
-}
-
-if(!class_exists('FF_User')) {
-	class FF_User extends FF_Section {
-	}
-}
-
-if(!class_exists('FF_Post')) {
-	class FF_Post extends FF_Section {
-		public $id, $title, $context = 'advanced', $priority = 'default';
-		
-		public $post_types = array(), $page_templates = array(), $post_formats = array();
-	
-		public function __construct($arguments) {
-			parent::__construct($arguments);
-
-			/* Post Types are required. Atleast one must be provided. */
-			if(empty($this->post_types)) {
-				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
-			}
-
-			/* Title is required */
-			if(empty($this->title)) {
-				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
-			}
 		}
 	}
 }
@@ -107,6 +67,50 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 	}
 }
 
+if(!class_exists('FF_Post')) {
+	class FF_Post extends FF_Section {
+		public $id, $title, $context = 'advanced', $priority = 'default';
+		
+		public $post_types = array(), $page_templates = array(), $post_formats = array();
+
+		public $hide_content_editor = false;
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Post Types are required. Atleast one must be provided. */
+			if(empty($this->post_types)) {
+				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
+			}
+
+			/* Title is required */
+			if(empty($this->title)) {
+				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_Taxonomy')) {
+	class FF_Taxonomy extends FF_Section {
+		public $taxonomies;
+	
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Taxonomies are required. Atleast one must be provided. */
+			if(empty($this->taxonomies)) {
+				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_User')) {
+	class FF_User extends FF_Section {
+	}
+}
+
 if(!class_exists('FF_Field')) {
 	abstract class FF_Field {
 		/*
@@ -126,6 +130,8 @@ if(!class_exists('FF_Field')) {
 		}
 
 		public function use_value($type = null) {
+			$value = null;
+
 			if($type == 'saved') {
 				$this->value = $this->saved_value;
 			}
@@ -135,27 +141,25 @@ if(!class_exists('FF_Field')) {
 			else {
 				/* Automatically determine the value that should be used */
 				if(!ff_empty($this->saved_value)) {
-					$this->value = $this->saved_value;
+					$value = $this->value = $this->saved_value;
 				}
-				else {
-					$this->value = $this->default_value;
+				elseif($this->repeatable != true) {
+					$value = $this->value = $this->default_value;
 				}
 			}
-			
-			return $this->value;
+
+			if($this->repeatable == true && ff_empty($value) && !is_array($value)) {
+				$value = array();
+			}
+
+			return $value;
 		}
 
 		public function set_saved_value($saved_value) {
-			if($this->repeatable == true && ff_empty($saved_value)) {
-				$saved_value = array();
-			}
-
 			$this->saved_value = $saved_value;
 
-			/* This will set the value property to either saved_value or default_value */
-			$this->use_value();
-
-			return $this->saved_value;
+			/* This will set the field's value property to either saved_value or default_value */
+			return $this->use_value();
 		}
 
 		public function get_from_options($option_type = null, $object_id = null) {
@@ -355,27 +359,32 @@ if(!class_exists('FF_Field_Group')) {
 		public function set_saved_value($saved_value) {
 			$saved_value = parent::set_saved_value($saved_value);
 
-			if(ff_empty($saved_value)) {
-				$saved_value = array();
-
+			if($this->repeatable != true) {
+				foreach($this->fields as $field) {
+					$set_saved_value = null;
+	
+					if(!ff_empty($saved_value) && is_array($saved_value) && array_key_exists($field->name, $saved_value)) {
+						$set_saved_value = $saved_value[$field->name];
+					}
+	
+					$saved_value[$field->name] = $field->set_saved_value($set_saved_value);
+				}
+			}
+			elseif(!ff_empty($saved_value) && is_array($saved_value)) {
 				foreach($saved_value as &$value) {
 					foreach($this->fields as $field) {
 						$set_saved_value = null;
-	
+		
 						if(!ff_empty($value) && is_array($value) && array_key_exists($field->name, $value)) {
 							$set_saved_value = $value[$field->name];
 						}
-	
-						$field->set_saved_value($set_saved_value);
-	
-						$value[$field->name] = $field->use_value();
+		
+						$value[$field->name] = $field->set_saved_value($set_saved_value);
 					}
 				}
 			}
-
-			$this->saved_value = $saved_value;
-
-			return $this->saved_value;
+			
+			return $saved_value;
 		}
 
 		public function html() {
@@ -426,7 +435,7 @@ if(!class_exists('FF_Field_Text')) {
 
 if(!class_exists('FF_Field_DateTime')) {
 	class FF_Field_DateTime extends FF_Field {
-		protected $class = 'ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
+		protected $class = 'large-text ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -446,14 +455,16 @@ if(!class_exists('FF_Field_DateTime')) {
 
 if(!class_exists('FF_Field_ColorPicker')) {
 	class FF_Field_ColorPicker extends FF_Field {
-		protected $class = 'ff-colorpicker';
+		protected $class = 'large-text ff-colorpicker';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/colorpicker.css');
+			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
-			wp_enqueue_script('ff-colorpicker', FF_Registry::$plugins_url . '/js/colorpicker.js', array('jquery'));
+			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
+
+			wp_enqueue_script('ff-colorpicker', FF_Registry::$plugins_url . '/js/jquery.colorpicker.js', array('jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-button'));
 		}
 
 		public function html() {
@@ -512,18 +523,16 @@ if(!class_exists('FF_Field_Multiple')) {
 	abstract class FF_Field_Multiple extends FF_Field {
 		protected $multiple;
 
-		public function set_saved_value($saved_value) {
-			$saved_value = parent::set_saved_value($saved_value);
+		public function use_value($type = null) {
+			$value = parent::use_value($type);
 
-			if($this->multiple == true && ff_empty($saved_value)) {
-				$saved_value = array();
+			if($this->multiple == true && ff_empty($value) && !is_array($value)) {
+				$value = array();
 			}
 
-			$this->saved_value = $saved_value;
-
-			return $this->saved_value;
+			return $value;
 		}
-		
+
 		public function get_name() {
 			$name = $this->name;
 
@@ -648,6 +657,26 @@ if(!class_exists('FF_Field_Select_Terms')) {
 
 			foreach($terms as $term) {
 				$this->options[$term->term_id] = $term->name;
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_Field_Select_Users')) {
+	class FF_Field_Select_Users extends FF_Field_Select {
+		protected $parameters = array();
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			$users = get_users($this->parameters);
+
+			if(empty($users)) {
+				return;
+			}
+
+			foreach($users as $user) {
+				$this->options[$user->ID] = "{$user->display_name} ({$user->user_login})";
 			}
 		}
 	}

@@ -1,16 +1,18 @@
 === Fields Framework ===
 Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
-Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
+Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-field, 
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.8.2
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 A framework which can be used by developers to add fields to various areas of the administration panel.
 
 == Description ==
+
+Please show your support for this plugin by giving it [a rating](http://wordpress.org/support/view/plugin-reviews/fields-framework?rate=5#postform)!
 
 [WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
@@ -41,17 +43,16 @@ Currently the following types of fields are supported:
 * Select - A drop down from which a single or multiple items can be selected depending on whether you have allowed selection of multiple values
 * Select_Posts - A drop down which can contain items belonging to any post type viz. Posts, Page, Attachments or of any other Custom Post Type
 * Select_Terms - A drop down which can contain terms from any taxonomy which includes Tags, Categories or any other Custom Taxonomy
+* Select_Users - A drop down which can contain users registered on the site
 * Editor - A WYSIWYG editor. This is the same one that's used on the post edit screen by default for editing the content of the post
 * DateTime
 * ColorPicker
 
 Most fields including the Group field can be made repeatable.
 
-= Support =
+= Additional Field Requests =
 
 If you feel the need for an additional field type then please use the [support forum](http://wordpress.org/support/plugin/fields-framework) and leave your suggestion. This will be looked into ASAP.
-
-Also please show your support for this plugin by giving it a rating!
 
 == Installation ==
 
@@ -85,8 +86,20 @@ Also please show your support for this plugin by giving it a rating!
 16. A section assigned to a page with a page template named 'About Page'
 17. Two individual fields
 18. A section assigned to a page with a page template named 'Contact Page'
+19. DateTime field
+20. ColorPicker field
+21. A demo of all fields
 
 == Changelog ==
+
+= 0.9 =
+* Added a new Users field
+* Fixed two issues related to the media uploader
+* Further improvements to default values that are returned for the fields
+* Added skip_save argument which if set to true and passed to sections, will skip saving of those sections
+* DateTime and ColorPicker fields now appears on focus instead of click. They are not called on click because when delegated, they would need to be clicked twice to appear.
+* Replaced ColorPicker widget to more advanced one
+* Added new boolean section argument named hide_content_editor for Posts sections which if set to true will hide the content editor for those sections
 
 = 0.8.2 =
 * Minor bug fixes related to delegation of events

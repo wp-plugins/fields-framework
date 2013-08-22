@@ -138,11 +138,11 @@ if(!function_exists('ff_render_fields')) {
 				$field->get_from_meta($source_type, $object_id);
 			}
 
-			do_action("ff_field_before", $field_uid);
+			do_action('ff_field_before', $field_uid);
 
 			$field->container();
 
-			do_action("ff_field_after", $field_uid);
+			do_action('ff_field_after', $field_uid);
 		}
 	}
 }
@@ -228,8 +228,6 @@ if(!function_exists('ff_admin_menu')) {
 		foreach(FF_Registry::$sections as $section_uid => $section) {
 			$class_name = get_class($section);
 
-			do_action("ff_section_before", $section_uid);
-
 			switch($class_name) {
 				case 'FF_Admin_Menu':
 					add_menu_page($section->page_title, $section->menu_title, $section->capability, $section->menu_uid, 'ff_admin_section', $section->icon_url, $section->position);
@@ -306,8 +304,6 @@ if(!function_exists('ff_admin_menu')) {
 					add_action('edit_user_profile', 'ff_user_section');
 				break;
 			}
-
-			do_action("ff_section_after", $section_uid);
 		}
 	}
 }
@@ -316,28 +312,34 @@ if(!function_exists('ff_admin_section')) {
 	function ff_admin_section() {
 		$section_uid = $_GET['page'];
 	
-		$section = FF_Registry::$sections[$section_uid];
-	
+		if(empty(FF_Registry::$fields_by_sections[$section_uid])) {
+			return;
+		}
+
 		echo '<div class="wrap">';
 
 		if(!empty($_GET['ff-updated'])) {
 			echo '<div class="updated fade"><p>' . __('Settings saved.', 'fields-framework') . '</p></div>';
 		}
 
+		do_action('ff_section_before', $section_uid);
+
 		echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
 	
 		wp_nonce_field('ff-options', 'ff-options-nonce');
 
+		ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
+
 		ff_create_field('ff-section-uid', 'hidden', array('value' => $section_uid));
 
-		ff_add_field_to_section($section_uid, 'ff-section-uid');
-	
-		ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
+		FF_Registry::$fields['ff-section-uid']->container();
 
 		submit_button();
 	
 		echo '</form>';
-		
+
+		do_action('ff_section_after', $section_uid);
+
 		echo '</div>';
 	}
 }
@@ -351,15 +353,21 @@ if(!function_exists('ff_save_options')) {
 
 		$section_uid = $_POST['ff-section-uid'];
 
-		foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-			$field->save_to_options();
+		$section = FF_Registry::$sections[$section_uid];
+
+		if($section->skip_save == false) {
+			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
+				$field->save_to_options();
+			}
 		}
 
 		if(!empty($_POST['_wp_http_referer'])) {
 			$location = $_POST['_wp_http_referer'];
 
-			if(strpos($location, 'ff-updated') === false) {
-				$location .= '&ff-updated=true';
+			if($section->skip_save == false) {
+				if(strpos($location, 'ff-updated') === false) {
+					$location .= '&ff-updated=true';
+				}
 			}
 
 			header('HTTP/1.1 303 See Other');
@@ -394,9 +402,17 @@ if(!function_exists('ff_post_section')) {
 				}
 			}
 
+			if($section->hide_content_editor == true) {
+				echo '<style type="text/css">#postdivrich {display: none;}</style>';
+			}
+
+			do_action('ff_section_before', $section_uid);
+
 			wp_nonce_field('ff-meta', 'ff-meta-nonce');
 
 			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'post', $post->ID);
+
+			do_action('ff_section_after', $section_uid);
 		}
 	}
 }
@@ -410,7 +426,7 @@ if(!function_exists('ff_save_post')) {
 		$post = get_post($post_id);
 
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Post') || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($post->post_type, $section->post_types)) {				
+			if(!is_a($section, 'FF_Post') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($post->post_type, $section->post_types)) {				
 				continue;
 			}
 			
@@ -470,9 +486,13 @@ if(!function_exists('ff_taxonomy_form_fields')) {
 				echo '<tr><td colspan="2">';
 			}
 
+			do_action('ff_section_before', $section_uid);
+
 			wp_nonce_field('ff-options', 'ff-options-nonce');
 
 			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options', 'taxonomy', $ttid);
+
+			do_action('ff_section_after', $section_uid);
 
 			if(!empty($ttid)) {
 				echo '</td></tr>';
@@ -489,7 +509,7 @@ if(!function_exists('ff_save_term')) {
 		}
 
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Taxonomy') || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($taxonomy, $section->taxonomies)) {
+			if(!is_a($section, 'FF_Taxonomy') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($taxonomy, $section->taxonomies)) {
 				continue;
 			}
 
@@ -528,7 +548,11 @@ if(!function_exists('ff_user_section')) {
 	
 			wp_nonce_field('ff-meta', 'ff-meta-nonce');
 
+			do_action('ff_section_before', $section_uid);
+
 			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'user', $user->ID);
+
+			do_action('ff_section_after', $section_uid);
 		}
 	}
 }
@@ -540,7 +564,7 @@ if(!function_exists('ff_save_user')) {
 		}
 
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_User') || empty(FF_Registry::$fields_by_sections[$section_uid])) {
+			if(!is_a($section, 'FF_User') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid])) {
 				continue;
 			}
 

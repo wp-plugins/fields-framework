@@ -1,23 +1,18 @@
 jQuery(function() {
 	if(jQuery.ui.timepicker !== undefined) {
-		jQuery('.ff-fields').on('click', '.ff-datetime', function() {
+		jQuery('.ff-fields').on('focus', '.ff-datetime', function() {
 			jQuery(this).datetimepicker({dateFormat: jQuery(this).data('date-format'), timeFormat: jQuery(this).data('time-format')});
 		});
 	}
 
-	if(jQuery.fn.ColorPicker !== undefined) {
-		jQuery('.ff-fields').on('click', '.ff-colorpicker', function() {
-			jQuery(this).ColorPicker({
-				onSubmit: function(hsb, hex, rgb, el) {
-					jQuery(el).val('#' + hex);
-		
-					jQuery(el).ColorPickerHide();
-				},
-				onBeforeShow: function () {
-					jQuery(this).ColorPickerSetColor(this.value);
-				}
-			}).bind('keyup', function() {
-				jQuery(this).ColorPickerSetColor(this.value);
+	if(jQuery.fn.colorpicker !== undefined) {
+		jQuery('.ff-fields').on('focus', '.ff-colorpicker', function() {
+			jQuery(this).colorpicker({
+				alpha: true,
+				colorFormat: 'RGBA',
+				dragggable: false,
+				parts: ['map', 'bar', 'hex', 'hsv', 'rgb', 'alpha', 'lab', 'cmyk', 'preview', 'footer'],
+				showNoneButton : true
 			});
 		});
 	}

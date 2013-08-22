@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-08-14 17:06+0530\n"
-"PO-Revision-Date: 2013-08-14 17:06+0530\n"
+"POT-Creation-Date: 2013-08-22 23:12+0530\n"
+"PO-Revision-Date: 2013-08-22 23:12+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -14,56 +14,208 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../php/classes.php:32 ../php/classes.php:636
-msgid "Empty Taxonomies"
+#: ../php/admin-menu.php:6 ../php/admin-menu.php:7
+msgid "Fields Framework"
 msgstr ""
 
-#: ../php/classes.php:54
-msgid "Empty Post Types"
+#: ../php/admin-menu.php:11
+msgid "Enable Field Testing and Demo Fields"
 msgstr ""
 
-#: ../php/classes.php:59
-msgid "Empty Meta Section Title"
+#: ../php/admin-menu.php:12
+msgid "No"
 msgstr ""
 
-#: ../php/classes.php:74
+#: ../php/admin-menu.php:12
+msgid "Yes"
+msgstr ""
+
+#: ../php/classes.php:34
 msgid "Empty Menu Section Page Title"
 msgstr ""
 
-#: ../php/classes.php:79
+#: ../php/classes.php:39
 msgid "Empty Menu Section Menu Title"
 msgstr ""
 
-#: ../php/classes.php:94
+#: ../php/classes.php:54
 msgid "Empty Sub Menu Section Parent UID"
 msgstr ""
 
-#: ../php/classes.php:99
+#: ../php/classes.php:59
 msgid "Empty Sub Menu Section Page Title"
 msgstr ""
 
-#: ../php/classes.php:104
+#: ../php/classes.php:64
 msgid "Empty Sub Menu Section Menu Title"
 msgstr ""
 
-#: ../php/classes.php:247
+#: ../php/classes.php:83
+msgid "Empty Post Types"
+msgstr ""
+
+#: ../php/classes.php:88
+msgid "Empty Meta Section Title"
+msgstr ""
+
+#: ../php/classes.php:103 ../php/classes.php:645
+msgid "Empty Taxonomies"
+msgstr ""
+
+#: ../php/classes.php:251
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:264 ../php/classes.php:302
+#: ../php/classes.php:268 ../php/classes.php:306
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:281 ../php/classes.php:318
+#: ../php/classes.php:285 ../php/classes.php:322
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:496
+#: ../php/classes.php:507
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:646
+#: ../php/classes.php:655
 msgid "One of the Specified Taxonomy is not valid"
+msgstr ""
+
+#: ../php/demo-fields.php:2
+msgid "Demo Fields"
+msgstr ""
+
+#: ../php/demo-fields.php:5
+msgid "A datetime field"
+msgstr ""
+
+#: ../php/demo-fields.php:11
+msgid "A colorpicker field"
+msgstr ""
+
+#: ../php/demo-fields.php:17 ../php/field-testing.php:5
+msgid "A text field"
+msgstr ""
+
+#: ../php/demo-fields.php:23
+msgid "A media upload field"
+msgstr ""
+
+#: ../php/demo-fields.php:29
+msgid "A textarea field"
+msgstr ""
+
+#: ../php/demo-fields.php:35
+msgid "A checkbox field"
+msgstr ""
+
+#: ../php/demo-fields.php:42
+msgid "A radio field"
+msgstr ""
+
+#: ../php/demo-fields.php:49 ../php/field-testing.php:37
+msgid "A select field"
+msgstr ""
+
+#: ../php/demo-fields.php:57
+msgid "A select posts field"
+msgstr ""
+
+#: ../php/demo-fields.php:66
+msgid "A select terms field"
+msgstr ""
+
+#: ../php/demo-fields.php:76
+msgid "A select users field"
+msgstr ""
+
+#: ../php/demo-fields.php:84
+msgid "A editor field"
+msgstr ""
+
+#: ../php/field-testing.php:2
+msgid "Unit Test"
+msgstr ""
+
+#: ../php/field-testing.php:11
+msgid "A text field with default"
+msgstr ""
+
+#: ../php/field-testing.php:12
+msgid "Here is a default value for this text field"
+msgstr ""
+
+#: ../php/field-testing.php:18
+msgid "A repeatable text field"
+msgstr ""
+
+#: ../php/field-testing.php:25
+msgid "A repeatable text field with default"
+msgstr ""
+
+#: ../php/field-testing.php:27
+msgid "Here is a default value for this repeatable text field"
+msgstr ""
+
+#: ../php/field-testing.php:45
+msgid "A select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:54
+msgid "A repeatable select field"
+msgstr ""
+
+#: ../php/field-testing.php:63
+msgid "A repeatable select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:77
+msgid "A multi-select field"
+msgstr ""
+
+#: ../php/field-testing.php:86
+msgid "A multi-select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:96
+msgid "A multi-select field with multi-default"
+msgstr ""
+
+#: ../php/field-testing.php:106
+msgid "A repeatable multi-select field"
+msgstr ""
+
+#: ../php/field-testing.php:116
+msgid "A repeatable multi-select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:127
+msgid "A repeatable multi-select field with multi-default"
+msgstr ""
+
+#: ../php/field-testing.php:145
+msgid "A group field"
+msgstr ""
+
+#: ../php/field-testing.php:187
+msgid "A repeatable group field"
+msgstr ""
+
+#: ../php/field-testing.php:227
+msgid "A nested group field"
+msgstr ""
+
+#: ../php/field-testing.php:237
+msgid "A nested repeatable group field"
+msgstr ""
+
+#: ../php/field-testing.php:251
+msgid "A nested nested group field"
+msgstr ""
+
+#: ../php/field-testing.php:265
+msgid "A nested nested repeatable group field"
 msgstr ""
 
 #: ../php/functions.php:16
@@ -114,6 +266,6 @@ msgstr ""
 msgid "No Fields exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:324
+#: ../php/functions.php:322
 msgid "Settings saved."
 msgstr ""

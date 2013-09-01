@@ -29,10 +29,6 @@ ff_create_field('ff-field-testing-a-repeatable-text-field-with-default', 'text',
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-text-field-with-default');
 
-
-
-
-
 ff_create_field('ff-field-testing-a-select-field', 'select', array(
 	'label' => __('A select field', 'fields-framework'),
 	'options' => array('Duis at nunc a sapien pharetra pretium', 'Aliquam sed risus at eros cursus iaculis', 'Fusce non odio at nisi eleifend gravida', 'Donec condimentum libero vitae tellus vestibulum', 'Non consequat nisl ornare'),
@@ -68,10 +64,6 @@ ff_create_field('ff-field-testing-a-repeatable-select-field-with-default', 'sele
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-select-field-with-default');
-
-
-
-
 
 ff_create_field('ff-field-testing-a-multi-select-field', 'select', array(
 	'label' => __('A multi-select field', 'fields-framework'),
@@ -134,13 +126,6 @@ ff_create_field('ff-field-testing-a-repeatable-multi-select-field-with-multi-def
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-multi-select-field-with-multi-default');
 
-
-
-
-
-
-
-
 ff_create_field('ff-field-testing-a-group-field', 'group', array(
 	'label' => __('A group field', 'fields-framework'),
 ));
@@ -174,14 +159,6 @@ ff_add_field_to_field_group('ff-field-testing-a-group-field', 'ff-field-testing-
 ff_add_field_to_field_group('ff-field-testing-a-group-field', 'ff-field-testing-a-repeatable-multi-select-field-with-default');
 
 ff_add_field_to_field_group('ff-field-testing-a-group-field', 'ff-field-testing-a-repeatable-multi-select-field-with-multi-default');
-
-
-
-
-
-
-
-
 
 ff_create_field('ff-field-testing-a-repeatable-group-field', 'group', array(
 	'label' => __('A repeatable group field', 'fields-framework'),
@@ -218,11 +195,6 @@ ff_add_field_to_field_group('ff-field-testing-a-repeatable-group-field', 'ff-fie
 
 ff_add_field_to_field_group('ff-field-testing-a-repeatable-group-field', 'ff-field-testing-a-repeatable-multi-select-field-with-multi-default');
 
-
-
-
-
-
 ff_create_field('ff-field-testing-a-nested-group-field', 'group', array(
 	'label' => __('A nested group field', 'fields-framework'),
 ));
@@ -230,8 +202,6 @@ ff_create_field('ff-field-testing-a-nested-group-field', 'group', array(
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-group-field');
 
 ff_add_field_to_field_group('ff-field-testing-a-nested-group-field', 'ff-field-testing-a-group-field');
-
-
 
 ff_create_field('ff-field-testing-a-nested-repeatable-group-field', 'group', array(
 	'label' => __('A nested repeatable group field', 'fields-framework'),
@@ -242,11 +212,6 @@ ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-repeatabl
 
 ff_add_field_to_field_group('ff-field-testing-a-nested-repeatable-group-field', 'ff-field-testing-a-group-field');
 
-
-
-
-
-
 ff_create_field('ff-field-testing-a-nested-nested-group-field', 'group', array(
 	'label' => __('A nested nested group field', 'fields-framework'),
 ));
@@ -254,12 +219,6 @@ ff_create_field('ff-field-testing-a-nested-nested-group-field', 'group', array(
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-nested-group-field');
 
 ff_add_field_to_field_group('ff-field-testing-a-nested-nested-group-field', 'ff-field-testing-a-nested-group-field');
-
-
-
-
-
-
 
 ff_create_field('ff-field-testing-a-nested-nested-repeatable-group-field', 'group', array(
 	'label' => __('A nested nested repeatable group field', 'fields-framework'),

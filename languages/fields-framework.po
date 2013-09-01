@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-08-22 23:12+0530\n"
-"PO-Revision-Date: 2013-08-22 23:12+0530\n"
+"POT-Creation-Date: 2013-09-01 09:50+0530\n"
+"PO-Revision-Date: 2013-09-01 09:50+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -58,27 +58,43 @@ msgstr ""
 msgid "Empty Meta Section Title"
 msgstr ""
 
-#: ../php/classes.php:103 ../php/classes.php:645
+#: ../php/classes.php:103 ../php/classes.php:774
 msgid "Empty Taxonomies"
 msgstr ""
 
-#: ../php/classes.php:251
+#: ../php/classes.php:123
+msgid "Empty Widget Section Title"
+msgstr ""
+
+#: ../php/classes.php:132
+msgid "Fields Framework Widget"
+msgstr ""
+
+#: ../php/classes.php:161
+msgid "Title"
+msgstr ""
+
+#: ../php/classes.php:205
+msgid "Section"
+msgstr ""
+
+#: ../php/classes.php:392
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:268 ../php/classes.php:306
+#: ../php/classes.php:409 ../php/classes.php:447
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:285 ../php/classes.php:322
+#: ../php/classes.php:426 ../php/classes.php:463
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:507
+#: ../php/classes.php:636
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:655
+#: ../php/classes.php:784
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 
@@ -114,7 +130,7 @@ msgstr ""
 msgid "A radio field"
 msgstr ""
 
-#: ../php/demo-fields.php:49 ../php/field-testing.php:37
+#: ../php/demo-fields.php:49 ../php/field-testing.php:33
 msgid "A select field"
 msgstr ""
 
@@ -158,63 +174,63 @@ msgstr ""
 msgid "Here is a default value for this repeatable text field"
 msgstr ""
 
-#: ../php/field-testing.php:45
+#: ../php/field-testing.php:41
 msgid "A select field with default"
 msgstr ""
 
-#: ../php/field-testing.php:54
+#: ../php/field-testing.php:50
 msgid "A repeatable select field"
 msgstr ""
 
-#: ../php/field-testing.php:63
+#: ../php/field-testing.php:59
 msgid "A repeatable select field with default"
 msgstr ""
 
-#: ../php/field-testing.php:77
+#: ../php/field-testing.php:69
 msgid "A multi-select field"
 msgstr ""
 
-#: ../php/field-testing.php:86
+#: ../php/field-testing.php:78
 msgid "A multi-select field with default"
 msgstr ""
 
-#: ../php/field-testing.php:96
+#: ../php/field-testing.php:88
 msgid "A multi-select field with multi-default"
 msgstr ""
 
-#: ../php/field-testing.php:106
+#: ../php/field-testing.php:98
 msgid "A repeatable multi-select field"
 msgstr ""
 
-#: ../php/field-testing.php:116
+#: ../php/field-testing.php:108
 msgid "A repeatable multi-select field with default"
 msgstr ""
 
-#: ../php/field-testing.php:127
+#: ../php/field-testing.php:119
 msgid "A repeatable multi-select field with multi-default"
 msgstr ""
 
-#: ../php/field-testing.php:145
+#: ../php/field-testing.php:130
 msgid "A group field"
 msgstr ""
 
-#: ../php/field-testing.php:187
+#: ../php/field-testing.php:164
 msgid "A repeatable group field"
 msgstr ""
 
-#: ../php/field-testing.php:227
+#: ../php/field-testing.php:199
 msgid "A nested group field"
 msgstr ""
 
-#: ../php/field-testing.php:237
+#: ../php/field-testing.php:207
 msgid "A nested repeatable group field"
 msgstr ""
 
-#: ../php/field-testing.php:251
+#: ../php/field-testing.php:216
 msgid "A nested nested group field"
 msgstr ""
 
-#: ../php/field-testing.php:265
+#: ../php/field-testing.php:224
 msgid "A nested nested repeatable group field"
 msgstr ""
 
@@ -246,11 +262,11 @@ msgstr ""
 msgid "Invalid Field Type"
 msgstr ""
 
-#: ../php/functions.php:99 ../php/functions.php:161 ../php/functions.php:193
+#: ../php/functions.php:99 ../php/functions.php:164 ../php/functions.php:199
 msgid "Invalid Section UID"
 msgstr ""
 
-#: ../php/functions.php:103 ../php/functions.php:117 ../php/functions.php:165
+#: ../php/functions.php:103 ../php/functions.php:117 ../php/functions.php:168
 msgid "Invalid Field UID"
 msgstr ""
 
@@ -258,14 +274,14 @@ msgstr ""
 msgid "Invalid Field Group UID"
 msgstr ""
 
-#: ../php/functions.php:169
+#: ../php/functions.php:172
 msgid "Field UID does not exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:197
+#: ../php/functions.php:203
 msgid "No Fields exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:322
+#: ../php/functions.php:337
 msgid "Settings saved."
 msgstr ""

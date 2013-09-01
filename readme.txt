@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-field
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.9.0.2
+Stable tag: 0.10.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,9 +20,10 @@ A framework which can be used by developers to add fields to various areas of th
 
 This includes the ability of adding fields to:
 
+* Custom Administration Menus and Sub Menus
 * Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
 * Categories, Tags and [Custom Taxonomies](http://codex.wordpress.org/Taxonomies)
-* Custom Administration Menus and Sub Menus
+* Custom Widgets [Widgets](http://codex.wordpress.org/WordPress_Widgets)
 * User Profiles
 
 Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
@@ -89,8 +90,17 @@ If you feel the need for an additional field type then please use the [support f
 19. DateTime field
 20. ColorPicker field
 21. A demo of all fields
+22. An example of a Fields Widget with a Section selection drop down
+23. A fields widget rendering fields of section associated to it.
+24. Front end dump of a widget section
 
 == Changelog ==
+
+= 0.10.0.1 =
+* Added new Widgets section which let's you add fields to custom Field Framework Widgets
+* Passing -1 to DateTime's date_format or time_format arguments will disable display of Date or Time respectively.
+* Manually assign post ID to media uploader if and only if a given post type doesn't have thumbnail support enabled
+* Minor bug fixes
 
 = 0.9.0.1 =
 * Added a new Users field

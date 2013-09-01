@@ -137,6 +137,9 @@ if(!function_exists('ff_render_fields')) {
 			elseif($source == 'meta') {
 				$field->get_from_meta($source_type, $object_id);
 			}
+			elseif($source == 'custom') {
+				$field->get_from_custom($source_type, $object_id);
+			}
 
 			do_action('ff_field_before', $field_uid);
 
@@ -177,6 +180,9 @@ if(!function_exists('ff_get_field_from_section')) {
 		elseif($source == 'meta') {
 			return $field->get_from_meta($source_type, $object_id);
 		}
+		elseif($source == 'custom') {
+			return $field->get_from_custom($source_type, $object_id);
+		}
 	}
 }
 
@@ -206,9 +212,18 @@ if(!function_exists('ff_get_all_fields_from_section')) {
 			elseif($source == 'meta') {
 				$values[$field_uid] = $field->get_from_meta($source_type, $object_id);
 			}
+			elseif($source == 'custom') {
+				$values[$field_uid] = $field->get_from_custom($source_type, $object_id);
+			}
 		}
 
 		return $values;
+	}
+}
+
+if(!function_exists('ff_widgets_init')) {
+	function ff_widgets_init() {
+		register_widget('FF_WP_Widget');
 	}
 }
 
@@ -326,7 +341,7 @@ if(!function_exists('ff_admin_section')) {
 
 		echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
 	
-		wp_nonce_field('ff-options', 'ff-options-nonce');
+		wp_nonce_field('ff-save', 'ff-nonce');
 
 		ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
 
@@ -347,7 +362,7 @@ if(!function_exists('ff_admin_section')) {
 if(!function_exists('ff_save_options')) {
 	function ff_save_options() {
 		/* Because the hook that calls this function always runs, make sure there are sections registered and that we are inside an administration menu save process */
-		if(empty(FF_Registry::$sections) || empty($_POST['ff-section-uid']) || empty($_POST['ff-options-nonce']) || !wp_verify_nonce($_POST['ff-options-nonce'], 'ff-options')) {
+		if(empty(FF_Registry::$sections) || empty($_POST['ff-section-uid']) || ff_verify_nonce()) {
 			return;
 		}
 
@@ -408,7 +423,7 @@ if(!function_exists('ff_post_section')) {
 
 			do_action('ff_section_before', $section_uid);
 
-			wp_nonce_field('ff-meta', 'ff-meta-nonce');
+			wp_nonce_field('ff-save', 'ff-nonce');
 
 			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'post', $post->ID);
 
@@ -419,7 +434,7 @@ if(!function_exists('ff_post_section')) {
 
 if(!function_exists('ff_save_post')) {
 	function ff_save_post($post_id) {
-		if(empty($_POST['ff-meta-nonce']) || !wp_verify_nonce($_POST['ff-meta-nonce'], 'ff-meta')) {
+		if(ff_verify_nonce()) {
 			return;
 		}
 	
@@ -488,7 +503,7 @@ if(!function_exists('ff_taxonomy_form_fields')) {
 
 			do_action('ff_section_before', $section_uid);
 
-			wp_nonce_field('ff-options', 'ff-options-nonce');
+			wp_nonce_field('ff-save', 'ff-nonce');
 
 			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options', 'taxonomy', $ttid);
 
@@ -504,7 +519,7 @@ if(!function_exists('ff_taxonomy_form_fields')) {
 if(!function_exists('ff_save_term')) {
 	function ff_save_term($term_id, $tt_id, $taxonomy) {
 		/* Because the hook that calls this function always runs, make sure there are sections registered */
-		if(empty(FF_Registry::$sections) || empty($_POST['ff-options-nonce']) || !wp_verify_nonce($_POST['ff-options-nonce'], 'ff-options')) {
+		if(empty(FF_Registry::$sections) || ff_verify_nonce()) {
 			return;
 		}
 
@@ -533,7 +548,7 @@ if(!function_exists('ff_delete_term')) {
 			}
 
 			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->delete_from_options($tt_id);
+				$field->delete_from_options('taxonomy', $tt_id);
 			}
 		}
 	}
@@ -546,7 +561,7 @@ if(!function_exists('ff_user_section')) {
 				continue;
 			}
 	
-			wp_nonce_field('ff-meta', 'ff-meta-nonce');
+			wp_nonce_field('ff-save', 'ff-nonce');
 
 			do_action('ff_section_before', $section_uid);
 
@@ -559,7 +574,7 @@ if(!function_exists('ff_user_section')) {
 
 if(!function_exists('ff_save_user')) {
 	function ff_save_user($user_id) {
-		if(empty($_POST['ff-meta-nonce']) || !wp_verify_nonce($_POST['ff-meta-nonce'], 'ff-meta')) {
+		if(ff_verify_nonce()) {
 			return;
 		}
 
@@ -591,7 +606,7 @@ if(!function_exists('ff_exception_handler')) {
 
 		$trace = $traces[1];
 
-		echo 'Uncaught Error Exception: ' . $exception->getMessage() .  "\n<br />";
+		echo 'Uncaught Error Exception: ' . $exception->getMessage() . "\n<br />";
 
 		echo "File: {$trace['file']}\n<br />";
 
@@ -610,6 +625,12 @@ if(!function_exists('ff_admin_enqueue_scripts')) {
 		wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
 
 		wp_enqueue_script('ff-backend', FF_Registry::$plugins_url . '/js/backend.js', array('jquery'));
+	}
+}
+
+if(!function_exists('ff_verify_nonce')) {
+	function ff_verify_nonce() {
+		return empty($_POST['ff-nonce']) || !wp_verify_nonce($_POST['ff-nonce'], 'ff-save');
 	}
 }
 

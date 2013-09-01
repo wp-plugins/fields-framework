@@ -14,50 +14,10 @@ if(!class_exists('FF_Registry')) {
 
 if(!class_exists('FF_Section')) {
 	abstract class FF_Section {
+		public $skip_save = false;
+
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
-		}
-	}
-}
-
-if(!class_exists('FF_Taxonomy')) {
-	class FF_Taxonomy extends FF_Section {
-		public $taxonomies;
-	
-		public function __construct($arguments) {
-			parent::__construct($arguments);
-
-			/* Taxonomies are required. Atleast one must be provided. */
-			if(empty($this->taxonomies)) {
-				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
-			}
-		}
-	}
-}
-
-if(!class_exists('FF_User')) {
-	class FF_User extends FF_Section {
-	}
-}
-
-if(!class_exists('FF_Post')) {
-	class FF_Post extends FF_Section {
-		public $id, $title, $context = 'advanced', $priority = 'default';
-		
-		public $post_types = array(), $page_templates = array(), $post_formats = array();
-	
-		public function __construct($arguments) {
-			parent::__construct($arguments);
-
-			/* Post Types are required. Atleast one must be provided. */
-			if(empty($this->post_types)) {
-				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
-			}
-
-			/* Title is required */
-			if(empty($this->title)) {
-				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
-			}
 		}
 	}
 }
@@ -107,6 +67,179 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 	}
 }
 
+if(!class_exists('FF_Post')) {
+	class FF_Post extends FF_Section {
+		public $id, $title, $context = 'advanced', $priority = 'default';
+		
+		public $post_types = array(), $page_templates = array(), $post_formats = array();
+
+		public $hide_content_editor = false;
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Post Types are required. Atleast one must be provided. */
+			if(empty($this->post_types)) {
+				ff_throw_exception(__('Empty Post Types', 'fields-framework'));
+			}
+
+			/* Title is required */
+			if(empty($this->title)) {
+				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_Taxonomy')) {
+	class FF_Taxonomy extends FF_Section {
+		public $taxonomies;
+	
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Taxonomies are required. Atleast one must be provided. */
+			if(empty($this->taxonomies)) {
+				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_User')) {
+	class FF_User extends FF_Section {
+	}
+}
+
+if(!class_exists('FF_Widget')) {
+	class FF_Widget extends FF_Section {
+		public $title;
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			/* Title is required */
+			if(empty($this->title)) {
+				ff_throw_exception(__('Empty Widget Section Title', 'fields-framework'));
+			}
+		}
+	}
+}
+
+if(!class_exists('FF_WP_Widget')) {
+	class FF_WP_Widget extends WP_Widget {
+		public function __construct() {
+			parent::__construct('ff_wp_widget', __('Fields Framework Widget', 'fields-framework'));
+		}
+
+		public function widget($arguments, $instance) {
+			$section_title = apply_filters('widget_title', $instance['ff-section-title']);
+
+			echo $arguments['before_widget'];
+
+			if (!empty($section_title)) {
+				echo $arguments['before_title'] . $section_title . $arguments['after_title'];
+			}
+
+			if(!empty($instance['ff-section-uid'])) {
+				$section_uid = $instance['ff-section-uid'];
+
+				$values = !empty(FF_Registry::$fields_by_sections[$section_uid]) ? ff_get_all_fields_from_section($section_uid, 'custom', 'widget', $instance) : null;
+	
+				do_action('ff_wp_widget', $section_uid, $values);
+			}
+
+			echo $arguments['after_widget'];
+		}
+
+		public function form($instance) {
+			$section_title = !empty($instance['ff-section-title']) ? $instance['ff-section-title'] : null;
+
+			ff_create_field('ff-section-title', 'text', array(
+				'name' => $this->get_field_name('ff-section-title'),
+				'id' => $this->get_field_id('ff-section-title'),
+				'label' => __('Title', 'fields-framework'),
+				'value' => $section_title,
+			));
+
+			FF_Registry::$fields['ff-section-title']->container();
+			
+			unset(FF_Registry::$fields['ff-section-title']);
+
+			if(empty(FF_Registry::$sections)) {
+				return;
+			}
+
+			if(!empty($instance['ff-section-uid'])) {
+				$section_uid = $instance['ff-section-uid'];
+
+				if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+					do_action('ff_section_before', $section_uid);
+		
+					ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'custom', 'widget', $instance);
+		
+					do_action('ff_section_after', $section_uid);
+				}
+
+				ff_create_field('ff-section-uid', 'hidden', array(
+					'name' => $this->get_field_name('ff-section-uid'),
+					'id' => $this->get_field_id('ff-section-uid'),
+					'value' => $section_uid,
+				));
+			}
+			else {
+				$options = null;
+	
+				foreach(FF_Registry::$sections as $section_uid => $section) {
+					if(!is_a($section, 'FF_Widget') || empty(FF_Registry::$fields_by_sections[$section_uid])) {
+						continue;
+					}
+					
+					$options[$section_uid] = $section->title;
+				}
+	
+				if(!empty($options)) {
+					ff_create_field('ff-section-uid', 'select', array(
+						'name' => $this->get_field_name('ff-section-uid'),
+						'id' => $this->get_field_id('ff-section-uid'),
+						'label' => __('Section', 'fields-framework'),
+						'options' => $options,
+						'prepend_blank' => true,
+					));
+				}
+			}
+
+			if(!empty(FF_Registry::$fields['ff-section-uid'])) {
+				FF_Registry::$fields['ff-section-uid']->container();
+			
+				unset(FF_Registry::$fields['ff-section-uid']);
+			}
+		}
+
+		public function update($new_instance, $old_instance) {
+			$instance['ff-section-title'] = !empty($new_instance['ff-section-title']) ? $new_instance['ff-section-title'] : null;
+
+			$instance['ff-section-uid'] = !empty($new_instance['ff-section-uid']) ? $new_instance['ff-section-uid'] : null;
+
+			if(!empty($instance['ff-section-uid'])) {
+				$section_uid = $instance['ff-section-uid'];
+		
+				$section = FF_Registry::$sections[$section_uid];
+		
+				if($section->skip_save == false) {
+					foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
+						$field_name = $field->get_name();
+
+						$instance[$field_name] = $field->save();
+					}
+				}
+			}
+		
+			return $instance;
+		}
+	}
+}
+
 if(!class_exists('FF_Field')) {
 	abstract class FF_Field {
 		/*
@@ -125,7 +258,13 @@ if(!class_exists('FF_Field')) {
 			}
 		}
 
+		public function get_name() {
+			return $this->name;
+		}
+
 		public function use_value($type = null) {
+			$value = null;
+
 			if($type == 'saved') {
 				$this->value = $this->saved_value;
 			}
@@ -135,27 +274,25 @@ if(!class_exists('FF_Field')) {
 			else {
 				/* Automatically determine the value that should be used */
 				if(!ff_empty($this->saved_value)) {
-					$this->value = $this->saved_value;
+					$value = $this->value = $this->saved_value;
 				}
-				else {
-					$this->value = $this->default_value;
+				elseif($this->repeatable != true) {
+					$value = $this->value = $this->default_value;
 				}
 			}
-			
-			return $this->value;
+
+			if($this->repeatable == true && ff_empty($value) && !is_array($value)) {
+				$value = array();
+			}
+
+			return $value;
 		}
 
 		public function set_saved_value($saved_value) {
-			if($this->repeatable == true && ff_empty($saved_value)) {
-				$saved_value = array();
-			}
-
 			$this->saved_value = $saved_value;
 
-			/* This will set the value property to either saved_value or default_value */
-			$this->use_value();
-
-			return $this->saved_value;
+			/* This will set the field's value property to either saved_value or default_value */
+			return $this->use_value();
 		}
 
 		public function get_from_options($option_type = null, $object_id = null) {
@@ -178,22 +315,33 @@ if(!class_exists('FF_Field')) {
 			return $this->set_saved_value($saved_value);
 		}
 
+		public function get_from_custom($custom_type, $object_id) {
+			$name = $this->name;
+
+			$saved_value = $custom_type == 'widget' && !empty($object_id[$name]) ? $object_id[$name] : null;
+			
+			return $this->set_saved_value($saved_value);
+		}
+
+		public function save() {
+			$name = $this->name;
+
+			$value = isset($_POST[$name]) ? ff_sanitize($_POST[$name]) : null;
+
+			return $value;
+		}
+
 		public function save_to_options($option_type = null, $object_id = null) {
 			$name = $this->name;
 
-			if(isset($_POST[$name])) {
-				$value = ff_sanitize($_POST[$name]);
+			if($option_type == 'taxonomy') {
+				$name = "ttid_{$object_id}_{$name}";
+			}
 
-				if($option_type == 'taxonomy') {
-					$name = "ttid_{$object_id}_{$name}";
-				}
+			$value = $this->save();
 
-				if(!ff_empty($value)) {
-					update_option($name, $value);
-				}
-				else {
-					delete_option($name);
-				}
+			if(!ff_empty($value)) {
+				update_option($name, $value);
 			}
 			else {
 				delete_option($name);
@@ -203,25 +351,22 @@ if(!class_exists('FF_Field')) {
 		public function save_to_meta($meta_type, $object_id) {
 			$name = $this->name;
 
-			if(isset($_POST[$name])) {
-				$value = ff_sanitize($_POST[$name]);
-			
-				if(!ff_empty($value)) {
-					update_metadata($meta_type, $object_id, $name, $value);
-				}
-				else {
-					delete_metadata($meta_type, $object_id, $name);
-				}
+			$value = $this->save();
+
+			if(!ff_empty($value)) {
+				update_metadata($meta_type, $object_id, $name, $value);
 			}
 			else {
 				delete_metadata($meta_type, $object_id, $name);
 			}
 		}
-	
-		public function delete_from_options($object_id = null) {
+
+		public function delete_from_options($option_type = null, $object_id = null) {
 			$name = $this->name;
-	
-			$name = "ttid_{$object_id}_{$name}";
+
+			if($option_type == 'taxonomy') {
+				$name = "ttid_{$object_id}_{$name}";
+			}
 	
 			delete_option($name);
 		}
@@ -355,27 +500,24 @@ if(!class_exists('FF_Field_Group')) {
 		public function set_saved_value($saved_value) {
 			$saved_value = parent::set_saved_value($saved_value);
 
-			if(ff_empty($saved_value)) {
-				$saved_value = array();
-
+			if($this->repeatable != true) {
+				foreach($this->fields as $field) {
+					$set_saved_value = !ff_empty($saved_value) && is_array($saved_value) && array_key_exists($field->name, $saved_value) ? $saved_value[$field->name] : null;
+	
+					$saved_value[$field->name] = $field->set_saved_value($set_saved_value);
+				}
+			}
+			elseif(!ff_empty($saved_value) && is_array($saved_value)) {
 				foreach($saved_value as &$value) {
 					foreach($this->fields as $field) {
-						$set_saved_value = null;
-	
-						if(!ff_empty($value) && is_array($value) && array_key_exists($field->name, $value)) {
-							$set_saved_value = $value[$field->name];
-						}
-	
-						$field->set_saved_value($set_saved_value);
-	
-						$value[$field->name] = $field->use_value();
+						$set_saved_value = !ff_empty($value) && is_array($value) && array_key_exists($field->name, $value) ? $value[$field->name] : null;
+
+						$value[$field->name] = $field->set_saved_value($set_saved_value);
 					}
 				}
 			}
-
-			$this->saved_value = $saved_value;
-
-			return $this->saved_value;
+			
+			return $saved_value;
 		}
 
 		public function html() {
@@ -392,11 +534,7 @@ if(!class_exists('FF_Field_Group')) {
 
 				$field->id = "{$field_group_id}-{$original_field_id}";
 
-				$value = null;
-
-				if(is_array($this->value) && array_key_exists($original_field_name, $this->value)) {
-					$value = $this->value[$original_field_name];
-				}
+				$value = is_array($this->value) && array_key_exists($original_field_name, $this->value) ? $this->value[$original_field_name] : null;
 
 				$field->set_saved_value($value);
 
@@ -426,7 +564,7 @@ if(!class_exists('FF_Field_Text')) {
 
 if(!class_exists('FF_Field_DateTime')) {
 	class FF_Field_DateTime extends FF_Field {
-		protected $class = 'ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
+		protected $class = 'large-text ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -446,14 +584,16 @@ if(!class_exists('FF_Field_DateTime')) {
 
 if(!class_exists('FF_Field_ColorPicker')) {
 	class FF_Field_ColorPicker extends FF_Field {
-		protected $class = 'ff-colorpicker';
+		protected $class = 'large-text ff-colorpicker';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/colorpicker.css');
+			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
-			wp_enqueue_script('ff-colorpicker', FF_Registry::$plugins_url . '/js/colorpicker.js', array('jquery'));
+			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
+
+			wp_enqueue_script('ff-colorpicker', FF_Registry::$plugins_url . '/js/jquery.colorpicker.js', array('jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-button'));
 		}
 
 		public function html() {
@@ -512,20 +652,18 @@ if(!class_exists('FF_Field_Multiple')) {
 	abstract class FF_Field_Multiple extends FF_Field {
 		protected $multiple;
 
-		public function set_saved_value($saved_value) {
-			$saved_value = parent::set_saved_value($saved_value);
+		public function use_value($type = null) {
+			$value = parent::use_value($type);
 
-			if($this->multiple == true && ff_empty($saved_value)) {
-				$saved_value = array();
+			if($this->multiple == true && ff_empty($value) && !is_array($value)) {
+				$value = array();
 			}
 
-			$this->saved_value = $saved_value;
-
-			return $this->saved_value;
+			return $value;
 		}
-		
+
 		public function get_name() {
-			$name = $this->name;
+			$name = parent::get_name();
 
 			if($this->multiple == true) {
 				$name .= '[]';
@@ -549,7 +687,7 @@ if(!class_exists('FF_Field_Checkbox')) {
 				$i = 1;
 
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="checkbox" name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . '  /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
+					echo '<input type="checkbox" name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
 					
 					$i++;
 				}
@@ -569,7 +707,7 @@ if(!class_exists('FF_Field_Radio')) {
 				$i = 1;
 				
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="radio" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . '  /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
+					echo '<input type="radio" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
 					
 					$i++;
 				}
@@ -595,7 +733,7 @@ if(!class_exists('FF_Field_Select')) {
 
 			if(!empty($options)) {
 				foreach($options as $option_name => $option_value) {
-					echo '<option value="' . $option_name  . '"' . ((in_array($option_name, (array) $this->value)) ? ' selected="selected"' : null) . '>' . $option_value  . '</option>';
+					echo '<option value="' . $option_name . '"' . ((in_array($option_name, (array) $this->value)) ? ' selected="selected"' : null) . '>' . $option_value . '</option>';
 				}
 			}
 
@@ -653,16 +791,36 @@ if(!class_exists('FF_Field_Select_Terms')) {
 	}
 }
 
+if(!class_exists('FF_Field_Select_Users')) {
+	class FF_Field_Select_Users extends FF_Field_Select {
+		protected $parameters = array();
+
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			$users = get_users($this->parameters);
+
+			if(empty($users)) {
+				return;
+			}
+
+			foreach($users as $user) {
+				$this->options[$user->ID] = "{$user->display_name} ({$user->user_login})";
+			}
+		}
+	}
+}
+
 if(!class_exists('FF_Field_Editor')) {
 	class FF_Field_Editor extends FF_Field {
-		protected $wpautop = true, $media_buttons  = true, $textarea_rows = 10, $tabindex, $editor_css, $editor_class, $teeny = false, $dfw = false, $tinymce = true, $quicktags = true;
+		protected $wpautop = true, $media_buttons = true, $textarea_rows = 10, $tabindex, $editor_css, $editor_class, $teeny = false, $dfw = false, $tinymce = true, $quicktags = true;
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
 			$id = null;
 
-			for ($i = 0; $i < strlen($this->id); $i++)  {
+			for ($i = 0; $i < strlen($this->id); $i++) {
 				$character = ord($this->id[$i]);
 
 				if($character >= 97 && $character <= 122) {

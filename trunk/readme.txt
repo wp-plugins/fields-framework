@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-field
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.10.0.1
+Stable tag: 0.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,7 +96,7 @@ If you feel the need for an additional field type then please use the [support f
 
 == Changelog ==
 
-= 0.10.0.1 =
+= 0.10.2 =
 * Added new Widgets section which let's you add fields to custom Field Framework Widgets
 * Passing -1 to DateTime's date_format or time_format arguments will disable display of Date or Time respectively.
 * Manually assign post ID to media uploader if and only if a given post type doesn't have thumbnail support enabled

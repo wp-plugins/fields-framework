@@ -1,10 +1,10 @@
 === Fields Framework ===
 Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
-Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field
+Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-field
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.8.2
+Stable tag: 0.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,15 +12,18 @@ A framework which can be used by developers to add fields to various areas of th
 
 == Description ==
 
+Please show your support for this plugin by giving it [a rating](http://wordpress.org/support/view/plugin-reviews/fields-framework?rate=5#postform)!
+
 [WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
 A framework which can be used by developers to add fields to various areas of the administration panel.
 
 This includes the ability of adding fields to:
 
+* Custom Administration Menus and Sub Menus
 * Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
 * Categories, Tags and [Custom Taxonomies](http://codex.wordpress.org/Taxonomies)
-* Custom Administration Menus and Sub Menus
+* Custom Widgets [Widgets](http://codex.wordpress.org/WordPress_Widgets)
 * User Profiles
 
 Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
@@ -41,17 +44,16 @@ Currently the following types of fields are supported:
 * Select - A drop down from which a single or multiple items can be selected depending on whether you have allowed selection of multiple values
 * Select_Posts - A drop down which can contain items belonging to any post type viz. Posts, Page, Attachments or of any other Custom Post Type
 * Select_Terms - A drop down which can contain terms from any taxonomy which includes Tags, Categories or any other Custom Taxonomy
+* Select_Users - A drop down which can contain users registered on the site
 * Editor - A WYSIWYG editor. This is the same one that's used on the post edit screen by default for editing the content of the post
 * DateTime
 * ColorPicker
 
 Most fields including the Group field can be made repeatable.
 
-= Support =
+= Additional Field Requests =
 
 If you feel the need for an additional field type then please use the [support forum](http://wordpress.org/support/plugin/fields-framework) and leave your suggestion. This will be looked into ASAP.
-
-Also please show your support for this plugin by giving it a rating!
 
 == Installation ==
 
@@ -85,8 +87,29 @@ Also please show your support for this plugin by giving it a rating!
 16. A section assigned to a page with a page template named 'About Page'
 17. Two individual fields
 18. A section assigned to a page with a page template named 'Contact Page'
+19. DateTime field
+20. ColorPicker field
+21. A demo of all fields
+22. An example of a Fields Widget with a Section selection drop down
+23. A fields widget rendering fields of section associated to it.
+24. Front end dump of a widget section
 
 == Changelog ==
+
+= 0.10 =
+* Added new Widgets section which let's you add fields to custom Field Framework Widgets
+* Passing -1 to DateTime's date_format or time_format arguments will disable display of Date or Time respectively.
+* Manually assign post ID to media uploader if and only if a given post type doesn't have thumbnail support enabled
+* Minor bug fixes
+
+= 0.9.0.1 =
+* Added a new Users field
+* Fixed two issues related to the media uploader
+* Further improvements to default values that are returned for the fields
+* Added skip_save argument which if set to true and passed to sections, will skip saving of those sections
+* DateTime and ColorPicker fields now appears on focus instead of click. They are not called on click because when delegated, they would need to be clicked twice to appear.
+* Replaced ColorPicker widget to more advanced one
+* Added new boolean section argument named hide_content_editor for Posts sections which if set to true will hide the content editor for those sections
 
 = 0.8.2 =
 * Minor bug fixes related to delegation of events

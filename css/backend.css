@@ -42,3 +42,6 @@
 	vertical-align: middle;
 	cursor: pointer;
 }
+div[id*="ff_wp_widget"] {
+	overflow: auto !important;
+}

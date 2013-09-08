@@ -17,6 +17,8 @@ function ff_load() {
 	
 	ff_colorpicker();
 
+	ff_validationengine();
+
 	ff_placeholder();
 
 	ff_media_uploader();
@@ -143,6 +145,12 @@ function ff_colorpicker() {
 				showNoneButton : true
 			});
 		});
+	}
+}
+
+function ff_validationengine() {
+	if(jQuery.fn.validationEngine !== undefined) {
+		jQuery('#wpbody-content form, form#post, form#addtag, form#edittag, form#your-profile, .widget form').validationEngine({promptPosition: 'topLeft'});
 	}
 }
 

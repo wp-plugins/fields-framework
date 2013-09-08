@@ -620,7 +620,13 @@ if(!function_exists('ff_exception_handler')) {
 
 if(!function_exists('ff_admin_enqueue_scripts')) {
 	function ff_admin_enqueue_scripts() {
+		wp_enqueue_style('ff-validationEngine', FF_Registry::$plugins_url . '/css/validationEngine.jquery.css');
+
 		wp_enqueue_style('ff-backend', FF_Registry::$plugins_url . '/css/backend.css');
+
+		wp_enqueue_script('ff-validationEngine-en', FF_Registry::$plugins_url . '/js/jquery.validationEngine-en.js', array('jquery'));
+
+		wp_enqueue_script('ff-validationEngine', FF_Registry::$plugins_url . '/js/jquery.validationEngine.js', array('jquery'));
 
 		wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
 
@@ -634,7 +640,15 @@ if(!function_exists('ff_verify_nonce')) {
 	}
 }
 
-if(!function_exists('ff_set_class_defaults')) {
+if(!function_exists('ff_validator_attributes')) {
+	function ff_validator_attributes($attributes) {
+		foreach($attributes as $key => $value) {
+			echo ' data-' . $key . '="' . $value . '"';
+		}
+	}
+}
+
+if(!function_exists('ff_set_object_defaults')) {
 	function ff_set_object_defaults($object, $arguments) {
 		$reflection = new ReflectionClass($object); 
 

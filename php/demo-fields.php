@@ -85,4 +85,11 @@ ff_create_field('ff-demo-fields-a-editor-field', 'editor', array(
 ));
 
 ff_add_field_to_section('ff-demo-fields', 'ff-demo-fields-a-editor-field');
+
+ff_create_field('ff-demo-fields-an-email-field', 'text', array(
+	'label' => __('An email field', 'fields-framework'),
+	'validator' => array('validation-engine' => 'validate[required,custom[email]]'),
+));
+
+ff_add_field_to_section('ff-demo-fields', 'ff-demo-fields-an-email-field');
 ?>

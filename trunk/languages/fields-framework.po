@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-09-01 09:50+0530\n"
-"PO-Revision-Date: 2013-09-01 09:50+0530\n"
+"POT-Creation-Date: 2013-09-08 09:54+0530\n"
+"PO-Revision-Date: 2013-09-08 09:54+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Empty Meta Section Title"
 msgstr ""
 
-#: ../php/classes.php:103 ../php/classes.php:774
+#: ../php/classes.php:103 ../php/classes.php:824
 msgid "Empty Taxonomies"
 msgstr ""
 
@@ -78,23 +78,23 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: ../php/classes.php:392
+#: ../php/classes.php:394
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:409 ../php/classes.php:447
+#: ../php/classes.php:411 ../php/classes.php:449
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:426 ../php/classes.php:463
+#: ../php/classes.php:428 ../php/classes.php:465
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:636
+#: ../php/classes.php:662
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:784
+#: ../php/classes.php:834
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 
@@ -148,6 +148,10 @@ msgstr ""
 
 #: ../php/demo-fields.php:84
 msgid "A editor field"
+msgstr ""
+
+#: ../php/demo-fields.php:90
+msgid "An email field"
 msgstr ""
 
 #: ../php/field-testing.php:2

@@ -93,7 +93,7 @@ if(!class_exists('FF_Post')) {
 
 if(!class_exists('FF_Taxonomy')) {
 	class FF_Taxonomy extends FF_Section {
-		public $taxonomies;
+		public $taxonomies = array();
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -248,7 +248,9 @@ if(!class_exists('FF_Field')) {
 		value is a property which is either set to use saved_value or if that's empty then it uses default_value
 		*/
 		protected $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false, $minimal = false;
-	
+
+		protected $validator = array();
+
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
 
@@ -557,7 +559,13 @@ if(!class_exists('FF_Field_Text')) {
 		protected $class = 'large-text';
 	
 		public function html() {
-			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '"';
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo ' />';
 		}
 	}
 }
@@ -577,7 +585,13 @@ if(!class_exists('FF_Field_DateTime')) {
 		}
 
 		public function html() {
-			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" data-date-format="' . esc_attr($this->date_format) . '" data-time-format="' . esc_attr($this->time_format) . '" />';
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" data-date-format="' . esc_attr($this->date_format) . '" data-time-format="' . esc_attr($this->time_format) . '"';
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo ' />';
 		}
 	}
 }
@@ -597,7 +611,13 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		}
 
 		public function html() {
-			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '"';
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo ' />';
 		}
 	}
 }
@@ -631,7 +651,13 @@ if(!class_exists('FF_Field_Media')) {
 		}
 	
 		public function html() {
-			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '" />';
+			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '"';
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo ' />';
 
 			echo '<p><img data-to="' . esc_attr($this->id) . '"' . (!empty($this->library) ? (' data-library="' . esc_attr(json_encode($this->library)) . '"') : null) . ' src="' . FF_Registry::$plugins_url . '/images/upload.png' . '" alt="' . __('Upload', 'fields-framework') . '" class="ff_upload_media" /></p>';
 		}
@@ -643,7 +669,13 @@ if(!class_exists('FF_Field_Textarea')) {
 		protected $class = 'large-text', $rows = 5, $cols = 50;
 
 		public function html() {
-			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '">' . esc_textarea($this->value) . '</textarea>';
+			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '"';
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo '>' . esc_textarea($this->value) . '</textarea>';
 		}
 	}
 }
@@ -687,7 +719,13 @@ if(!class_exists('FF_Field_Checkbox')) {
 				$i = 1;
 
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="checkbox" name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
+					echo '<input type="checkbox" name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null);
+
+					if(!empty($this->validator)) {
+						ff_validator_attributes($this->validator);
+					}
+
+					echo ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
 					
 					$i++;
 				}
@@ -707,7 +745,13 @@ if(!class_exists('FF_Field_Radio')) {
 				$i = 1;
 				
 				foreach($options as $option_name => $option_value) {
-					echo '<input type="radio" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null) . ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
+					echo '<input type="radio" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '-' . $i . '" value="' . esc_attr($option_name) . '" class="' . esc_attr($this->class) . '"' . ((in_array($option_name, (array) $this->value)) ? ' checked="checked"' : null);
+
+					if(!empty($this->validator)) {
+						ff_validator_attributes($this->validator);
+					}
+
+					echo ' /> <label for="' . esc_attr($this->id) . '-' . $i . '">' . $option_value . '</label><br />';
 					
 					$i++;
 				}
@@ -723,7 +767,13 @@ if(!class_exists('FF_Field_Select')) {
 		public function html() {
 			$name = $this->get_name();
 
-			echo '<select name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '" class="' . esc_attr($this->class) . '"' . (($this->multiple == true) ? ' multiple="multiple" size="' . $this->size . '"' : null) . '>';
+			echo '<select name="' . esc_attr($name) . '" id="' . esc_attr($this->id) . '" class="' . esc_attr($this->class) . '"' . (($this->multiple == true) ? ' multiple="multiple" size="' . $this->size . '"' : null);
+
+			if(!empty($this->validator)) {
+				ff_validator_attributes($this->validator);
+			}
+
+			echo '>';
 
 			if(!empty($this->placeholder) || $this->prepend_blank == true) {
 				echo '<option value="">' . $this->placeholder . '</option>';
@@ -813,10 +863,16 @@ if(!class_exists('FF_Field_Select_Users')) {
 
 if(!class_exists('FF_Field_Editor')) {
 	class FF_Field_Editor extends FF_Field {
-		protected $wpautop = true, $media_buttons = true, $textarea_rows = 10, $tabindex, $editor_css, $editor_class, $teeny = false, $dfw = false, $tinymce = true, $quicktags = true;
+		protected $settings = array();
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
+
+			$settings = array(
+				'textarea_name' => $this->name,
+			);
+
+			$this->settings = wp_parse_args($this->settings, $settings);
 
 			$id = null;
 
@@ -835,21 +891,7 @@ if(!class_exists('FF_Field_Editor')) {
 		}
 
 		public function html() {
-			$arguments = array(
-				'wpautop' => $this->wpautop,
-				'media_buttons' => $this->media_buttons,
-				'textarea_name' => $this->name,
-				'textarea_rows' => $this->textarea_rows,
-				'tabindex' => $this->tabindex,
-				'editor_css' => $this->editor_css,
-				'editor_class' => $this->editor_class,
-				'teeny' => $this->teeny,
-				'dfw' => $this->dfw,
-				'tinymce' => $this->tinymce,
-				'quicktags' => $this->quicktags,
-			);
-
-			wp_editor($this->value, $this->id, $arguments);
+			wp_editor($this->value, $this->id, $this->settings);
 		}
 	}
 }

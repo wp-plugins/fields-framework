@@ -1,10 +1,10 @@
 === Fields Framework ===
 Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
-Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-field
+Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.10.2
+Stable tag: 0.11.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,8 @@ This includes the ability of adding fields to:
 Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
 
 * The plugin can also be placed inside a theme. This is useful if you would like to bundle this plugin with a theme
+
+The plugin supports client side validation using JavaScript
 
 = Fields Supported =
 
@@ -96,6 +98,9 @@ If you feel the need for an additional field type then please use the [support f
 
 == Changelog ==
 
+= 0.11.2 =
+* Added support for client side validation using JavaScript
+
 = 0.10.2 =
 * Added new Widgets section which let's you add fields to custom Field Framework Widgets
 * Passing -1 to DateTime's date_format or time_format arguments will disable display of Date or Time respectively.
@@ -160,4 +165,17 @@ If you feel the need for an additional field type then please use the [support f
 
 == Upgrade Notice ==
 
-None
+= 0.11.2 =
+* Editor field setting variables will now need to be passed to a settings array instead of directly to the arguments array. So for example, the following:
+
+'arguments' => array(
+	'wpautop' => false
+)
+
+should now be:
+
+'arguments' => array(
+	'settings' => array(
+		'wpautop' => false
+	)
+)

@@ -1,35 +1,30 @@
 jQuery(function() {
-	if(jQuery.ui.timepicker !== undefined) {
-		jQuery('.ff-fields').on('click', '.ff-datetime', function() {
-			jQuery(this).datetimepicker({dateFormat: jQuery(this).data('date-format'), timeFormat: jQuery(this).data('time-format')});
-		});
-	}
+	ff_load();
 
-	if(jQuery.fn.ColorPicker !== undefined) {
-		jQuery('.ff-fields').on('click', '.ff-colorpicker', function() {
-			jQuery(this).ColorPicker({
-				onSubmit: function(hsb, hex, rgb, el) {
-					jQuery(el).val('#' + hex);
-		
-					jQuery(el).ColorPickerHide();
-				},
-				onBeforeShow: function () {
-					jQuery(this).ColorPickerSetColor(this.value);
-				}
-			}).bind('keyup', function() {
-				jQuery(this).ColorPickerSetColor(this.value);
-			});
-		});
-	}
+	jQuery(document).ajaxComplete(function(event, xhr, settings) {
+		if(settings.data.match(/action\=save-widget/) == 'action=save-widget' && settings.data.match(/delete_widget=1/) != 'delete_widget=1') {
+			ff_load();
+		}
+	});
+});
 
+function ff_load() {
 	jQuery('.ff-repeatable').each(function() {
 		ff_repeatable(this);
 	});
 
-	if(jQuery.fn.placeholder !== undefined) {
-		jQuery('input, textarea').placeholder();
-	}
-});
+	ff_datetimepicker();
+	
+	ff_colorpicker();
+
+	ff_validationengine();
+
+	ff_placeholder();
+
+	ff_media_uploader();
+	
+	ff_builder();
+}
 
 function ff_repeatable(ff_table) {
 	var table_class = '.ff-repeatable';
@@ -111,4 +106,80 @@ function ff_repeatable(ff_table) {
 
 		event.stopImmediatePropagation();
 	});
+}
+
+function ff_datetimepicker() {
+	if(jQuery.ui.timepicker !== undefined) {
+		jQuery('.ff-fields').on('focus', '.ff-datetime', function() {
+			var settings = {};
+			
+			var date_format = jQuery(this).data('date-format');
+
+			var time_format = jQuery(this).data('time-format');
+			
+			if(date_format == -1) {
+				settings.timeOnly = true;
+			}
+			else {
+				settings.dateFormat = date_format;
+			}
+
+			if(time_format == -1) {
+				settings.showTimepicker = false;
+			}
+			else {
+				settings.timeFormat = time_format;
+			}
+
+			jQuery(this).datetimepicker(settings);
+		});
+	}
+}
+
+function ff_colorpicker() {
+	if(jQuery.fn.colorpicker !== undefined) {
+		jQuery('.ff-fields').on('focus', '.ff-colorpicker', function() {
+			jQuery(this).colorpicker({
+				alpha: true,
+				colorFormat: 'RGBA',
+				dragggable: false,
+				parts: ['map', 'bar', 'hex', 'hsv', 'rgb', 'alpha', 'lab', 'cmyk', 'preview', 'footer'],
+				showNoneButton : true
+			});
+		});
+	}
+}
+
+function ff_validationengine() {
+	if(jQuery.fn.validationEngine !== undefined) {
+		jQuery('#wpbody-content form, form#post, form#addtag, form#edittag, form#your-profile, .widget form').validationEngine({promptPosition: 'topLeft'});
+	}
+}
+
+function ff_placeholder() {
+	if(jQuery.fn.placeholder !== undefined) {
+		jQuery('input, textarea').placeholder();
+	}
+}
+
+function ff_builder() {
+	jQuery('.ff-builder a').filter(function() {
+		return jQuery(this).attr('href').match(/\=delete&/) == '=delete&';
+	}).click(function() {
+		if(jQuery(this).attr('href').match(/\=delete&/) == '=delete&') {
+			return confirm('Confirm Delete?');
+		}
+
+		return false;
+	});
+	
+
+
+	if(jQuery.ui.sortable !== undefined) {
+		jQuery('.ff-builder-fields-by-sections').each(function() {
+			jQuery(this).sortable({
+					items: '> li',
+			});
+		});
+	}
 }

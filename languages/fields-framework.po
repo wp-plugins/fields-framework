@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-09-08 09:54+0530\n"
-"PO-Revision-Date: 2013-09-08 09:54+0530\n"
+"POT-Creation-Date: 2013-09-14 16:27+0530\n"
+"PO-Revision-Date: 2013-09-14 16:27+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -14,20 +14,379 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../php/admin-menu.php:6 ../php/admin-menu.php:7
+#: ../php/admin-menu.php:6 ../php/admin-menu.php:7 ../php/admin-menu.php:46
 msgid "Fields Framework"
 msgstr ""
 
-#: ../php/admin-menu.php:11
-msgid "Enable Field Testing and Demo Fields"
+#: ../php/admin-menu.php:13
+msgid "Disable Builder"
 msgstr ""
 
-#: ../php/admin-menu.php:12
+#: ../php/admin-menu.php:14 ../php/admin-menu.php:28
 msgid "No"
 msgstr ""
 
-#: ../php/admin-menu.php:12
+#: ../php/admin-menu.php:14 ../php/admin-menu.php:28
 msgid "Yes"
+msgstr ""
+
+#: ../php/admin-menu.php:27
+msgid "Enable Field Testing and Demo Fields"
+msgstr ""
+
+#: ../php/admin-menu.php:47
+msgid "WordPress Fields Framework Documentation"
+msgstr ""
+
+#: ../php/builder.php:2
+msgid "Builder"
+msgstr ""
+
+#: ../php/builder.php:16
+msgid "Area"
+msgstr ""
+
+#: ../php/builder.php:24
+msgid "Type"
+msgstr ""
+
+#: ../php/builder.php:32
+msgid "Action"
+msgstr ""
+
+#: ../php/builder.php:40 ../php/builder.php:49
+msgid "UID"
+msgstr ""
+
+#: ../php/builder.php:57
+msgid "Key"
+msgstr ""
+
+#: ../php/builder.php:65
+msgid "Value"
+msgstr ""
+
+#: ../php/builder.php:73
+msgid "Skip Save"
+msgstr ""
+
+#: ../php/builder.php:83
+msgid "Page Title"
+msgstr ""
+
+#: ../php/builder.php:92
+msgid "Menu Title"
+msgstr ""
+
+#: ../php/builder.php:101
+msgid "Capability"
+msgstr ""
+
+#: ../php/builder.php:110
+msgid "Icon URL"
+msgstr ""
+
+#: ../php/builder.php:118
+msgid "Position"
+msgstr ""
+
+#: ../php/builder.php:126
+msgid "Parent UID"
+msgstr ""
+
+#: ../php/builder.php:135 ../php/builder.php:144
+msgid "ID"
+msgstr ""
+
+#: ../php/builder.php:152 ../php/classes.php:161
+msgid "Title"
+msgstr ""
+
+#: ../php/builder.php:167
+msgid "Post Types"
+msgstr ""
+
+#: ../php/builder.php:179
+msgid "Context"
+msgstr ""
+
+#: ../php/builder.php:188
+msgid "Priority"
+msgstr ""
+
+#: ../php/builder.php:203
+msgid "Page Templates"
+msgstr ""
+
+#: ../php/builder.php:212
+msgid "Aside"
+msgstr ""
+
+#: ../php/builder.php:213
+msgid "Chat"
+msgstr ""
+
+#: ../php/builder.php:214
+msgid "Gallery"
+msgstr ""
+
+#: ../php/builder.php:215
+msgid "Link"
+msgstr ""
+
+#: ../php/builder.php:216
+msgid "Image"
+msgstr ""
+
+#: ../php/builder.php:217
+msgid "Quote"
+msgstr ""
+
+#: ../php/builder.php:218
+msgid "Status"
+msgstr ""
+
+#: ../php/builder.php:219
+msgid "Video"
+msgstr ""
+
+#: ../php/builder.php:220
+msgid "Audio"
+msgstr ""
+
+#: ../php/builder.php:226
+msgid "Post Formats"
+msgstr ""
+
+#: ../php/builder.php:243
+msgid "Taxonomies"
+msgstr ""
+
+#: ../php/builder.php:255
+msgid "Name"
+msgstr ""
+
+#: ../php/builder.php:263
+msgid "Label"
+msgstr ""
+
+#: ../php/builder.php:271
+msgid "Class"
+msgstr ""
+
+#: ../php/builder.php:279
+msgid "Description"
+msgstr ""
+
+#: ../php/builder.php:287
+msgid "Placeholder"
+msgstr ""
+
+#: ../php/builder.php:295
+msgid "Default Value"
+msgstr ""
+
+#: ../php/builder.php:303
+msgid "Repeatable"
+msgstr ""
+
+#: ../php/builder.php:313
+msgid "Minimal"
+msgstr ""
+
+#: ../php/builder.php:323
+msgid "Hide Content Editor"
+msgstr ""
+
+#: ../php/builder.php:333
+msgid "Library"
+msgstr ""
+
+#: ../php/builder.php:341
+msgid "Rows"
+msgstr ""
+
+#: ../php/builder.php:350
+msgid "Cols"
+msgstr ""
+
+#: ../php/builder.php:359
+msgid "Size"
+msgstr ""
+
+#: ../php/builder.php:368
+msgid "Date Format"
+msgstr ""
+
+#: ../php/builder.php:377
+msgid "Time Format"
+msgstr ""
+
+#: ../php/builder.php:386
+msgid "Options"
+msgstr ""
+
+#: ../php/builder.php:399
+msgid "Parameters"
+msgstr ""
+
+#: ../php/builder.php:412
+msgid "Settings"
+msgstr ""
+
+#: ../php/builder.php:425
+msgid "Validator"
+msgstr ""
+
+#: ../php/builder.php:438
+msgid "Multiple"
+msgstr ""
+
+#: ../php/builder.php:448
+msgid "Prepend Blank"
+msgstr ""
+
+#: ../php/builder.php:458
+msgid "Arguments"
+msgstr ""
+
+#: ../php/builder.php:474
+msgid "Section UID"
+msgstr ""
+
+#: ../php/builder.php:493
+msgid "Field UID"
+msgstr ""
+
+#: ../php/builder.php:504 ../php/builder.php:761
+msgid "Fields"
+msgstr ""
+
+#: ../php/builder.php:669
+#, php-format
+msgid "Section UID \"%s\" is not unique!"
+msgstr ""
+
+#: ../php/builder.php:672
+#, php-format
+msgid "Field UID \"%s\" is not unique!"
+msgstr ""
+
+#: ../php/builder.php:687
+#, php-format
+msgid "Field UID \"%s\" is not unique to Section with UID \"%s\"!"
+msgstr ""
+
+#: ../php/builder.php:760
+msgid "Sections"
+msgstr ""
+
+#: ../php/builder.php:762
+msgid "Fields By Sections"
+msgstr ""
+
+#: ../php/builder.php:773
+#, php-format
+msgid ""
+"To learn how to integrate the code generated below, please refer to the \"%s"
+"\" section of the documentation."
+msgstr ""
+
+#: ../php/builder.php:775
+#, php-format
+msgid "You must replace the \"%s\" part with the code you see below."
+msgstr ""
+
+#: ../php/builder.php:810
+msgid "Admin Menu"
+msgstr ""
+
+#: ../php/builder.php:811
+msgid "Admin Sub Menu"
+msgstr ""
+
+#: ../php/builder.php:812
+msgid "Post"
+msgstr ""
+
+#: ../php/builder.php:813
+msgid "Taxonomy"
+msgstr ""
+
+#: ../php/builder.php:814
+msgid "Widget"
+msgstr ""
+
+#: ../php/builder.php:815
+msgid "User"
+msgstr ""
+
+#: ../php/builder.php:822
+msgid "Group"
+msgstr ""
+
+#: ../php/builder.php:823
+msgid "Text"
+msgstr ""
+
+#: ../php/builder.php:824
+msgid "Hidden"
+msgstr ""
+
+#: ../php/builder.php:825
+msgid "Media"
+msgstr ""
+
+#: ../php/builder.php:826
+msgid "Textarea"
+msgstr ""
+
+#: ../php/builder.php:827
+msgid "Checkbox"
+msgstr ""
+
+#: ../php/builder.php:828
+msgid "Radio"
+msgstr ""
+
+#: ../php/builder.php:829
+msgid "Select"
+msgstr ""
+
+#: ../php/builder.php:830
+msgid "Select Posts"
+msgstr ""
+
+#: ../php/builder.php:831
+msgid "Select Terms"
+msgstr ""
+
+#: ../php/builder.php:832
+msgid "Select Users"
+msgstr ""
+
+#: ../php/builder.php:833
+msgid "Editor"
+msgstr ""
+
+#: ../php/builder.php:834
+msgid "DateTime"
+msgstr ""
+
+#: ../php/builder.php:835
+msgid "ColorPicker"
+msgstr ""
+
+#: ../php/builder.php:844 ../php/builder.php:850
+msgid "Create New"
+msgstr ""
+
+#: ../php/builder.php:978 ../php/builder.php:993
+msgid "Delete"
+msgstr ""
+
+#: ../php/builder.php:991
+msgid "Edit"
 msgstr ""
 
 #: ../php/classes.php:34
@@ -68,10 +427,6 @@ msgstr ""
 
 #: ../php/classes.php:132
 msgid "Fields Framework Widget"
-msgstr ""
-
-#: ../php/classes.php:161
-msgid "Title"
 msgstr ""
 
 #: ../php/classes.php:205
@@ -246,7 +601,7 @@ msgstr ""
 msgid "Duplicate Section UID"
 msgstr ""
 
-#: ../php/functions.php:26 ../php/functions.php:79
+#: ../php/functions.php:26 ../php/functions.php:83
 msgid "Empty Section Type"
 msgstr ""
 
@@ -254,38 +609,38 @@ msgstr ""
 msgid "Invalid Section Type"
 msgstr ""
 
-#: ../php/functions.php:61
+#: ../php/functions.php:65
 msgid "Empty Field UID"
 msgstr ""
 
-#: ../php/functions.php:65
+#: ../php/functions.php:69
 msgid "Duplicate Field UID"
 msgstr ""
 
-#: ../php/functions.php:88
+#: ../php/functions.php:92
 msgid "Invalid Field Type"
 msgstr ""
 
-#: ../php/functions.php:99 ../php/functions.php:164 ../php/functions.php:199
+#: ../php/functions.php:107 ../php/functions.php:172 ../php/functions.php:207
 msgid "Invalid Section UID"
 msgstr ""
 
-#: ../php/functions.php:103 ../php/functions.php:117 ../php/functions.php:168
+#: ../php/functions.php:111 ../php/functions.php:125 ../php/functions.php:176
 msgid "Invalid Field UID"
 msgstr ""
 
-#: ../php/functions.php:113
+#: ../php/functions.php:121
 msgid "Invalid Field Group UID"
 msgstr ""
 
-#: ../php/functions.php:172
+#: ../php/functions.php:180
 msgid "Field UID does not exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:203
+#: ../php/functions.php:211
 msgid "No Fields exist in Section specified by Section UID"
 msgstr ""
 
-#: ../php/functions.php:337
+#: ../php/functions.php:341
 msgid "Settings saved."
 msgstr ""

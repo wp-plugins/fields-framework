@@ -228,4 +228,16 @@ ff_create_field('ff-field-testing-a-nested-nested-repeatable-group-field', 'grou
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-nested-repeatable-group-field');
 
 ff_add_field_to_field_group('ff-field-testing-a-nested-nested-repeatable-group-field', 'ff-field-testing-a-nested-repeatable-group-field');
+
+add_action('ff_section_after', 'ff_field_testing_after');
+
+function ff_field_testing_after($section_uid) {
+	if($section_uid == 'ff-field-testing') {
+		echo '<pre>';
+
+		print_r(ff_get_all_fields_from_section($section_uid, 'options'));
+
+		echo '</pre>';
+	}
+}
 ?>

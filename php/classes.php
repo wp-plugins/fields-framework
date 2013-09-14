@@ -762,7 +762,7 @@ if(!class_exists('FF_Field_Radio')) {
 
 if(!class_exists('FF_Field_Select')) {
 	class FF_Field_Select extends FF_Field_Multiple {
-		protected $options = array(), $multiple = false, $size = 5, $prepend_blank = false;
+		protected $options = array(), $multiple = false, $size = 5, $prepend_blank = true;
 
 		public function html() {
 			$name = $this->get_name();

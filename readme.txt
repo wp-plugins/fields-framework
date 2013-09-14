@@ -4,33 +4,34 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.3
 Tested up to: 3.6
-Stable tag: 0.11.2
+Stable tag: 0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A framework which can be used by developers to add fields to various areas of the administration panel.
+A framework which can be used to add fields to various areas of the administration panel. Provides a Visual Builder for creating sections and fields.
 
 == Description ==
+
+*Update*: This plugin ***now features a visual builder*** to help non-developers create fields and sections with ease!
 
 Please show your support for this plugin by giving it [a rating](http://wordpress.org/support/view/plugin-reviews/fields-framework?rate=5#postform)!
 
 [WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
-A framework which can be used by developers to add fields to various areas of the administration panel.
+A framework which can be used to add fields to various areas of the administration panel. Provides a Visual Builder for creating sections and fields.
 
 This includes the ability of adding fields to:
 
 * Custom Administration Menus and Sub Menus
 * Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
 * Categories, Tags and [Custom Taxonomies](http://codex.wordpress.org/Taxonomies)
-* Custom Widgets [Widgets](http://codex.wordpress.org/WordPress_Widgets)
+* Custom [Widgets](http://codex.wordpress.org/WordPress_Widgets)
 * User Profiles
 
 Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
 
+* The plugin supports client side validation using JavaScript
 * The plugin can also be placed inside a theme. This is useful if you would like to bundle this plugin with a theme
-
-The plugin supports client side validation using JavaScript
 
 = Fields Supported =
 
@@ -95,8 +96,14 @@ If you feel the need for an additional field type then please use the [support f
 22. An example of a Fields Widget with a Section selection drop down
 23. A fields widget rendering fields of section associated to it.
 24. Front end dump of a widget section
+25. Builder - Sections
+26. Builder - Fields
+27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.12 =
+* Added Visual Builder
 
 = 0.11.2 =
 * Added support for client side validation using JavaScript
@@ -164,6 +171,9 @@ If you feel the need for an additional field type then please use the [support f
 * Initial release
 
 == Upgrade Notice ==
+
+= 0.12 =
+* Prepend Blank now set to true for all Fields of type Select and it's related types viz. Select_Posts, Select_Terms, and Select_Users
 
 = 0.11.2 =
 * Editor field setting variables will now need to be passed to a settings array instead of directly to the arguments array. So for example, the following:

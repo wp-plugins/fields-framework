@@ -22,6 +22,8 @@ function ff_load() {
 	ff_placeholder();
 
 	ff_media_uploader();
+	
+	ff_builder();
 }
 
 function ff_repeatable(ff_table) {
@@ -157,5 +159,27 @@ function ff_validationengine() {
 function ff_placeholder() {
 	if(jQuery.fn.placeholder !== undefined) {
 		jQuery('input, textarea').placeholder();
+	}
+}
+
+function ff_builder() {
+	jQuery('.ff-builder a').filter(function() {
+		return jQuery(this).attr('href').match(/\=delete&/) == '=delete&';
+	}).click(function() {
+		if(jQuery(this).attr('href').match(/\=delete&/) == '=delete&') {
+			return confirm('Confirm Delete?');
+		}
+
+		return false;
+	});
+	
+
+
+	if(jQuery.ui.sortable !== undefined) {
+		jQuery('.ff-builder-fields-by-sections').each(function() {
+			jQuery(this).sortable({
+					items: '> li',
+			});
+		});
 	}
 }

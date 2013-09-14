@@ -9,7 +9,7 @@
  * @return void
  */
 if(!function_exists('ff_create_section')) {
-	function ff_create_section($uid, $type, $arguments = null) {
+	function ff_create_section($uid, $type, $arguments = null, $skip_registry = false) {
 		$uid = trim($uid);
 	
 		if(empty($uid)) {
@@ -41,9 +41,13 @@ if(!function_exists('ff_create_section')) {
 		else {
 			ff_throw_exception(__('Invalid Section Type', 'fields-framework'));
 		}
-	
-		/* Add this to the Registry so that it can later be referenced */
-		FF_Registry::$sections[$uid] = $section;
+
+		if($skip_registry == false) {
+			/* Add this to the Registry so that it can later be referenced */
+			FF_Registry::$sections[$uid] = $section;
+		}
+		
+		return $section;
 	}
 }
 
@@ -54,7 +58,7 @@ if(!function_exists('ff_create_section')) {
  * @return void
  */
 if(!function_exists('ff_create_field')) {
-	function ff_create_field($uid, $type, $arguments) {
+	function ff_create_field($uid, $type, $arguments, $skip_registry = false) {
 		$uid = trim($uid);
 	
 		if(empty($uid)) {
@@ -88,8 +92,12 @@ if(!function_exists('ff_create_field')) {
 			ff_throw_exception(__('Invalid Field Type', 'fields-framework'));
 		}
 
-		/* Add this to the Registry so that it can later be referenced */
-		FF_Registry::$fields[$uid] = $field;
+		if($skip_registry == false) {
+			/* Add this to the Registry so that it can later be referenced */
+			FF_Registry::$fields[$uid] = $field;
+		}
+		
+		return $field;
 	}
 }
 
@@ -326,10 +334,6 @@ if(!function_exists('ff_admin_menu')) {
 if(!function_exists('ff_admin_section')) {
 	function ff_admin_section() {
 		$section_uid = $_GET['page'];
-	
-		if(empty(FF_Registry::$fields_by_sections[$section_uid])) {
-			return;
-		}
 
 		echo '<div class="wrap">';
 
@@ -339,19 +343,21 @@ if(!function_exists('ff_admin_section')) {
 
 		do_action('ff_section_before', $section_uid);
 
-		echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
+		if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+			echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
+		
+			wp_nonce_field('ff-save', 'ff-nonce');
 	
-		wp_nonce_field('ff-save', 'ff-nonce');
-
-		ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
-
-		ff_create_field('ff-section-uid', 'hidden', array('value' => $section_uid));
-
-		FF_Registry::$fields['ff-section-uid']->container();
-
-		submit_button();
+			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
 	
-		echo '</form>';
+			ff_create_field('ff-section-uid', 'hidden', array('value' => $section_uid));
+	
+			FF_Registry::$fields['ff-section-uid']->container();
+	
+			submit_button();
+		
+			echo '</form>';
+		}
 
 		do_action('ff_section_after', $section_uid);
 
@@ -397,7 +403,7 @@ if(!function_exists('ff_save_options')) {
 if(!function_exists('ff_post_section')) {
 	function ff_post_section($post) {
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Post') || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($post->post_type, $section->post_types)) {
+			if(!is_a($section, 'FF_Post') || !in_array($post->post_type, $section->post_types)) {
 				continue;
 			}
 
@@ -423,9 +429,11 @@ if(!function_exists('ff_post_section')) {
 
 			do_action('ff_section_before', $section_uid);
 
-			wp_nonce_field('ff-save', 'ff-nonce');
+			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+				wp_nonce_field('ff-save', 'ff-nonce');
 
-			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'post', $post->ID);
+				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'post', $post->ID);
+			}
 
 			do_action('ff_section_after', $section_uid);
 		}
@@ -493,7 +501,7 @@ if(!function_exists('ff_taxonomy_form_fields')) {
 		}
 	
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Taxonomy') || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($taxonomy, $section->taxonomies)) {
+			if(!is_a($section, 'FF_Taxonomy') || !in_array($taxonomy, $section->taxonomies)) {
 				continue;
 			}
 
@@ -503,9 +511,11 @@ if(!function_exists('ff_taxonomy_form_fields')) {
 
 			do_action('ff_section_before', $section_uid);
 
-			wp_nonce_field('ff-save', 'ff-nonce');
+			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+				wp_nonce_field('ff-save', 'ff-nonce');
 
-			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options', 'taxonomy', $ttid);
+				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options', 'taxonomy', $ttid);
+			}
 
 			do_action('ff_section_after', $section_uid);
 
@@ -557,15 +567,17 @@ if(!function_exists('ff_delete_term')) {
 if(!function_exists('ff_user_section')) {
 	function ff_user_section($user) {
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_User') || empty(FF_Registry::$fields_by_sections[$section_uid])) {
+			if(!is_a($section, 'FF_User')) {
 				continue;
 			}
 	
 			wp_nonce_field('ff-save', 'ff-nonce');
 
-			do_action('ff_section_before', $section_uid);
+			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+				do_action('ff_section_before', $section_uid);
 
-			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'user', $user->ID);
+				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'user', $user->ID);
+			}
 
 			do_action('ff_section_after', $section_uid);
 		}
@@ -630,7 +642,7 @@ if(!function_exists('ff_admin_enqueue_scripts')) {
 
 		wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
 
-		wp_enqueue_script('ff-backend', FF_Registry::$plugins_url . '/js/backend.js', array('jquery'));
+		wp_enqueue_script('ff-backend', FF_Registry::$plugins_url . '/js/backend.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'));
 	}
 }
 

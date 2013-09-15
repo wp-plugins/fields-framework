@@ -21,7 +21,9 @@ function ff_load() {
 
 	ff_placeholder();
 
-	ff_media_uploader();
+	if(typeof ff_media_uploader === 'function') {
+		ff_media_uploader();
+	}
 	
 	ff_builder();
 }

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-09-14 16:27+0530\n"
-"PO-Revision-Date: 2013-09-14 16:27+0530\n"
+"POT-Creation-Date: 2013-09-21 16:18+0530\n"
+"PO-Revision-Date: 2013-09-21 16:18+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -94,298 +94,298 @@ msgstr ""
 msgid "Parent UID"
 msgstr ""
 
-#: ../php/builder.php:135 ../php/builder.php:144
+#: ../php/builder.php:135
 msgid "ID"
 msgstr ""
 
-#: ../php/builder.php:152 ../php/classes.php:161
+#: ../php/builder.php:143 ../php/classes.php:161
 msgid "Title"
 msgstr ""
 
-#: ../php/builder.php:167
+#: ../php/builder.php:158
 msgid "Post Types"
 msgstr ""
 
-#: ../php/builder.php:179
+#: ../php/builder.php:170
 msgid "Context"
 msgstr ""
 
-#: ../php/builder.php:188
+#: ../php/builder.php:179
 msgid "Priority"
 msgstr ""
 
-#: ../php/builder.php:203
+#: ../php/builder.php:194
 msgid "Page Templates"
 msgstr ""
 
-#: ../php/builder.php:212
+#: ../php/builder.php:203
 msgid "Aside"
 msgstr ""
 
-#: ../php/builder.php:213
+#: ../php/builder.php:204
 msgid "Chat"
 msgstr ""
 
-#: ../php/builder.php:214
+#: ../php/builder.php:205
 msgid "Gallery"
 msgstr ""
 
-#: ../php/builder.php:215
+#: ../php/builder.php:206
 msgid "Link"
 msgstr ""
 
-#: ../php/builder.php:216
+#: ../php/builder.php:207
 msgid "Image"
 msgstr ""
 
-#: ../php/builder.php:217
+#: ../php/builder.php:208
 msgid "Quote"
 msgstr ""
 
-#: ../php/builder.php:218
+#: ../php/builder.php:209
 msgid "Status"
 msgstr ""
 
-#: ../php/builder.php:219
+#: ../php/builder.php:210
 msgid "Video"
 msgstr ""
 
-#: ../php/builder.php:220
+#: ../php/builder.php:211
 msgid "Audio"
 msgstr ""
 
-#: ../php/builder.php:226
+#: ../php/builder.php:217
 msgid "Post Formats"
 msgstr ""
 
-#: ../php/builder.php:243
+#: ../php/builder.php:234
 msgid "Taxonomies"
 msgstr ""
 
-#: ../php/builder.php:255
+#: ../php/builder.php:246
 msgid "Name"
 msgstr ""
 
-#: ../php/builder.php:263
+#: ../php/builder.php:254
 msgid "Label"
 msgstr ""
 
-#: ../php/builder.php:271
+#: ../php/builder.php:262
 msgid "Class"
 msgstr ""
 
-#: ../php/builder.php:279
+#: ../php/builder.php:270
 msgid "Description"
 msgstr ""
 
-#: ../php/builder.php:287
+#: ../php/builder.php:278
 msgid "Placeholder"
 msgstr ""
 
-#: ../php/builder.php:295
+#: ../php/builder.php:286
 msgid "Default Value"
 msgstr ""
 
-#: ../php/builder.php:303
+#: ../php/builder.php:294
 msgid "Repeatable"
 msgstr ""
 
-#: ../php/builder.php:313
+#: ../php/builder.php:304
 msgid "Minimal"
 msgstr ""
 
-#: ../php/builder.php:323
+#: ../php/builder.php:314
 msgid "Hide Content Editor"
 msgstr ""
 
-#: ../php/builder.php:333
+#: ../php/builder.php:324
 msgid "Library"
 msgstr ""
 
-#: ../php/builder.php:341
+#: ../php/builder.php:332
 msgid "Rows"
 msgstr ""
 
-#: ../php/builder.php:350
+#: ../php/builder.php:341
 msgid "Cols"
 msgstr ""
 
-#: ../php/builder.php:359
+#: ../php/builder.php:350
 msgid "Size"
 msgstr ""
 
-#: ../php/builder.php:368
+#: ../php/builder.php:359
 msgid "Date Format"
 msgstr ""
 
-#: ../php/builder.php:377
+#: ../php/builder.php:368
 msgid "Time Format"
 msgstr ""
 
-#: ../php/builder.php:386
+#: ../php/builder.php:377
 msgid "Options"
 msgstr ""
 
-#: ../php/builder.php:399
+#: ../php/builder.php:390
 msgid "Parameters"
 msgstr ""
 
-#: ../php/builder.php:412
+#: ../php/builder.php:403
 msgid "Settings"
 msgstr ""
 
-#: ../php/builder.php:425
+#: ../php/builder.php:416
 msgid "Validator"
 msgstr ""
 
-#: ../php/builder.php:438
+#: ../php/builder.php:429
 msgid "Multiple"
 msgstr ""
 
-#: ../php/builder.php:448
+#: ../php/builder.php:439
 msgid "Prepend Blank"
 msgstr ""
 
-#: ../php/builder.php:458
+#: ../php/builder.php:449
 msgid "Arguments"
 msgstr ""
 
-#: ../php/builder.php:474
+#: ../php/builder.php:465
 msgid "Section UID"
 msgstr ""
 
-#: ../php/builder.php:493
+#: ../php/builder.php:484
 msgid "Field UID"
 msgstr ""
 
-#: ../php/builder.php:504 ../php/builder.php:761
+#: ../php/builder.php:495 ../php/builder.php:751
 msgid "Fields"
 msgstr ""
 
-#: ../php/builder.php:669
+#: ../php/builder.php:659
 #, php-format
 msgid "Section UID \"%s\" is not unique!"
 msgstr ""
 
-#: ../php/builder.php:672
+#: ../php/builder.php:662
 #, php-format
 msgid "Field UID \"%s\" is not unique!"
 msgstr ""
 
-#: ../php/builder.php:687
+#: ../php/builder.php:677
 #, php-format
 msgid "Field UID \"%s\" is not unique to Section with UID \"%s\"!"
 msgstr ""
 
-#: ../php/builder.php:760
+#: ../php/builder.php:750
 msgid "Sections"
 msgstr ""
 
-#: ../php/builder.php:762
+#: ../php/builder.php:752
 msgid "Fields By Sections"
 msgstr ""
 
-#: ../php/builder.php:773
+#: ../php/builder.php:763
 #, php-format
 msgid ""
 "To learn how to integrate the code generated below, please refer to the \"%s"
 "\" section of the documentation."
 msgstr ""
 
-#: ../php/builder.php:775
+#: ../php/builder.php:765
 #, php-format
 msgid "You must replace the \"%s\" part with the code you see below."
 msgstr ""
 
-#: ../php/builder.php:810
+#: ../php/builder.php:800
 msgid "Admin Menu"
 msgstr ""
 
-#: ../php/builder.php:811
+#: ../php/builder.php:801
 msgid "Admin Sub Menu"
 msgstr ""
 
-#: ../php/builder.php:812
+#: ../php/builder.php:802
 msgid "Post"
 msgstr ""
 
-#: ../php/builder.php:813
+#: ../php/builder.php:803
 msgid "Taxonomy"
 msgstr ""
 
-#: ../php/builder.php:814
+#: ../php/builder.php:804
 msgid "Widget"
 msgstr ""
 
-#: ../php/builder.php:815
+#: ../php/builder.php:805
 msgid "User"
 msgstr ""
 
-#: ../php/builder.php:822
+#: ../php/builder.php:812
 msgid "Group"
 msgstr ""
 
-#: ../php/builder.php:823
+#: ../php/builder.php:813
 msgid "Text"
 msgstr ""
 
-#: ../php/builder.php:824
+#: ../php/builder.php:814
 msgid "Hidden"
 msgstr ""
 
-#: ../php/builder.php:825
+#: ../php/builder.php:815
 msgid "Media"
 msgstr ""
 
-#: ../php/builder.php:826
+#: ../php/builder.php:816
 msgid "Textarea"
 msgstr ""
 
-#: ../php/builder.php:827
+#: ../php/builder.php:817
 msgid "Checkbox"
 msgstr ""
 
-#: ../php/builder.php:828
+#: ../php/builder.php:818
 msgid "Radio"
 msgstr ""
 
-#: ../php/builder.php:829
+#: ../php/builder.php:819
 msgid "Select"
 msgstr ""
 
-#: ../php/builder.php:830
+#: ../php/builder.php:820
 msgid "Select Posts"
 msgstr ""
 
-#: ../php/builder.php:831
+#: ../php/builder.php:821
 msgid "Select Terms"
 msgstr ""
 
-#: ../php/builder.php:832
+#: ../php/builder.php:822
 msgid "Select Users"
 msgstr ""
 
-#: ../php/builder.php:833
+#: ../php/builder.php:823
 msgid "Editor"
 msgstr ""
 
-#: ../php/builder.php:834
+#: ../php/builder.php:824
 msgid "DateTime"
 msgstr ""
 
-#: ../php/builder.php:835
+#: ../php/builder.php:825
 msgid "ColorPicker"
 msgstr ""
 
-#: ../php/builder.php:844 ../php/builder.php:850
+#: ../php/builder.php:834 ../php/builder.php:840
 msgid "Create New"
 msgstr ""
 
-#: ../php/builder.php:978 ../php/builder.php:993
+#: ../php/builder.php:968 ../php/builder.php:983
 msgid "Delete"
 msgstr ""
 
-#: ../php/builder.php:991
+#: ../php/builder.php:981
 msgid "Edit"
 msgstr ""
 

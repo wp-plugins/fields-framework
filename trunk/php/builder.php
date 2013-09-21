@@ -129,16 +129,7 @@ function ff_builder_before($section_uid) {
 		true
 	);
 
-	$options['id-required'] = ff_create_field('ff-builder-id', 'text',
-		array(
-			'name' => 'id',
-			'label' => __('ID', 'fields-framework'),
-			'validator' => array('validation-engine' => 'validate[required]'),
-		),
-		true
-	);
-
-	$options['id-optional'] = ff_create_field('ff-builder-id', 'text',
+	$options['id'] = ff_create_field('ff-builder-id', 'text',
 		array(
 			'name' => 'id',
 			'label' => __('ID', 'fields-framework'),
@@ -525,7 +516,6 @@ function ff_builder_before($section_uid) {
 	);
 
 	$associations['sections']['post'] = array(
-		$options['id-required'],
 		$options['title'],
 		$options['post-types'],
 		$options['context'],
@@ -634,7 +624,7 @@ function ff_builder_before($section_uid) {
 
 		array_unshift(
 			$associations['fields'][$key],
-			$options['id-optional'],
+			$options['id'],
 			$options['label'],
 			$options['class'],
 			$options['description'],

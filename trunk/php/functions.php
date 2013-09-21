@@ -401,9 +401,9 @@ if(!function_exists('ff_save_options')) {
 }
 
 if(!function_exists('ff_post_section')) {
-	function ff_post_section($post) {
+	function ff_post_section($post, $meta_box) {
 		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Post') || !in_array($post->post_type, $section->post_types)) {
+			if(!is_a($section, 'FF_Post') || !in_array($post->post_type, $section->post_types) || $meta_box['id'] != $section_uid) {
 				continue;
 			}
 

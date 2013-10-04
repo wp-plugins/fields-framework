@@ -1,5 +1,10 @@
 <?php
 ff_create_section('ff-field-testing', 'admin_sub_menu', array('parent_uid' => 'ff-admin-menu', 'page_title' => __('Unit Test', 'fields-framework'), 'menu_title' => __('Unit Test', 'fields-framework')));
+//ff_create_section('ff-field-testing', 'admin_menu', array('page_title' => __('Unit Test', 'fields-framework'), 'menu_title' => __('Unit Test', 'fields-framework')));
+//ff_create_section('ff-field-testing', 'post', array('post_types' => array('post', 'page'), 'title' => __('Unit Test', 'fields-framework')));
+//ff_create_section('ff-field-testing', 'taxonomy', array('taxonomies' => array('category')));
+//ff_create_section('ff-field-testing', 'user');
+//ff_create_section('ff-field-testing', 'widget', array('title' => __('Unit Test', 'fields-framework')));
 
 ff_create_field('ff-field-testing-a-text-field', 'text', array(
 	'label' => __('A text field', 'fields-framework'),

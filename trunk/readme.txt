@@ -4,23 +4,21 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 0.12.2
+Stable tag: 0.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A framework which can be used to add fields to various areas of the administration panel. Provides a Visual Builder for creating sections and fields.
+A framework which can be used by developers to add fields to various areas of the administration panel either manually or using the Visual Builder.
 
 == Description ==
 
-*Update*: This plugin ***now features a visual builder*** to help non-developers create fields and sections with ease!
+*Update*: ***Now featuring a visual builder*** to help developers create sections and fields with ease!
 
 Please show your support for this plugin by giving it [a rating](http://wordpress.org/support/view/plugin-reviews/fields-framework?rate=5#postform)!
 
 [WordPress Fields Framework Documentation](http://www.rhyzz.com/fields-framework.html "WordPress Fields Framework Documentation")
 
-A framework which can be used to add fields to various areas of the administration panel. Provides a Visual Builder for creating sections and fields.
-
-This includes the ability of adding fields to:
+This plugin can be used to add fields to:
 
 * Custom Administration Menus and Sub Menus
 * Posts, Pages, Attachments and [Custom Post Types](http://codex.wordpress.org/Post_Types)
@@ -52,7 +50,7 @@ Currently the following types of fields are supported:
 * DateTime
 * ColorPicker
 
-Most fields including the Group field can be made repeatable.
+All fields except the Editor field can be made repeatable.
 
 = Additional Field Requests =
 
@@ -101,6 +99,12 @@ If you feel the need for an additional field type then please use the [support f
 27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.13 =
+* Refactoring of code
+* Duplicate uid no longer checked for sections & fields that skip registry
+* Added new page_templates_not & post_formats_not boolean properties which if set to true will inverse the check
+* Added 'Standard' to Post Formats list
 
 = 0.12.2 =
 * Bug fixes

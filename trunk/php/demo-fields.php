@@ -92,4 +92,16 @@ ff_create_field('ff-demo-fields-an-email-field', 'text', array(
 ));
 
 ff_add_field_to_section('ff-demo-fields', 'ff-demo-fields-an-email-field');
+
+add_action('ff_section_before', 'ff_demo_fields_before');
+
+function ff_demo_fields_before($section_uid) {
+	?><p><?php _e('Sample text prepended before section.', 'fields-framework'); ?></p><?php
+}
+
+add_action('ff_section_after', 'ff_demo_fields_after');
+
+function ff_demo_fields_after($section_uid) {
+	?><p><?php _e('Sample text appended after section.', 'fields-framework'); ?></p><?php
+}
 ?>

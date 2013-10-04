@@ -14,7 +14,7 @@ if(!class_exists('FF_Registry')) {
 
 if(!class_exists('FF_Section')) {
 	abstract class FF_Section {
-		public $skip_save = false;
+		protected $uid, $skip_save = false;
 
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
@@ -22,9 +22,71 @@ if(!class_exists('FF_Section')) {
 	}
 }
 
+if(!class_exists('FF_Admin_Menus')) {	
+	class FF_Admin_Menus extends FF_Section {
+		public function __construct($arguments) {
+			add_action('wp_loaded', array($this, 'save'));
+
+			parent::__construct($arguments);
+		}
+
+		public function display() {
+			$section_uid = $_GET['page'];
+
+			if($section_uid != $this->uid) {
+				return;
+			}
+
+			echo '<div class="wrap">';
+	
+			if(!empty($_GET['ff-updated'])) {
+				echo '<div class="updated fade"><p>' . __('Settings saved.', 'fields-framework') . '</p></div>';
+			}
+	
+			ff_render_section($this->uid, 'options');
+
+			echo '</div>';
+		}
+
+		public function save() {
+			if(empty($_POST['ff-section-uid']) || ff_verify_nonce()) {
+				return;
+			}
+	
+			$section_uid = $_POST['ff-section-uid'];
+
+			if($section_uid != $this->uid) {
+				return;
+			}
+
+			if($this->skip_save == false) {
+				foreach(FF_Registry::$fields_by_sections[$this->uid] as $field) {
+					$field->save_to_options();
+				}
+			}
+	
+			if(!empty($_POST['_wp_http_referer'])) {
+				$location = $_POST['_wp_http_referer'];
+	
+				if($this->skip_save == false) {
+					if(strpos($location, 'ff-updated') === false) {
+						$location .= '&ff-updated=true';
+					}
+				}
+	
+				header('HTTP/1.1 303 See Other');
+	
+				header("Location: {$location}");
+	
+				exit;
+			}
+		}
+	}
+}
+
 if(!class_exists('FF_Admin_Menu')) {	
-	class FF_Admin_Menu extends FF_Section {
-		public $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
+	class FF_Admin_Menu extends FF_Admin_Menus {
+		protected $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
 		
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -38,13 +100,19 @@ if(!class_exists('FF_Admin_Menu')) {
 			if(empty($this->menu_title)) {
 				ff_throw_exception(__('Empty Menu Section Menu Title', 'fields-framework'));
 			}
+			
+			add_action('admin_menu', array($this, 'add'), 1);
+		}
+		
+		public function add() {
+			add_menu_page($this->page_title, $this->menu_title, $this->capability, $this->menu_uid, array($this, 'display'), $this->icon_url, $this->position);
 		}
 	}
 }
 
 if(!class_exists('FF_Admin_Sub_Menu')) {
-	class FF_Admin_Sub_Menu extends FF_Section {
-		public $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
+	class FF_Admin_Sub_Menu extends FF_Admin_Menus {
+		protected $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -63,17 +131,25 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 			if(empty($this->menu_title)) {
 				ff_throw_exception(__('Empty Sub Menu Section Menu Title', 'fields-framework'));
 			}
+
+			add_action('admin_menu', array($this, 'add'), 1);
+		}
+		
+		public function add() {
+			add_submenu_page($this->parent_uid, $this->page_title, $this->menu_title, $this->capability, $this->menu_uid, array($this, 'display'));
 		}
 	}
 }
 
 if(!class_exists('FF_Post')) {
 	class FF_Post extends FF_Section {
-		public $id, $title, $context = 'advanced', $priority = 'default';
+		protected $id, $title, $context = 'advanced', $priority = 'default';
 		
-		public $post_types = array(), $page_templates = array(), $post_formats = array();
+		protected $post_types = array(), $page_templates = array(), $post_formats = array();
+		
+		protected $page_templates_not = false, $post_formats_not = false;
 
-		public $hide_content_editor = false;
+		protected $hide_content_editor = false;
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -87,13 +163,134 @@ if(!class_exists('FF_Post')) {
 			if(empty($this->title)) {
 				ff_throw_exception(__('Empty Meta Section Title', 'fields-framework'));
 			}
+
+			add_action('add_meta_boxes', array($this, 'add'), 10, 2);
+
+			/* The following conditionals basically insure the relevant actions are only called if sections pertaining to them exist */
+			if(in_array('attachment', $this->post_types)) {
+				add_action('edit_attachment', array($this, 'save'));
+			}
+			else {
+				add_action('save_post', array($this, 'save'));
+			}
+		}
+		
+		public function add($post_type, $post) {
+			foreach($this->post_types as $post_type) {
+				/* Post meta box will be displayed even on posts or pages not saved hence such posts can't have a page template or post format, because they aren't saved. */
+				if((!empty($this->page_templates) || !empty($this->post_formats)) && $post->post_status == 'auto-draft') {
+					return;
+				}
+
+				/* Check if this section requires a page template. This check is ignored if the post type doesn't support this feature. */
+				if(!empty($this->page_templates) && post_type_supports($post_type, 'page-attributes')) {
+					$page_template = get_post_meta($post->ID, '_wp_page_template', true);
+
+					/* Selected page does not have the required page template hence return */
+					if($this->page_templates_not == false && !in_array($page_template, $this->page_templates)) {
+						return;
+					}
+					/* Selected page has the required page template to be ignored hence return */
+					elseif($this->page_templates_not == true && in_array($page_template, $this->page_templates)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post format. This check is ignored if the post type doesn't support this feature. */
+				if(!empty($this->post_formats) && post_type_supports($post_type, 'post-formats')) {
+					$post_format = get_post_format($post->ID);
+
+					/* Selected post does not have the required post format hence return */
+					if($this->post_formats_not == false && !in_array($post_format, $this->post_formats)) {
+						return;
+					}
+					/* Selected post has the required post format to be ignored hence return */
+					elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+						return;
+					}
+				}
+
+				add_meta_box($this->id, $this->title, array($this, 'display'), $post_type, $this->context, $this->priority);
+			}
+		}
+
+		public function display($post, $meta_box) {
+			if(!in_array($post->post_type, $this->post_types) || $meta_box['id'] != $this->uid) {
+				return;
+			}
+
+			if(!empty($this->page_templates) && post_type_supports($post->post_type, 'page-attributes')) {
+				$page_template = get_post_meta($post->ID, '_wp_page_template', true);
+				
+				if($this->page_templates_not == false && !in_array($page_template, $this->page_templates)) {
+					return;
+				}
+				elseif($this->page_templates_not == true && in_array($page_template, $this->page_templates)) {
+					return;
+				}
+			}
+
+			if(!empty($this->post_formats) && post_type_supports($post->post_type, 'post-formats')) {
+				$post_format = get_post_format($post->ID);
+				
+				if($this->post_formats_not == false && !in_array($post_format, $this->post_formats)) {
+					return;
+				}
+				elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+					return;
+				}
+			}
+
+			if($this->hide_content_editor == true) {
+				echo '<style type="text/css">#postdivrich {display: none;}</style>';
+			}
+
+			ff_render_section($this->uid, 'meta', 'post', $post->ID);
+		}
+
+		public function save($post_id) {
+			if(ff_verify_nonce()) {
+				return;
+			}
+		
+			$post = get_post($post_id);
+	
+			if($this->skip_save != false || empty(FF_Registry::$fields_by_sections[$this->uid]) || !in_array($post->post_type, $this->post_types)) {				
+				return;
+			}
+			
+			if(!empty($this->page_templates) && post_type_supports($post->post_type, 'page-attributes')) {
+				$page_template = get_post_meta($post->ID, '_wp_page_template', true);
+
+				if($this->page_templates_not == false && !in_array($page_template, $this->page_templates)) {
+					return;
+				}
+				elseif($this->page_templates_not == true && in_array($page_template, $this->page_templates)) {
+					return;
+				}
+			}
+
+			if(!empty($this->post_formats) && post_type_supports($post->post_type, 'post-formats')) {
+				$post_format = get_post_format($post->ID);
+				
+				if($this->post_formats_not == false && !in_array($post_format, $this->post_formats)) {
+					return;
+				}
+				elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+					return;
+				}
+			}
+
+			foreach(FF_Registry::$fields_by_sections[$this->uid] as $field) {
+				$field->save_to_meta('post', $post_id);
+			}
 		}
 	}
 }
 
 if(!class_exists('FF_Taxonomy')) {
 	class FF_Taxonomy extends FF_Section {
-		public $taxonomies = array();
+		protected $taxonomies = array();
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -102,18 +299,122 @@ if(!class_exists('FF_Taxonomy')) {
 			if(empty($this->taxonomies)) {
 				ff_throw_exception(__('Empty Taxonomies', 'fields-framework'));
 			}
+			
+			$this->add();
+			
+			add_action('created_term', array($this, 'save'), 10, 3);
+
+			add_action('edited_term', array($this, 'save'), 10, 3);
+
+			add_action('delete_term', array($this, 'delete'), 10, 4);
+		}
+		
+		public function add() {
+			foreach($this->taxonomies as $taxonomy) {
+				add_action("{$taxonomy}_add_form_fields", array($this, 'add_form_fields'));
+
+				add_action("{$taxonomy}_edit_form_fields", array($this, 'edit_form_fields'), 10, 2);
+			}
+		}
+
+		public function add_form_fields($taxonomy) {
+			$this->display($taxonomy);
+		}
+	
+		public function edit_form_fields($tag, $taxonomy) {
+			$this->display($taxonomy, $tag);
+		}
+
+		public function display($taxonomy, $tag = null) {
+			$ttid = null;
+
+			if(!empty($tag)) {
+				$ttid = $tag->term_taxonomy_id;
+			}
+
+			if(!in_array($taxonomy, $this->taxonomies)) {
+				return;
+			}
+
+			if(!empty($ttid)) {
+				echo '<tr><td colspan="2">';
+			}
+
+			ff_render_section($this->uid, 'options', 'taxonomy', $ttid);
+
+			if(!empty($ttid)) {
+				echo '</td></tr>';
+			}
+		}
+
+		public function save($term_id, $tt_id, $taxonomy) {
+			if(ff_verify_nonce()) {
+				return;
+			}
+	
+			if($this->skip_save != false || empty(FF_Registry::$fields_by_sections[$this->uid]) || !in_array($taxonomy, $this->taxonomies)) {
+				return;
+			}
+
+			foreach(FF_Registry::$fields_by_sections[$this->uid] as $field) {
+				$field->save_to_options('taxonomy', $tt_id);
+			}
+		}
+
+		public function delete($term, $tt_id, $taxonomy, $deleted_term) {
+			if($this->skip_save != false || empty(FF_Registry::$fields_by_sections[$this->uid]) || !in_array($taxonomy, $this->taxonomies)) {
+				return;
+			}
+
+			foreach(FF_Registry::$fields_by_sections[$this->uid] as $field) {
+				$field->delete_from_options('taxonomy', $tt_id);
+			}
 		}
 	}
 }
 
 if(!class_exists('FF_User')) {
 	class FF_User extends FF_Section {
+		public function __construct($arguments) {
+			parent::__construct($arguments);
+
+			$this->add();
+		}
+
+		public function add() {
+			/* The following basically insures the relevant actions are only called if sections pertaining to them exist */
+			add_action('personal_options_update', array($this, 'save'));
+	
+			add_action('edit_user_profile_update', array($this, 'save'));
+
+			add_action('show_user_profile', array($this, 'display'));
+
+			add_action('edit_user_profile', array($this, 'display'));
+		}
+		
+		public function display($user) {
+			ff_render_section($this->uid, 'meta', 'user', $user->ID);
+		}
+
+		public function save($user_id) {
+			if(ff_verify_nonce()) {
+				return;
+			}
+	
+			if($this->skip_save != false || empty(FF_Registry::$fields_by_sections[$this->uid])) {
+				return;
+			}
+
+			foreach(FF_Registry::$fields_by_sections[$this->uid] as $field) {
+				$field->save_to_meta('user', $user_id);
+			}
+		}
 	}
 }
 
 if(!class_exists('FF_Widget')) {
 	class FF_Widget extends FF_Section {
-		public $title;
+		protected $title;
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -123,13 +424,17 @@ if(!class_exists('FF_Widget')) {
 				ff_throw_exception(__('Empty Widget Section Title', 'fields-framework'));
 			}
 		}
+		
+		public static function add() {
+			register_widget('FF_WP_Widget');
+		}
 	}
 }
 
 if(!class_exists('FF_WP_Widget')) {
 	class FF_WP_Widget extends WP_Widget {
 		public function __construct() {
-			parent::__construct('ff_wp_widget', __('Fields Framework Widget', 'fields-framework'));
+			parent::__construct('ff_wp_widget', __('Fields Framework Widget', 'fields-framework'), null, array('width' => 450));
 		}
 
 		public function widget($arguments, $instance) {
@@ -155,16 +460,14 @@ if(!class_exists('FF_WP_Widget')) {
 		public function form($instance) {
 			$section_title = !empty($instance['ff-section-title']) ? $instance['ff-section-title'] : null;
 
-			ff_create_field('ff-section-title', 'text', array(
+			$section_title_field = ff_create_field('ff-section-title', 'text', array(
 				'name' => $this->get_field_name('ff-section-title'),
 				'id' => $this->get_field_id('ff-section-title'),
 				'label' => __('Title', 'fields-framework'),
 				'value' => $section_title,
-			));
+			), true);
 
-			FF_Registry::$fields['ff-section-title']->container();
-			
-			unset(FF_Registry::$fields['ff-section-title']);
+			$section_title_field->container();
 
 			if(empty(FF_Registry::$sections)) {
 				return;
@@ -173,19 +476,13 @@ if(!class_exists('FF_WP_Widget')) {
 			if(!empty($instance['ff-section-uid'])) {
 				$section_uid = $instance['ff-section-uid'];
 
-				if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
-					do_action('ff_section_before', $section_uid);
-		
-					ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'custom', 'widget', $instance);
-		
-					do_action('ff_section_after', $section_uid);
-				}
+				ff_render_section($section_uid, 'custom', 'widget', $instance);
 
-				ff_create_field('ff-section-uid', 'hidden', array(
+				$section_uid_field = ff_create_field('ff-section-uid', 'hidden', array(
 					'name' => $this->get_field_name('ff-section-uid'),
 					'id' => $this->get_field_id('ff-section-uid'),
 					'value' => $section_uid,
-				));
+				), true);
 			}
 			else {
 				$options = null;
@@ -194,25 +491,29 @@ if(!class_exists('FF_WP_Widget')) {
 					if(!is_a($section, 'FF_Widget') || empty(FF_Registry::$fields_by_sections[$section_uid])) {
 						continue;
 					}
+
+					$class = new ReflectionClass($section);
+
+					$property = $class->getProperty('title');
 					
-					$options[$section_uid] = $section->title;
+					$property->setAccessible(true);
+
+					$options[$section_uid] = $property->getValue($section);
 				}
 	
 				if(!empty($options)) {
-					ff_create_field('ff-section-uid', 'select', array(
+					$section_uid_field = ff_create_field('ff-section-uid', 'select', array(
 						'name' => $this->get_field_name('ff-section-uid'),
 						'id' => $this->get_field_id('ff-section-uid'),
 						'label' => __('Section', 'fields-framework'),
 						'options' => $options,
 						'prepend_blank' => true,
-					));
+					), true);
 				}
 			}
 
-			if(!empty(FF_Registry::$fields['ff-section-uid'])) {
-				FF_Registry::$fields['ff-section-uid']->container();
-			
-				unset(FF_Registry::$fields['ff-section-uid']);
+			if(!empty($section_uid_field)) {
+				$section_uid_field->container();
 			}
 		}
 
@@ -225,12 +526,16 @@ if(!class_exists('FF_WP_Widget')) {
 				$section_uid = $instance['ff-section-uid'];
 		
 				$section = FF_Registry::$sections[$section_uid];
-		
-				if($section->skip_save == false) {
-					foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-						$field_name = $field->get_name();
 
-						$instance[$field_name] = $field->save();
+				$class = new ReflectionClass($section);
+
+				$property = $class->getProperty('skip_save');
+				
+				$property->setAccessible(true);
+
+				if($property->getValue($section) == false && !empty(FF_Registry::$fields_by_sections[$section_uid])) {
+					foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
+						$field->save_to_custom('widget', $instance);
 					}
 				}
 			}
@@ -247,7 +552,7 @@ if(!class_exists('FF_Field')) {
 		default_value is a property which holds the field's default value
 		value is a property which is either set to use saved_value or if that's empty then it uses default_value
 		*/
-		protected $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false, $minimal = false;
+		protected $uid, $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false, $minimal = false;
 
 		protected $validator = array();
 
@@ -258,10 +563,22 @@ if(!class_exists('FF_Field')) {
 			if(!ff_empty($this->value)) {
 				$this->default_value = $this->value;
 			}
+
+			add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
 		}
 
-		public function get_name() {
-			return $this->name;
+		public function admin_enqueue_scripts() {
+			if(!empty($this->validator)) {
+				wp_enqueue_style('ff-validationEngine', FF_Registry::$plugins_url . '/css/validationEngine.jquery.css');
+		
+				wp_enqueue_script('ff-validationEngine-en', FF_Registry::$plugins_url . '/js/jquery.validationEngine-en.js', array('jquery'));
+		
+				wp_enqueue_script('ff-validationEngine', FF_Registry::$plugins_url . '/js/jquery.validationEngine.js', array('jquery'));
+			}
+
+			if(!empty($this->placeholder)) {
+				wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
+			}
 		}
 
 		public function use_value($type = null) {
@@ -361,6 +678,14 @@ if(!class_exists('FF_Field')) {
 			else {
 				delete_metadata($meta_type, $object_id, $name);
 			}
+		}
+
+		public function save_to_custom($custom_type, &$object_id) {
+			$name = $this->name;
+
+			$value = $this->save();
+
+			$object_id[$name] = $value;
 		}
 
 		public function delete_from_options($option_type = null, $object_id = null) {
@@ -577,6 +902,10 @@ if(!class_exists('FF_Field_DateTime')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
+			add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+		}
+	
+		public function admin_enqueue_scripts() {
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-ui-timepicker', FF_Registry::$plugins_url . '/css/jquery-ui-timepicker-addon.css');
@@ -603,6 +932,10 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
+			add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+		}
+	
+		public function admin_enqueue_scripts() {
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
@@ -640,10 +973,10 @@ if(!class_exists('FF_Field_Media')) {
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
-	
+
 			add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
 		}
-
+	
 		public function admin_enqueue_scripts() {
 			wp_enqueue_media();
 	
@@ -695,7 +1028,7 @@ if(!class_exists('FF_Field_Multiple')) {
 		}
 
 		public function get_name() {
-			$name = parent::get_name();
+			$name = $this->name;
 
 			if($this->multiple == true) {
 				$name .= '[]';

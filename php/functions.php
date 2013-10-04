@@ -15,10 +15,12 @@ if(!function_exists('ff_create_section')) {
 		if(empty($uid)) {
 			ff_throw_exception(__('Empty Section UID', 'fields-framework'));
 		}
-	
-		if(array_key_exists($uid, FF_Registry::$sections)) {
+
+		if($skip_registry == false && array_key_exists($uid, FF_Registry::$sections)) {
 			ff_throw_exception(__('Duplicate Section UID', 'fields-framework'));
 		}
+
+		$arguments['uid'] = $uid;
 	
 		$type = trim($type);
 	
@@ -65,9 +67,11 @@ if(!function_exists('ff_create_field')) {
 			ff_throw_exception(__('Empty Field UID', 'fields-framework'));
 		}
 	
-		if(array_key_exists($uid, FF_Registry::$fields)) {
+		if($skip_registry == false && array_key_exists($uid, FF_Registry::$fields)) {
 			ff_throw_exception(__('Duplicate Field UID', 'fields-framework'));
 		}
+
+		$arguments['uid'] = $uid;
 
 		if(empty($arguments['name'])) {
 			$arguments['name'] = $uid;
@@ -126,6 +130,36 @@ if(!function_exists('ff_add_field_to_field_group')) {
 		}
 
 		FF_Registry::$fields[$field_group_uid]->add_field(FF_Registry::$fields[$field_uid]);
+	}
+}
+
+if(!function_exists('ff_render_section')) {
+	function ff_render_section($section_uid, $source, $source_type = null, $object_id = null) {
+		do_action('ff_section_before', $section_uid);
+
+		if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
+			if($source == 'options' && $source_type == null) {
+				echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
+			}
+	
+			if($source != 'custom') {
+				wp_nonce_field('ff-save', 'ff-nonce');
+			}
+	
+			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], $source, $source_type, $object_id);
+	
+			if($source == 'options' && $source_type == null) {
+				$section_uid_field = ff_create_field('ff-section-uid', 'hidden', array('value' => $section_uid), true);
+	
+				$section_uid_field->container();
+		
+				submit_button();
+			
+				echo '</form>';
+			}
+		}
+
+		do_action('ff_section_after', $section_uid);
 	}
 }
 
@@ -229,379 +263,6 @@ if(!function_exists('ff_get_all_fields_from_section')) {
 	}
 }
 
-if(!function_exists('ff_widgets_init')) {
-	function ff_widgets_init() {
-		register_widget('FF_WP_Widget');
-	}
-}
-
-/**
- * This function is responsible for all registered sections.
- *
- * @param void
- * @return void
- */
-if(!function_exists('ff_admin_menu')) {
-	function ff_admin_menu() {
-		/* Because this action is always called even if no sections are registered, first check if any section is registered or not. */
-		if(empty(FF_Registry::$sections)) {
-			return;
-		}
-
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			$class_name = get_class($section);
-
-			switch($class_name) {
-				case 'FF_Admin_Menu':
-					add_menu_page($section->page_title, $section->menu_title, $section->capability, $section->menu_uid, 'ff_admin_section', $section->icon_url, $section->position);
-				break;
-
-				case 'FF_Admin_Sub_Menu':
-					add_submenu_page($section->parent_uid, $section->page_title, $section->menu_title, $section->capability, $section->menu_uid, 'ff_admin_section');
-				break;
-
-				case 'FF_Post':
-					/* The following conditionals basically insure the relevant actions are only called if sections pertaining to them exist */
-
-					if(in_array('attachment', $section->post_types)) {
-						add_action('edit_attachment', 'ff_save_post');
-					}
-					else {
-						add_action('save_post', 'ff_save_post');
-					}
-
-					if(!empty($_GET['post'])) {
-						$post = get_post($_GET['post']);
-					}
-
-					foreach($section->post_types as $post_type) {
-						/*
-							Post meta box will be displayed even on posts or pages not saved hence such posts can't have a page template or post format, because they aren't saved.
-							Hence continue with next section.
-						*/
-						if((!empty($section->page_templates) || !empty($section->post_formats)) && empty($post)) {
-							continue;
-						}
-
-						/* Check if this section requires a page template. This check is ignored if the post type doesn't support this feature. */
-						if(!empty($section->page_templates) && post_type_supports($post->post_type, 'page-attributes')) {
-							$page_template = get_post_meta($post->ID, '_wp_page_template', true);
-
-							/* Selected page does not have the required page template hence continue */
-							if(!in_array($page_template, $section->page_templates)) {
-								continue;
-							}
-						}
-
-						/* Check if this section requires a post format. This check is ignored if the post type doesn't support this feature. */
-						if(!empty($section->post_formats) && post_type_supports($post->post_type, 'post-formats')) {
-							$post_format = get_post_format($post->ID);
-
-							/* Selected post does not have the required post format hence continue */
-							if(!in_array($post_format, $section->post_formats)) {
-								continue;
-							}
-						}
-
-						add_meta_box($section->id, $section->title, 'ff_post_section', $post_type, $section->context, $section->priority);
-					}
-				break;
-
-				case 'FF_Taxonomy':
-					foreach($section->taxonomies as $taxonomy) {
-						add_action("{$taxonomy}_add_form_fields", 'ff_taxonomy_add_form_fields');
-		
-						add_action("{$taxonomy}_edit_form_fields", 'ff_taxonomy_edit_form_fields', 10, 2);
-					}
-				break;
-
-				case 'FF_User':
-					/* The following basically insures the relevant actions are only called if sections pertaining to them exist */
-
-					add_action('personal_options_update', 'ff_save_user');
-			
-					add_action('edit_user_profile_update', 'ff_save_user');
-
-					add_action('show_user_profile', 'ff_user_section');
-		
-					add_action('edit_user_profile', 'ff_user_section');
-				break;
-			}
-		}
-	}
-}
-
-if(!function_exists('ff_admin_section')) {
-	function ff_admin_section() {
-		$section_uid = $_GET['page'];
-
-		echo '<div class="wrap">';
-
-		if(!empty($_GET['ff-updated'])) {
-			echo '<div class="updated fade"><p>' . __('Settings saved.', 'fields-framework') . '</p></div>';
-		}
-
-		do_action('ff_section_before', $section_uid);
-
-		if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
-			echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=' . $section_uid . '" method="post">';
-		
-			wp_nonce_field('ff-save', 'ff-nonce');
-	
-			ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options');
-	
-			ff_create_field('ff-section-uid', 'hidden', array('value' => $section_uid));
-	
-			FF_Registry::$fields['ff-section-uid']->container();
-	
-			submit_button();
-		
-			echo '</form>';
-		}
-
-		do_action('ff_section_after', $section_uid);
-
-		echo '</div>';
-	}
-}
-
-if(!function_exists('ff_save_options')) {
-	function ff_save_options() {
-		/* Because the hook that calls this function always runs, make sure there are sections registered and that we are inside an administration menu save process */
-		if(empty(FF_Registry::$sections) || empty($_POST['ff-section-uid']) || ff_verify_nonce()) {
-			return;
-		}
-
-		$section_uid = $_POST['ff-section-uid'];
-
-		$section = FF_Registry::$sections[$section_uid];
-
-		if($section->skip_save == false) {
-			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->save_to_options();
-			}
-		}
-
-		if(!empty($_POST['_wp_http_referer'])) {
-			$location = $_POST['_wp_http_referer'];
-
-			if($section->skip_save == false) {
-				if(strpos($location, 'ff-updated') === false) {
-					$location .= '&ff-updated=true';
-				}
-			}
-
-			header('HTTP/1.1 303 See Other');
-
-			header("Location: {$location}");
-
-			exit;
-		}
-	}
-}
-
-if(!function_exists('ff_post_section')) {
-	function ff_post_section($post, $meta_box) {
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Post') || !in_array($post->post_type, $section->post_types) || $meta_box['id'] != $section_uid) {
-				continue;
-			}
-
-			if(!empty($section->page_templates) && post_type_supports($post->post_type, 'page-attributes')) {
-				$page_template = get_post_meta($post->ID, '_wp_page_template', true);
-				
-				if(!in_array($page_template, $section->page_templates)) {
-					continue;
-				}
-			}
-
-			if(!empty($section->post_formats) && post_type_supports($post->post_type, 'post-formats')) {
-				$post_format = get_post_format($post->ID);
-				
-				if(!in_array($post_format, $section->post_formats)) {
-					continue;
-				}
-			}
-
-			if($section->hide_content_editor == true) {
-				echo '<style type="text/css">#postdivrich {display: none;}</style>';
-			}
-
-			do_action('ff_section_before', $section_uid);
-
-			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
-				wp_nonce_field('ff-save', 'ff-nonce');
-
-				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'post', $post->ID);
-			}
-
-			do_action('ff_section_after', $section_uid);
-		}
-	}
-}
-
-if(!function_exists('ff_save_post')) {
-	function ff_save_post($post_id) {
-		if(ff_verify_nonce()) {
-			return;
-		}
-	
-		$post = get_post($post_id);
-
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Post') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($post->post_type, $section->post_types)) {				
-				continue;
-			}
-			
-			if(!empty($section->page_templates) && post_type_supports($post->post_type, 'page-attributes')) {
-				$page_template = get_post_meta($post->ID, '_wp_page_template', true);
-
-				if(!in_array($page_template, $section->page_templates)) {
-					continue;
-				}
-			}
-
-			if(!empty($section->post_formats) && post_type_supports($post->post_type, 'post-formats')) {
-				$post_format = get_post_format($post->ID);
-				
-				if(!in_array($post_format, $section->post_formats)) {
-					continue;
-				}
-			}
-
-			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->save_to_meta('post', $post_id);
-			}
-		}
-	}
-}
-
-if(!function_exists('ff_taxonomy_add_form_fields')) {
-	function ff_taxonomy_add_form_fields($taxonomy) {
-		ff_taxonomy_form_fields($taxonomy);
-	}
-}
-
-if(!function_exists('ff_taxonomy_edit_form_fields')) {
-	function ff_taxonomy_edit_form_fields($tag, $taxonomy) {
-		ff_taxonomy_form_fields($taxonomy, $tag);
-	}
-}
-
-if(!function_exists('ff_taxonomy_form_fields')) {
-	function ff_taxonomy_form_fields($taxonomy, $tag = null) {
-		$taxonomy = $_GET['taxonomy'];
-	
-		$ttid = null;
-	
-		if(!empty($tag)) {
-			$term = get_term($tag, $taxonomy);
-	
-			$ttid = $term->term_taxonomy_id;
-		}
-	
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Taxonomy') || !in_array($taxonomy, $section->taxonomies)) {
-				continue;
-			}
-
-			if(!empty($ttid)) {
-				echo '<tr><td colspan="2">';
-			}
-
-			do_action('ff_section_before', $section_uid);
-
-			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
-				wp_nonce_field('ff-save', 'ff-nonce');
-
-				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'options', 'taxonomy', $ttid);
-			}
-
-			do_action('ff_section_after', $section_uid);
-
-			if(!empty($ttid)) {
-				echo '</td></tr>';
-			}
-		}
-	}
-}
-
-if(!function_exists('ff_save_term')) {
-	function ff_save_term($term_id, $tt_id, $taxonomy) {
-		/* Because the hook that calls this function always runs, make sure there are sections registered */
-		if(empty(FF_Registry::$sections) || ff_verify_nonce()) {
-			return;
-		}
-
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Taxonomy') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($taxonomy, $section->taxonomies)) {
-				continue;
-			}
-
-			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->save_to_options('taxonomy', $tt_id);
-			}
-		}
-	}
-}
-
-if(!function_exists('ff_delete_term')) {
-	function ff_delete_term($term, $tt_id, $taxonomy, $deleted_term) {
-		/* Because the hook that calls this function always runs, make sure there are sections registered */
-		if(empty(FF_Registry::$sections)) {
-			return;
-		}
-
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_Taxonomy') || empty(FF_Registry::$fields_by_sections[$section_uid]) || !in_array($taxonomy, $section->taxonomies)) {
-				continue;
-			}
-
-			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->delete_from_options('taxonomy', $tt_id);
-			}
-		}
-	}
-}
-
-if(!function_exists('ff_user_section')) {
-	function ff_user_section($user) {
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_User')) {
-				continue;
-			}
-	
-			wp_nonce_field('ff-save', 'ff-nonce');
-
-			if(!empty(FF_Registry::$fields_by_sections[$section_uid])) {
-				do_action('ff_section_before', $section_uid);
-
-				ff_render_fields(FF_Registry::$fields_by_sections[$section_uid], 'meta', 'user', $user->ID);
-			}
-
-			do_action('ff_section_after', $section_uid);
-		}
-	}
-}
-
-if(!function_exists('ff_save_user')) {
-	function ff_save_user($user_id) {
-		if(ff_verify_nonce()) {
-			return;
-		}
-
-		foreach(FF_Registry::$sections as $section_uid => $section) {
-			if(!is_a($section, 'FF_User') || $section->skip_save != false || empty(FF_Registry::$fields_by_sections[$section_uid])) {
-				continue;
-			}
-
-			foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
-				$field->save_to_meta('user', $user_id);
-			}
-		}
-	}
-}
-
 if(!function_exists('ff_throw_exception')) {
 	function ff_throw_exception($message) {
 		set_exception_handler('ff_exception_handler');
@@ -632,15 +293,7 @@ if(!function_exists('ff_exception_handler')) {
 
 if(!function_exists('ff_admin_enqueue_scripts')) {
 	function ff_admin_enqueue_scripts() {
-		wp_enqueue_style('ff-validationEngine', FF_Registry::$plugins_url . '/css/validationEngine.jquery.css');
-
 		wp_enqueue_style('ff-backend', FF_Registry::$plugins_url . '/css/backend.css');
-
-		wp_enqueue_script('ff-validationEngine-en', FF_Registry::$plugins_url . '/js/jquery.validationEngine-en.js', array('jquery'));
-
-		wp_enqueue_script('ff-validationEngine', FF_Registry::$plugins_url . '/js/jquery.validationEngine.js', array('jquery'));
-
-		wp_enqueue_script('ff-placeholder', FF_Registry::$plugins_url . '/js/jquery.placeholder.js', array('jquery'));
 
 		wp_enqueue_script('ff-backend', FF_Registry::$plugins_url . '/js/backend.js', array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'));
 	}
@@ -649,6 +302,38 @@ if(!function_exists('ff_admin_enqueue_scripts')) {
 if(!function_exists('ff_verify_nonce')) {
 	function ff_verify_nonce() {
 		return empty($_POST['ff-nonce']) || !wp_verify_nonce($_POST['ff-nonce'], 'ff-save');
+	}
+}
+
+if(!function_exists('ff_get_attachment_id_by_url')) {
+	function ff_get_attachment_id_by_url($url) {
+		$upload_directory = wp_upload_dir();
+
+		$file = str_replace($upload_directory['baseurl'] . '/', null, $url);
+
+		$arguments = array(
+			'post_type' => 'attachment',
+			'post_status' => 'any',
+			'posts_per_page' => 1,
+			'meta_query' =>	array(
+				array(
+					'key' => '_wp_attached_file',
+					'value' => $file,
+				)
+			)
+		);
+
+		$attachment_id = null;
+
+		$attachments = get_posts($arguments);
+
+		if(!empty($attachments)) {
+			$attachment = array_shift($attachments);
+
+			$attachment_id = $attachment->ID;
+		}
+		
+		return $attachment_id;
 	}
 }
 
@@ -672,7 +357,7 @@ if(!function_exists('ff_set_object_defaults')) {
 			$property_name = $property->getName();
 
 			if(isset($arguments[$property_name])) {
-				if(is_array($arguments[$property_name])) {
+				if(!is_scalar($arguments[$property_name]) || is_bool($arguments[$property_name])) {
 					$property_value = $arguments[$property_name];
 				}
 				else {

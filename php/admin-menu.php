@@ -44,6 +44,7 @@ function ff_fields_framework_admin_menu($section_uid) {
 	if($section_uid == 'ff-admin-menu') {
 		?>
 		<h2><?php _e('Fields Framework', 'fields-framework'); ?></h2>
+
 		<p><a href="http://www.rhyzz.com/fields-framework.html" target="_blank"><?php _e('WordPress Fields Framework Documentation', 'fields-framework'); ?></a></p>
 		<?php
 	}

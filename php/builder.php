@@ -199,7 +199,18 @@ function ff_builder_before($section_uid) {
 		true
 	);
 
+	$options['page-templates-not'] = ff_create_field('ff-builder-page-templates-not', 'select',
+		array(
+			'name' => 'page-templates-not',
+			'label' => __('Page Templates Not', 'fields-framework'),
+			'prepend_blank' => true,
+			'options' => array('false' => 'No', 'true' => 'Yes'),
+		),
+		true
+	);
+
 	$post_formats_options = array(
+		'false' => __('Standard', 'fields-framework'),	
 		'aside' => __('Aside', 'fields-framework'),
 		'chat' => __('Chat', 'fields-framework'),
 		'gallery' => __('Gallery', 'fields-framework'),
@@ -218,6 +229,16 @@ function ff_builder_before($section_uid) {
 			'prepend_blank' => true,
 			'multiple' => true,
 			'options' => $post_formats_options
+		),
+		true
+	);
+
+	$options['post-formats-not'] = ff_create_field('ff-builder-post-formats-not', 'select',
+		array(
+			'name' => 'post-formats-not',
+			'label' => __('Post Formats Not', 'fields-framework'),
+			'prepend_blank' => true,
+			'options' => array('false' => 'No', 'true' => 'Yes'),
 		),
 		true
 	);
@@ -521,7 +542,9 @@ function ff_builder_before($section_uid) {
 		$options['context'],
 		$options['priority'],
 		$options['page-templates'],
+		$options['page-templates-not'],
 		$options['post-formats'],
+		$options['post-formats-not'],
 		$options['hide-content-editor'],
 	);
 
@@ -1040,8 +1063,8 @@ function ff_builder_create_process($value) {
 				$value_1 = "'{$value_1}'";
 			}
 			elseif(is_array($value_1)) {
-				if(ff_empty($value_1['value'])) {
-					$value_1 = "'{$value_1['key']}'";
+				if(ff_empty($value_1['key'])) {
+					$value_1 = "'{$value_1['value']}'";
 				}
 				else {
 					$value_1 = "'{$value_1['key']}' => '{$value_1['value']}'";

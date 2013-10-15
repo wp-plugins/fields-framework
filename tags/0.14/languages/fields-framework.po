@@ -1,0 +1,763 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Fields Framework\n"
+"POT-Creation-Date: 2013-10-16 00:30+0530\n"
+"PO-Revision-Date: 2013-10-16 00:30+0530\n"
+"Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
+"Language-Team: Rhyzz <support@rhyzz.com>\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../php/admin-menu.php:6 ../php/admin-menu.php:7 ../php/admin-menu.php:46
+msgid "Fields Framework"
+msgstr ""
+
+#: ../php/admin-menu.php:13
+msgid "Disable Builder"
+msgstr ""
+
+#: ../php/admin-menu.php:14 ../php/admin-menu.php:28
+msgid "No"
+msgstr ""
+
+#: ../php/admin-menu.php:14 ../php/admin-menu.php:28
+msgid "Yes"
+msgstr ""
+
+#: ../php/admin-menu.php:27
+msgid "Enable Field Testing and Demo Fields"
+msgstr ""
+
+#: ../php/admin-menu.php:48
+msgid "WordPress Fields Framework Documentation"
+msgstr ""
+
+#: ../php/builder.php:2
+msgid "Builder"
+msgstr ""
+
+#: ../php/builder.php:16
+msgid "Area"
+msgstr ""
+
+#: ../php/builder.php:24
+msgid "Type"
+msgstr ""
+
+#: ../php/builder.php:32
+msgid "Action"
+msgstr ""
+
+#: ../php/builder.php:40 ../php/builder.php:49
+msgid "UID"
+msgstr ""
+
+#: ../php/builder.php:57
+msgid "Key"
+msgstr ""
+
+#: ../php/builder.php:65
+msgid "Value"
+msgstr ""
+
+#: ../php/builder.php:73
+msgid "Skip Save"
+msgstr ""
+
+#: ../php/builder.php:83
+msgid "Page Title"
+msgstr ""
+
+#: ../php/builder.php:92
+msgid "Menu Title"
+msgstr ""
+
+#: ../php/builder.php:101
+msgid "Capability"
+msgstr ""
+
+#: ../php/builder.php:110
+msgid "Icon URL"
+msgstr ""
+
+#: ../php/builder.php:118
+msgid "Position"
+msgstr ""
+
+#: ../php/builder.php:126
+msgid "Parent UID"
+msgstr ""
+
+#: ../php/builder.php:135
+msgid "ID"
+msgstr ""
+
+#: ../php/builder.php:143 ../php/classes.php:466
+msgid "Title"
+msgstr ""
+
+#: ../php/builder.php:158
+msgid "Post Types"
+msgstr ""
+
+#: ../php/builder.php:170
+msgid "Context"
+msgstr ""
+
+#: ../php/builder.php:179
+msgid "Priority"
+msgstr ""
+
+#: ../php/builder.php:194
+msgid "Page Templates"
+msgstr ""
+
+#: ../php/builder.php:205
+msgid "Page Templates Not"
+msgstr ""
+
+#: ../php/builder.php:213
+msgid "Standard"
+msgstr ""
+
+#: ../php/builder.php:214
+msgid "Aside"
+msgstr ""
+
+#: ../php/builder.php:215
+msgid "Chat"
+msgstr ""
+
+#: ../php/builder.php:216
+msgid "Gallery"
+msgstr ""
+
+#: ../php/builder.php:217
+msgid "Link"
+msgstr ""
+
+#: ../php/builder.php:218
+msgid "Image"
+msgstr ""
+
+#: ../php/builder.php:219
+msgid "Quote"
+msgstr ""
+
+#: ../php/builder.php:220
+msgid "Status"
+msgstr ""
+
+#: ../php/builder.php:221
+msgid "Video"
+msgstr ""
+
+#: ../php/builder.php:222
+msgid "Audio"
+msgstr ""
+
+#: ../php/builder.php:228
+msgid "Post Formats"
+msgstr ""
+
+#: ../php/builder.php:239
+msgid "Post Formats Not"
+msgstr ""
+
+#: ../php/builder.php:255
+msgid "Taxonomies"
+msgstr ""
+
+#: ../php/builder.php:267
+msgid "Name"
+msgstr ""
+
+#: ../php/builder.php:275
+msgid "Label"
+msgstr ""
+
+#: ../php/builder.php:283
+msgid "Class"
+msgstr ""
+
+#: ../php/builder.php:291
+msgid "Description"
+msgstr ""
+
+#: ../php/builder.php:299
+msgid "Placeholder"
+msgstr ""
+
+#: ../php/builder.php:307
+msgid "Default Value"
+msgstr ""
+
+#: ../php/builder.php:315
+msgid "Repeatable"
+msgstr ""
+
+#: ../php/builder.php:325
+msgid "Minimal"
+msgstr ""
+
+#: ../php/builder.php:335
+msgid "Hide Content Editor"
+msgstr ""
+
+#: ../php/builder.php:345
+msgid "Library"
+msgstr ""
+
+#: ../php/builder.php:353
+msgid "Rows"
+msgstr ""
+
+#: ../php/builder.php:362
+msgid "Cols"
+msgstr ""
+
+#: ../php/builder.php:371
+msgid "Size"
+msgstr ""
+
+#: ../php/builder.php:380
+msgid "Date Format"
+msgstr ""
+
+#: ../php/builder.php:381
+#, php-format
+msgid ""
+"Format details for this argument can be found %s. Set this to -1 if you "
+"don't want to a Date."
+msgstr ""
+
+#: ../php/builder.php:381 ../php/builder.php:391
+msgid "here"
+msgstr ""
+
+#: ../php/builder.php:390
+msgid "Time Format"
+msgstr ""
+
+#: ../php/builder.php:391
+#, php-format
+msgid ""
+"Format details for this argument can be found %s. Set this to -1 if you "
+"don't want to a Time."
+msgstr ""
+
+#: ../php/builder.php:400
+msgid "Options"
+msgstr ""
+
+#: ../php/builder.php:401
+msgid ""
+"You must specify the options as key/value pairs. If you don't use a key/"
+"value pair,\tthen the array will be treated as an indexed array."
+msgstr ""
+
+#: ../php/builder.php:414 ../php/builder.php:424 ../php/builder.php:434
+msgid "Parameters"
+msgstr ""
+
+#: ../php/builder.php:415
+#, php-format
+msgid "Refer to the Parameters section of the %s Class on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:415
+msgid "WP_Query"
+msgstr ""
+
+#: ../php/builder.php:425
+#, php-format
+msgid ""
+"Refer to the Arguments section of the %s Function on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:425
+msgid "Get Terms"
+msgstr ""
+
+#: ../php/builder.php:435
+#, php-format
+msgid ""
+"Refer to the Parameters section of the %s Function on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:435
+msgid "Get Users"
+msgstr ""
+
+#: ../php/builder.php:456
+msgid "Settings"
+msgstr ""
+
+#: ../php/builder.php:457
+#, php-format
+msgid "Refer to the Arguments section on this %s"
+msgstr ""
+
+#: ../php/builder.php:457
+msgid "page"
+msgstr ""
+
+#: ../php/builder.php:470
+msgid "Validator"
+msgstr ""
+
+#: ../php/builder.php:471
+#, php-format
+msgid ""
+"This is used by the client side validator and takes key/value pairs. Please "
+"refer to the %s of the plugin used for validation to learn more about this"
+msgstr ""
+
+#: ../php/builder.php:471
+msgid "documentation"
+msgstr ""
+
+#: ../php/builder.php:484
+msgid "Multiple"
+msgstr ""
+
+#: ../php/builder.php:494
+msgid "Prepend Blank"
+msgstr ""
+
+#: ../php/builder.php:504
+msgid "Arguments"
+msgstr ""
+
+#: ../php/builder.php:520
+msgid "Section UID"
+msgstr ""
+
+#: ../php/builder.php:539
+msgid "Field UID"
+msgstr ""
+
+#: ../php/builder.php:550 ../php/builder.php:839
+msgid "Fields"
+msgstr ""
+
+#: ../php/builder.php:733
+msgid "Import Builder Data is not valid!"
+msgstr ""
+
+#: ../php/builder.php:747
+#, php-format
+msgid "Section UID \"%s\" is not unique!"
+msgstr ""
+
+#: ../php/builder.php:750
+#, php-format
+msgid "Field UID \"%s\" is not unique!"
+msgstr ""
+
+#: ../php/builder.php:765
+#, php-format
+msgid "Field UID \"%s\" is not unique to Section with UID \"%s\"!"
+msgstr ""
+
+#: ../php/builder.php:838
+msgid "Sections"
+msgstr ""
+
+#: ../php/builder.php:840
+msgid "Fields By Sections"
+msgstr ""
+
+#: ../php/builder.php:850
+msgid "Integration"
+msgstr ""
+
+#: ../php/builder.php:852
+#, php-format
+msgid ""
+"To learn how to integrate the code generated below, please refer to the \"%s"
+"\" section of the documentation."
+msgstr ""
+
+#: ../php/builder.php:852
+msgid "Usage Instructions"
+msgstr ""
+
+#: ../php/builder.php:854
+#, php-format
+msgid "You must replace the \"%s\" part with the code you see below."
+msgstr ""
+
+#: ../php/builder.php:886
+msgid "Export Builder Data"
+msgstr ""
+
+#: ../php/builder.php:894
+msgid "Import Builder Data"
+msgstr ""
+
+#: ../php/builder.php:902
+msgid "Import"
+msgstr ""
+
+#: ../php/builder.php:909
+msgid "Admin Menu"
+msgstr ""
+
+#: ../php/builder.php:910
+msgid "Admin Sub Menu"
+msgstr ""
+
+#: ../php/builder.php:911
+msgid "Post"
+msgstr ""
+
+#: ../php/builder.php:912
+msgid "Taxonomy"
+msgstr ""
+
+#: ../php/builder.php:913
+msgid "Widget"
+msgstr ""
+
+#: ../php/builder.php:914
+msgid "User"
+msgstr ""
+
+#: ../php/builder.php:921
+msgid "Group"
+msgstr ""
+
+#: ../php/builder.php:922
+msgid "Text"
+msgstr ""
+
+#: ../php/builder.php:923
+msgid "Hidden"
+msgstr ""
+
+#: ../php/builder.php:924
+msgid "Media"
+msgstr ""
+
+#: ../php/builder.php:925
+msgid "Textarea"
+msgstr ""
+
+#: ../php/builder.php:926
+msgid "Checkbox"
+msgstr ""
+
+#: ../php/builder.php:927
+msgid "Radio"
+msgstr ""
+
+#: ../php/builder.php:928
+msgid "Select"
+msgstr ""
+
+#: ../php/builder.php:929
+msgid "Select Posts"
+msgstr ""
+
+#: ../php/builder.php:930
+msgid "Select Terms"
+msgstr ""
+
+#: ../php/builder.php:931
+msgid "Select Users"
+msgstr ""
+
+#: ../php/builder.php:932
+msgid "Editor"
+msgstr ""
+
+#: ../php/builder.php:933
+msgid "DateTime"
+msgstr ""
+
+#: ../php/builder.php:934
+msgid "ColorPicker"
+msgstr ""
+
+#: ../php/builder.php:943 ../php/builder.php:949
+msgid "Create New"
+msgstr ""
+
+#: ../php/builder.php:1082 ../php/builder.php:1097
+msgid "Delete"
+msgstr ""
+
+#: ../php/builder.php:1095
+msgid "Edit"
+msgstr ""
+
+#: ../php/classes.php:43
+msgid "Settings saved."
+msgstr ""
+
+#: ../php/classes.php:96
+msgid "Empty Menu Section Page Title"
+msgstr ""
+
+#: ../php/classes.php:101
+msgid "Empty Menu Section Menu Title"
+msgstr ""
+
+#: ../php/classes.php:122
+msgid "Empty Sub Menu Section Parent UID"
+msgstr ""
+
+#: ../php/classes.php:127
+msgid "Empty Sub Menu Section Page Title"
+msgstr ""
+
+#: ../php/classes.php:132
+msgid "Empty Sub Menu Section Menu Title"
+msgstr ""
+
+#: ../php/classes.php:159
+msgid "Empty Post Types"
+msgstr ""
+
+#: ../php/classes.php:164
+msgid "Empty Meta Section Title"
+msgstr ""
+
+#: ../php/classes.php:300 ../php/classes.php:1151
+msgid "Empty Taxonomies"
+msgstr ""
+
+#: ../php/classes.php:424
+msgid "Empty Widget Section Title"
+msgstr ""
+
+#: ../php/classes.php:437
+msgid "Fields Framework Widget"
+msgstr ""
+
+#: ../php/classes.php:508
+msgid "Section"
+msgstr ""
+
+#: ../php/classes.php:723
+msgid "Add Row"
+msgstr ""
+
+#: ../php/classes.php:736 ../php/classes.php:768
+msgid "Move Row"
+msgstr ""
+
+#: ../php/classes.php:751 ../php/classes.php:784
+msgid "Remove Row"
+msgstr ""
+
+#: ../php/classes.php:989
+msgid "Upload"
+msgstr ""
+
+#: ../php/classes.php:1161
+msgid "One of the Specified Taxonomy is not valid"
+msgstr ""
+
+#: ../php/demo-fields.php:2
+msgid "Demo Fields"
+msgstr ""
+
+#: ../php/demo-fields.php:5
+msgid "A datetime field"
+msgstr ""
+
+#: ../php/demo-fields.php:11
+msgid "A colorpicker field"
+msgstr ""
+
+#: ../php/demo-fields.php:17 ../php/field-testing.php:10
+msgid "A text field"
+msgstr ""
+
+#: ../php/demo-fields.php:23
+msgid "A media upload field"
+msgstr ""
+
+#: ../php/demo-fields.php:29
+msgid "A textarea field"
+msgstr ""
+
+#: ../php/demo-fields.php:35
+msgid "A checkbox field"
+msgstr ""
+
+#: ../php/demo-fields.php:42
+msgid "A radio field"
+msgstr ""
+
+#: ../php/demo-fields.php:49 ../php/field-testing.php:38
+msgid "A select field"
+msgstr ""
+
+#: ../php/demo-fields.php:57
+msgid "A select posts field"
+msgstr ""
+
+#: ../php/demo-fields.php:66
+msgid "A select terms field"
+msgstr ""
+
+#: ../php/demo-fields.php:76
+msgid "A select users field"
+msgstr ""
+
+#: ../php/demo-fields.php:84
+msgid "A editor field"
+msgstr ""
+
+#: ../php/demo-fields.php:90
+msgid "An email field"
+msgstr ""
+
+#: ../php/demo-fields.php:100
+msgid "Sample text prepended before section."
+msgstr ""
+
+#: ../php/demo-fields.php:108
+msgid "Sample text appended after section."
+msgstr ""
+
+#: ../php/field-testing.php:2
+msgid "Unit Test"
+msgstr ""
+
+#: ../php/field-testing.php:16
+msgid "A text field with default"
+msgstr ""
+
+#: ../php/field-testing.php:17
+msgid "Here is a default value for this text field"
+msgstr ""
+
+#: ../php/field-testing.php:23
+msgid "A repeatable text field"
+msgstr ""
+
+#: ../php/field-testing.php:30
+msgid "A repeatable text field with default"
+msgstr ""
+
+#: ../php/field-testing.php:32
+msgid "Here is a default value for this repeatable text field"
+msgstr ""
+
+#: ../php/field-testing.php:46
+msgid "A select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:55
+msgid "A repeatable select field"
+msgstr ""
+
+#: ../php/field-testing.php:64
+msgid "A repeatable select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:74
+msgid "A multi-select field"
+msgstr ""
+
+#: ../php/field-testing.php:83
+msgid "A multi-select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:93
+msgid "A multi-select field with multi-default"
+msgstr ""
+
+#: ../php/field-testing.php:103
+msgid "A repeatable multi-select field"
+msgstr ""
+
+#: ../php/field-testing.php:113
+msgid "A repeatable multi-select field with default"
+msgstr ""
+
+#: ../php/field-testing.php:124
+msgid "A repeatable multi-select field with multi-default"
+msgstr ""
+
+#: ../php/field-testing.php:135
+msgid "A group field"
+msgstr ""
+
+#: ../php/field-testing.php:169
+msgid "A repeatable group field"
+msgstr ""
+
+#: ../php/field-testing.php:204
+msgid "A nested group field"
+msgstr ""
+
+#: ../php/field-testing.php:212
+msgid "A nested repeatable group field"
+msgstr ""
+
+#: ../php/field-testing.php:221
+msgid "A nested nested group field"
+msgstr ""
+
+#: ../php/field-testing.php:229
+msgid "A nested nested repeatable group field"
+msgstr ""
+
+#: ../php/functions.php:16
+msgid "Empty Section UID"
+msgstr ""
+
+#: ../php/functions.php:20
+msgid "Duplicate Section UID"
+msgstr ""
+
+#: ../php/functions.php:28 ../php/functions.php:87
+msgid "Empty Section Type"
+msgstr ""
+
+#: ../php/functions.php:44
+msgid "Invalid Section Type"
+msgstr ""
+
+#: ../php/functions.php:67
+msgid "Empty Field UID"
+msgstr ""
+
+#: ../php/functions.php:71
+msgid "Duplicate Field UID"
+msgstr ""
+
+#: ../php/functions.php:96
+msgid "Invalid Field Type"
+msgstr ""
+
+#: ../php/functions.php:111 ../php/functions.php:206 ../php/functions.php:241
+msgid "Invalid Section UID"
+msgstr ""
+
+#: ../php/functions.php:115 ../php/functions.php:129 ../php/functions.php:210
+msgid "Invalid Field UID"
+msgstr ""
+
+#: ../php/functions.php:125
+msgid "Invalid Field Group UID"
+msgstr ""
+
+#: ../php/functions.php:214
+msgid "Field UID does not exist in Section specified by Section UID"
+msgstr ""
+
+#: ../php/functions.php:245
+msgid "No Fields exist in Section specified by Section UID"
+msgstr ""

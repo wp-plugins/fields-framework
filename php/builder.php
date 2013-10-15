@@ -378,6 +378,7 @@ function ff_builder_before($section_uid) {
 		array(
 			'name' => 'date-format',
 			'label' => __('Date Format', 'fields-framework'),
+			'description' => sprintf(__('Format details for this argument can be found %s. Set this to -1 if you don\'t want to a Date.', 'fields-framework'), '<a href="http://api.jqueryui.com/datepicker/" target="_blank">' . __('here', 'fields-framework') . '</a>'),
 			'placeholder' => 'mm/dd/yy',
 		),
 		true
@@ -387,6 +388,7 @@ function ff_builder_before($section_uid) {
 		array(
 			'name' => 'time-format',
 			'label' => __('Time Format', 'fields-framework'),
+			'description' => sprintf(__('Format details for this argument can be found %s. Set this to -1 if you don\'t want to a Time.', 'fields-framework'), '<a href="http://trentrichardson.com/examples/timepicker/#tp-formatting" target="_blank">' . __('here', 'fields-framework') . '</a>'),
 			'placeholder' => 'hh:mm:ss tt',
 		),
 		true
@@ -396,6 +398,7 @@ function ff_builder_before($section_uid) {
 		array(
 			'name' => 'options',
 			'label' => __('Options', 'fields-framework'),
+			'description' => __('You must specify the options as key/value pairs. If you don\'t use a key/value pair,	then the array will be treated as an indexed array.', 'fields-framework'),
 			'repeatable' => true,
 		),
 		true
@@ -405,23 +408,53 @@ function ff_builder_before($section_uid) {
 
 	$options['options']->add_field($options['value']);
 
-	$options['parameters'] = ff_create_field('ff-builder-parameters', 'group',
+	$options['parameters-posts'] = ff_create_field('ff-builder-parameters', 'group',
 		array(
 			'name' => 'parameters',
 			'label' => __('Parameters', 'fields-framework'),
+			'description' => sprintf(__('Refer to the Parameters section of the %s Class on the WordPress Codex', 'fields-framework'), '<a href="http://codex.wordpress.org/Class_Reference/WP_Query" target="_blank">' . __('WP_Query', 'fields-framework') . '</a>'),
 			'repeatable' => true,
 		),
 		true
 	);
 
-	$options['parameters']->add_field($options['key']);
+	$options['parameters-terms'] = ff_create_field('ff-builder-parameters', 'group',
+		array(
+			'name' => 'parameters',
+			'label' => __('Parameters', 'fields-framework'),
+			'description' => sprintf(__('Refer to the Arguments section of the %s Function on the WordPress Codex', 'fields-framework'), '<a href="http://codex.wordpress.org/Function_Reference/get_terms" target="_blank">' . __('Get Terms', 'fields-framework') . '</a>'),
+			'repeatable' => true,
+		),
+		true
+	);
 
-	$options['parameters']->add_field($options['value']);
+	$options['parameters-users'] = ff_create_field('ff-builder-parameters', 'group',
+		array(
+			'name' => 'parameters',
+			'label' => __('Parameters', 'fields-framework'),
+			'description' => sprintf(__('Refer to the Parameters section of the %s Function on the WordPress Codex', 'fields-framework'), '<a href="http://codex.wordpress.org/Function_Reference/get_users" target="_blank">' . __('Get Users', 'fields-framework') . '</a>'),
+			'repeatable' => true,
+		),
+		true
+	);
+
+	$options['parameters-posts']->add_field($options['key']);
+
+	$options['parameters-posts']->add_field($options['value']);
+
+	$options['parameters-terms']->add_field($options['key']);
+
+	$options['parameters-terms']->add_field($options['value']);
+
+	$options['parameters-users']->add_field($options['key']);
+
+	$options['parameters-users']->add_field($options['value']);
 
 	$options['settings'] = ff_create_field('ff-builder-settings', 'group',
 		array(
 			'name' => 'settings',
 			'label' => __('Settings', 'fields-framework'),
+			'description' => sprintf(__('Refer to the Arguments section on this %s', 'fields-framework'), '<a href="http://codex.wordpress.org/Function_Reference/wp_editor" target="_blank">' . __('page', 'fields-framework') . '</a>'),
 			'repeatable' => true,
 		),
 		true
@@ -435,6 +468,7 @@ function ff_builder_before($section_uid) {
 		array(
 			'name' => 'validator',
 			'label' => __('Validator', 'fields-framework'),
+			'description' => sprintf(__('This is used by the client side validator and takes key/value pairs. Please refer to the %s of the plugin used for validation to learn more about this', 'fields-framework'), '<a href="http://posabsolute.github.io/jQuery-Validation-Engine/" target="_blank">' . __('documentation', 'fields-framework') . '</a>'),
 			'repeatable' => true,
 		),
 		true
@@ -602,14 +636,14 @@ function ff_builder_before($section_uid) {
 		$options['multiple'],
 		$options['size'],
 		$options['prepend-blank'],
-		$options['parameters'],
+		$options['parameters-posts'],
 	);
 
 	$associations['fields']['select_terms'] = array(
 		$options['multiple'],
 		$options['size'],
 		$options['prepend-blank'],
-		$options['parameters'],
+		$options['parameters-terms'],
 		$options['taxonomies'],
 	);
 
@@ -617,7 +651,7 @@ function ff_builder_before($section_uid) {
 		$options['multiple'],
 		$options['size'],
 		$options['prepend-blank'],
-		$options['parameters'],
+		$options['parameters-users'],
 	);
 
 	$associations['fields']['editor'] = array(
@@ -635,7 +669,17 @@ function ff_builder_before($section_uid) {
 	foreach($associations['fields'] as $key => $field) {
 		array_unshift(
 			$associations['fields'][$key],
-			$options['name'],
+			$options['name']
+		);
+	}
+
+	foreach($associations['fields'] as $key => $field) {
+		if($key == 'group') {
+			continue;
+		}
+
+		array_unshift(
+			$associations['fields'][$key],
 			$options['default-value']
 		);
 	}
@@ -652,8 +696,7 @@ function ff_builder_before($section_uid) {
 			$options['class'],
 			$options['description'],
 			$options['placeholder'],
-			$options['minimal'],
-			$options['validator']
+			$options['minimal']
 		);
 	}
 
@@ -668,7 +711,29 @@ function ff_builder_before($section_uid) {
 		);
 	}
 
+	foreach($associations['fields'] as $key => $field) {
+		if($key == 'group' || $key == 'hidden' || $key == 'editor') {
+			continue;
+		}
+		
+		array_push(
+			$associations['fields'][$key],
+			$options['validator']
+		);
+	}
+
 	if(!empty($_POST)) {
+		if(!empty($_POST['import-builder'])) {
+			if(!empty($_POST['import-builder-data']) && ($serialize = unserialize(stripslashes($_POST['import-builder-data']))) !== false) {
+				$builder = ff_sanitize($serialize);
+				
+				update_option('ff-builder', $builder);
+			}
+			else {
+				?><p class="error-message"><?php _e('Import Builder Data is not valid!', 'fields-framework'); ?></p><?php
+			}
+		}
+
 		if(!empty($_POST['action'])) {
 			$area = $_POST['area'];
 
@@ -782,11 +847,12 @@ function ff_builder_before($section_uid) {
 	$type = !empty($_GET['type']) ? $_GET['type'] : null;
 
 	if(empty($area)) {
-		?>
-		<p><?php printf(__('To learn how to integrate the code generated below, please refer to the "%s" section of the documentation.', 'fields-framework'), '<a href="http://www.rhyzz.com/fields-framework.html#usage-instructions" target="_blank">Usage Instructions</a>'); ?></p>
+		echo '<h3>' . __('Integration', 'fields-framework') . '</h3>';
+		
+		echo '<p>' . sprintf(__('To learn how to integrate the code generated below, please refer to the "%s" section of the documentation.', 'fields-framework'), '<a href="http://www.rhyzz.com/fields-framework.html#usage-instructions" target="_blank">' . __('Usage Instructions', 'fields-framework') . '</a>') . '</p>';
 
-		<p><?php printf(__('You must replace the "%s" part with the code you see below.', 'fields-framework'), '<code>// Add your function calls here!</code>'); ?></p>
-		<?php
+		echo '<p>' . sprintf(__('You must replace the "%s" part with the code you see below.', 'fields-framework'), '<code>// Add your function calls here!</code>') . '</p>';
+
 		echo '<p><textarea class="large-text" readonly="readonly" rows="25" cols="100">';
 
 		if(!empty($builder['sections'])) {
@@ -816,6 +882,26 @@ function ff_builder_before($section_uid) {
 		}
 
 		echo '</textarea></p>';
+
+		echo '<h3>' . __('Export Builder Data', 'fields-framework') . '</h3>';
+
+		echo '<p><textarea class="large-text" readonly="readonly" rows="25" cols="100">';
+
+		echo serialize(get_option('ff-builder'));
+
+		echo '</textarea></p>';
+
+		echo '<h3>' . __('Import Builder Data', 'fields-framework') . '</h3>';
+
+		echo '<form action="' . $_SERVER['PHP_SELF'] . '?page=ff-builder" method="post">';
+
+		echo '<p><textarea name="import-builder-data" class="large-text" rows="25" cols="100">';
+
+		echo '</textarea></p>';
+
+		submit_button(__('Import', 'fields-framework'), 'primary', 'import-builder');
+
+		echo '</form>';
 	}
 	elseif($area == 'sections') {
 		?>
@@ -967,7 +1053,12 @@ function ff_builder_before($section_uid) {
 								}
 							}
 							elseif(is_array($value)) {
-								$value = implode(', ', $value);
+								if(is_array(current($value))) {
+									$value = '<pre>' . print_r($value, true) . '</pre>';
+								}
+								else {
+									$value = implode(', ', $value);
+								}
 							}
 		
 							echo "<dd>{$value}</dd>";

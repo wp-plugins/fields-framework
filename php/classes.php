@@ -568,6 +568,10 @@ if(!class_exists('FF_Field')) {
 		}
 
 		public function admin_enqueue_scripts() {
+			if($this->repeatable == true) {
+				wp_enqueue_script('repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
+			}
+			
 			if(!empty($this->validator)) {
 				wp_enqueue_style('ff-validationEngine', FF_Registry::$plugins_url . '/css/validationEngine.jquery.css');
 		
@@ -706,9 +710,9 @@ if(!class_exists('FF_Field')) {
 					<tr>
 						<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
 						
-						<td>
+						<td <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
 				<?php endif; ?>
-							<table <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
+							<table>
 								<?php if($this->repeatable == true) : ?>
 								<thead>
 									<tr>
@@ -724,24 +728,18 @@ if(!class_exists('FF_Field')) {
 								<tbody>
 									<?php
 										if($this->repeatable == true) {
-											$i = 0;
-	
 											$original_name = $this->name;
 		
 											$original_id = $this->id;
-											
-											ob_start();
 											?>
-											<tr>
+											<tr class="ff-add-template">
 												<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
 							
 												<td>
 												<?php
-													$this->name = "{$original_name}[{$i}]";
+													$this->name = "{$original_name}[{{row-count-placeholder}}]";
 		
-													$this->id = "{$original_id}-{$i}";
-		
-													$i++;
+													$this->id = "{$original_id}-{{row-count-placeholder}}";
 	
 													/* Reset this object's instance to the default value */
 													$this->use_value('default');
@@ -753,12 +751,6 @@ if(!class_exists('FF_Field')) {
 												<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
 											</tr>
 											<?php
-											$content = ob_get_contents();
-											
-											ob_end_clean();
-	
-											echo '<script type="application/json" class="ff-add-template">' . json_encode($content) . '</script>';
-	
 											$values = $this->saved_value;
 	
 											if(ff_empty($values)) {
@@ -767,7 +759,9 @@ if(!class_exists('FF_Field')) {
 											elseif(!is_array($values)) {
 												$values = array($values);
 											}
-	
+
+											$i = 0;
+
 											foreach($values as $value) {
 												?>
 												<tr>
@@ -1201,29 +1195,31 @@ if(!class_exists('FF_Field_Editor')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			$settings = array(
-				'textarea_name' => $this->name,
-			);
-
 			$this->settings = wp_parse_args($this->settings, $settings);
 
+			/* Editor cannot be made repeatable so force it to be false in case the user has tried setting it to true */
+			$this->repeatable = false;
+		}
+
+		public function container() {
 			$id = null;
 
 			for ($i = 0; $i < strlen($this->id); $i++) {
 				$character = ord($this->id[$i]);
 
-				if($character >= 97 && $character <= 122) {
+				if(($character >= 97 && $character <= 122) || ($character >= 48 && $character <= 57)) {
 					$id .= chr($character);
 				}
 			}
 
 			$this->id = $id;
 
-			/* Editor cannot be made repeatable so force it to be false in case the user has tried setting it to true */
-			$this->repeatable = false;
+			parent::container();
 		}
 
 		public function html() {
+			$this->settings['textarea_name'] = $this->name;
+
 			wp_editor($this->value, $this->id, $this->settings);
 		}
 	}

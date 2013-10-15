@@ -234,6 +234,17 @@ ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-nested-re
 
 ff_add_field_to_field_group('ff-field-testing-a-nested-nested-repeatable-group-field', 'ff-field-testing-a-nested-repeatable-group-field');
 
+/*
+ff_create_field('ff-field-testing-a-nested-nested-nested-repeatable-group-field', 'group', array(
+	'label' => __('A nested nested nested repeatable group field', 'fields-framework'),
+	'repeatable' => true,
+));
+
+ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-nested-nested-nested-repeatable-group-field');
+
+ff_add_field_to_field_group('ff-field-testing-a-nested-nested-nested-repeatable-group-field', 'ff-field-testing-a-nested-nested-repeatable-group-field');
+*/
+
 add_action('ff_section_after', 'ff_field_testing_after');
 
 function ff_field_testing_after($section_uid) {

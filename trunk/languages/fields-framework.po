@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-10-04 19:00+0530\n"
-"PO-Revision-Date: 2013-10-04 19:00+0530\n"
+"POT-Creation-Date: 2013-10-16 00:30+0530\n"
+"PO-Revision-Date: 2013-10-16 00:30+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -230,174 +230,271 @@ msgstr ""
 msgid "Date Format"
 msgstr ""
 
-#: ../php/builder.php:389
+#: ../php/builder.php:381
+#, php-format
+msgid ""
+"Format details for this argument can be found %s. Set this to -1 if you "
+"don't want to a Date."
+msgstr ""
+
+#: ../php/builder.php:381 ../php/builder.php:391
+msgid "here"
+msgstr ""
+
+#: ../php/builder.php:390
 msgid "Time Format"
 msgstr ""
 
-#: ../php/builder.php:398
+#: ../php/builder.php:391
+#, php-format
+msgid ""
+"Format details for this argument can be found %s. Set this to -1 if you "
+"don't want to a Time."
+msgstr ""
+
+#: ../php/builder.php:400
 msgid "Options"
 msgstr ""
 
-#: ../php/builder.php:411
+#: ../php/builder.php:401
+msgid ""
+"You must specify the options as key/value pairs. If you don't use a key/"
+"value pair,\tthen the array will be treated as an indexed array."
+msgstr ""
+
+#: ../php/builder.php:414 ../php/builder.php:424 ../php/builder.php:434
 msgid "Parameters"
 msgstr ""
 
-#: ../php/builder.php:424
+#: ../php/builder.php:415
+#, php-format
+msgid "Refer to the Parameters section of the %s Class on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:415
+msgid "WP_Query"
+msgstr ""
+
+#: ../php/builder.php:425
+#, php-format
+msgid ""
+"Refer to the Arguments section of the %s Function on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:425
+msgid "Get Terms"
+msgstr ""
+
+#: ../php/builder.php:435
+#, php-format
+msgid ""
+"Refer to the Parameters section of the %s Function on the WordPress Codex"
+msgstr ""
+
+#: ../php/builder.php:435
+msgid "Get Users"
+msgstr ""
+
+#: ../php/builder.php:456
 msgid "Settings"
 msgstr ""
 
-#: ../php/builder.php:437
-msgid "Validator"
+#: ../php/builder.php:457
+#, php-format
+msgid "Refer to the Arguments section on this %s"
 msgstr ""
 
-#: ../php/builder.php:450
-msgid "Multiple"
-msgstr ""
-
-#: ../php/builder.php:460
-msgid "Prepend Blank"
+#: ../php/builder.php:457
+msgid "page"
 msgstr ""
 
 #: ../php/builder.php:470
+msgid "Validator"
+msgstr ""
+
+#: ../php/builder.php:471
+#, php-format
+msgid ""
+"This is used by the client side validator and takes key/value pairs. Please "
+"refer to the %s of the plugin used for validation to learn more about this"
+msgstr ""
+
+#: ../php/builder.php:471
+msgid "documentation"
+msgstr ""
+
+#: ../php/builder.php:484
+msgid "Multiple"
+msgstr ""
+
+#: ../php/builder.php:494
+msgid "Prepend Blank"
+msgstr ""
+
+#: ../php/builder.php:504
 msgid "Arguments"
 msgstr ""
 
-#: ../php/builder.php:486
+#: ../php/builder.php:520
 msgid "Section UID"
 msgstr ""
 
-#: ../php/builder.php:505
+#: ../php/builder.php:539
 msgid "Field UID"
 msgstr ""
 
-#: ../php/builder.php:516 ../php/builder.php:774
+#: ../php/builder.php:550 ../php/builder.php:839
 msgid "Fields"
 msgstr ""
 
-#: ../php/builder.php:682
+#: ../php/builder.php:733
+msgid "Import Builder Data is not valid!"
+msgstr ""
+
+#: ../php/builder.php:747
 #, php-format
 msgid "Section UID \"%s\" is not unique!"
 msgstr ""
 
-#: ../php/builder.php:685
+#: ../php/builder.php:750
 #, php-format
 msgid "Field UID \"%s\" is not unique!"
 msgstr ""
 
-#: ../php/builder.php:700
+#: ../php/builder.php:765
 #, php-format
 msgid "Field UID \"%s\" is not unique to Section with UID \"%s\"!"
 msgstr ""
 
-#: ../php/builder.php:773
+#: ../php/builder.php:838
 msgid "Sections"
 msgstr ""
 
-#: ../php/builder.php:775
+#: ../php/builder.php:840
 msgid "Fields By Sections"
 msgstr ""
 
-#: ../php/builder.php:786
+#: ../php/builder.php:850
+msgid "Integration"
+msgstr ""
+
+#: ../php/builder.php:852
 #, php-format
 msgid ""
 "To learn how to integrate the code generated below, please refer to the \"%s"
 "\" section of the documentation."
 msgstr ""
 
-#: ../php/builder.php:788
+#: ../php/builder.php:852
+msgid "Usage Instructions"
+msgstr ""
+
+#: ../php/builder.php:854
 #, php-format
 msgid "You must replace the \"%s\" part with the code you see below."
 msgstr ""
 
-#: ../php/builder.php:823
+#: ../php/builder.php:886
+msgid "Export Builder Data"
+msgstr ""
+
+#: ../php/builder.php:894
+msgid "Import Builder Data"
+msgstr ""
+
+#: ../php/builder.php:902
+msgid "Import"
+msgstr ""
+
+#: ../php/builder.php:909
 msgid "Admin Menu"
 msgstr ""
 
-#: ../php/builder.php:824
+#: ../php/builder.php:910
 msgid "Admin Sub Menu"
 msgstr ""
 
-#: ../php/builder.php:825
+#: ../php/builder.php:911
 msgid "Post"
 msgstr ""
 
-#: ../php/builder.php:826
+#: ../php/builder.php:912
 msgid "Taxonomy"
 msgstr ""
 
-#: ../php/builder.php:827
+#: ../php/builder.php:913
 msgid "Widget"
 msgstr ""
 
-#: ../php/builder.php:828
+#: ../php/builder.php:914
 msgid "User"
 msgstr ""
 
-#: ../php/builder.php:835
+#: ../php/builder.php:921
 msgid "Group"
 msgstr ""
 
-#: ../php/builder.php:836
+#: ../php/builder.php:922
 msgid "Text"
 msgstr ""
 
-#: ../php/builder.php:837
+#: ../php/builder.php:923
 msgid "Hidden"
 msgstr ""
 
-#: ../php/builder.php:838
+#: ../php/builder.php:924
 msgid "Media"
 msgstr ""
 
-#: ../php/builder.php:839
+#: ../php/builder.php:925
 msgid "Textarea"
 msgstr ""
 
-#: ../php/builder.php:840
+#: ../php/builder.php:926
 msgid "Checkbox"
 msgstr ""
 
-#: ../php/builder.php:841
+#: ../php/builder.php:927
 msgid "Radio"
 msgstr ""
 
-#: ../php/builder.php:842
+#: ../php/builder.php:928
 msgid "Select"
 msgstr ""
 
-#: ../php/builder.php:843
+#: ../php/builder.php:929
 msgid "Select Posts"
 msgstr ""
 
-#: ../php/builder.php:844
+#: ../php/builder.php:930
 msgid "Select Terms"
 msgstr ""
 
-#: ../php/builder.php:845
+#: ../php/builder.php:931
 msgid "Select Users"
 msgstr ""
 
-#: ../php/builder.php:846
+#: ../php/builder.php:932
 msgid "Editor"
 msgstr ""
 
-#: ../php/builder.php:847
+#: ../php/builder.php:933
 msgid "DateTime"
 msgstr ""
 
-#: ../php/builder.php:848
+#: ../php/builder.php:934
 msgid "ColorPicker"
 msgstr ""
 
-#: ../php/builder.php:857 ../php/builder.php:863
+#: ../php/builder.php:943 ../php/builder.php:949
 msgid "Create New"
 msgstr ""
 
-#: ../php/builder.php:991 ../php/builder.php:1006
+#: ../php/builder.php:1082 ../php/builder.php:1097
 msgid "Delete"
 msgstr ""
 
-#: ../php/builder.php:1004
+#: ../php/builder.php:1095
 msgid "Edit"
 msgstr ""
 
@@ -433,7 +530,7 @@ msgstr ""
 msgid "Empty Meta Section Title"
 msgstr ""
 
-#: ../php/classes.php:300 ../php/classes.php:1157
+#: ../php/classes.php:300 ../php/classes.php:1151
 msgid "Empty Taxonomies"
 msgstr ""
 
@@ -449,23 +546,23 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: ../php/classes.php:719
+#: ../php/classes.php:723
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:736 ../php/classes.php:774
+#: ../php/classes.php:736 ../php/classes.php:768
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:753 ../php/classes.php:790
+#: ../php/classes.php:751 ../php/classes.php:784
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:995
+#: ../php/classes.php:989
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:1167
+#: ../php/classes.php:1161
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 
@@ -525,11 +622,11 @@ msgstr ""
 msgid "An email field"
 msgstr ""
 
-#: ../php/demo-fields.php:99
+#: ../php/demo-fields.php:100
 msgid "Sample text prepended before section."
 msgstr ""
 
-#: ../php/demo-fields.php:105
+#: ../php/demo-fields.php:108
 msgid "Sample text appended after section."
 msgstr ""
 

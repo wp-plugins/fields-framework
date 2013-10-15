@@ -1,3 +1,6 @@
+.ff-fields .ff-add-template {
+	display: none;
+}
 .ff-fields:not(:last-child) {
 	margin: 0 0 1em 0;
 }

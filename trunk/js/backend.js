@@ -9,9 +9,7 @@ jQuery(function() {
 });
 
 function ff_load() {
-	jQuery('.ff-repeatable').each(function() {
-		ff_repeatable(this);
-	});
+	ff_repeatable();
 
 	ff_datetimepicker();
 	
@@ -28,86 +26,20 @@ function ff_load() {
 	ff_builder();
 }
 
-function ff_repeatable(ff_table) {
-	var table_class = '.ff-repeatable';
-	
-	var add_row = '.ff-add-row';
-	
-	var template_class = '.ff-add-template';
-	
-	var remove_row = '.ff-remove-row';
-
-	var move_class = '.ff-move-row';
-
-	if(jQuery.ui.sortable !== undefined) {
-		jQuery(table_class).find('tbody').each(function() {
-			jQuery(this).sortable({
-					handle: move_class,
-					helper: function(e, ui) {
-						ui.children().each(function() {
-							jQuery(this).width(jQuery(this).width());
-						});
-
-						return ui;
-					},
-					items: '> tr',
+function ff_repeatable() {
+	if(jQuery.fn.repeatable_fields !== undefined) {
+		jQuery('.ff-repeatable').each(function() {
+			jQuery(this).repeatable_fields({
+				wrapper: 'table',
+				container: 'tbody',
+				row: 'tr',
+				add: '.ff-add-row',
+				remove: '.ff-remove-row',
+				move: '.ff-move-row',
+				template: '.ff-add-template',
 			});
 		});
 	}
-
-	jQuery(table_class).on('click', add_row, function(event) {
-		event.stopImmediatePropagation();
-
-		var table = jQuery(this).parents('table').first();
-
-		var table_body = jQuery(table).children('tbody');
-
-		var row_template = JSON.parse(jQuery(table_body).children(template_class).html());
-
-		var new_row = jQuery(row_template).appendTo(table_body);
-
-		var row_count = jQuery(table_body).children('tr').length;
-
-		jQuery('> td label', new_row).each(function() {
-			var ff_for = jQuery(this).attr('for');
-
-			ff_for = ff_for.replace(/-0/, '-' + row_count);
-
-			jQuery(this).attr('for', ff_for);
-		});
-
-		jQuery('> td :input', new_row).each(function() {
-			var ff_name = jQuery(this).attr('name');
-
-			ff_name = ff_name.replace(/\[0\]/, '[' + row_count + ']');
-
-			jQuery(this).attr('name', ff_name);
-
-			var ff_id = jQuery(this).attr('id');
-
-			ff_id = ff_id.replace(/-0/, '-' + row_count);
-			
-			jQuery(this).attr('id', ff_id);
-		});
-
-		jQuery('> td .ff_upload_media', new_row).each(function() {
-			var ff_id = jQuery(this).data('to');
-
-			ff_id = ff_id.replace(/-0/, '-' + row_count);
-			
-			jQuery(this).data('to', ff_id);
-		});
-	});
-
-	jQuery(table_class).on('click', remove_row, function(event) {
-		event.stopImmediatePropagation();
-
-		var row = jQuery(this).parents('tr').first();
-
-		row.remove();
-
-		event.stopImmediatePropagation();
-	});
 }
 
 function ff_datetimepicker() {
@@ -168,14 +100,12 @@ function ff_builder() {
 	jQuery('.ff-builder a').filter(function() {
 		return jQuery(this).attr('href').match(/\=delete&/) == '=delete&';
 	}).click(function() {
-		if(jQuery(this).attr('href').match(/\=delete&/) == '=delete&') {
-			return confirm('Confirm Delete?');
-		}
-
-		return false;
+		return confirm('Confirm Delete?');
 	});
-	
 
+	jQuery('.ff-builder input[name="import-builder"]').click(function() {
+		return confirm('Confirm Import?');
+	});
 
 	if(jQuery.ui.sortable !== undefined) {
 		jQuery('.ff-builder-fields-by-sections').each(function() {

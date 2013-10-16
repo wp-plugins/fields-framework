@@ -1,7 +1,19 @@
 <?php
 ff_create_section('ff-builder', 'admin_sub_menu', array('skip_save' => true, 'parent_uid' => 'ff-admin-menu', 'page_title' => __('Builder', 'fields-framework'), 'menu_title' => __('Builder', 'fields-framework')));
 
-add_action('ff_section_before', 'ff_builder_before');
+if(!empty($_GET['page']) && $_GET['page'] == 'ff-builder') {
+	add_action('ff_section_before', 'ff_builder_before');
+
+	add_action('admin_enqueue_scripts', 'ff_builder_admin_enqueue_scripts');
+}
+
+function ff_builder_admin_enqueue_scripts() {
+	wp_enqueue_style('ff-validationEngine', FF_Registry::$plugins_url . '/css/validationEngine.jquery.css');
+
+	wp_enqueue_script('ff-validationEngine-en', FF_Registry::$plugins_url . '/js/jquery.validationEngine-en.js', array('jquery'));
+
+	wp_enqueue_script('ff-validationEngine', FF_Registry::$plugins_url . '/js/jquery.validationEngine.js', array('jquery'));
+}
 
 function ff_builder_before($section_uid) {
 	if($section_uid != 'ff-builder') {
@@ -742,15 +754,28 @@ function ff_builder_before($section_uid) {
 
 				$type = $_POST['type'];
 
-				if($_POST['action'] == 'create' && !empty($builder[$area][$uid])) {
-					if($area == 'sections') {
-						?><p class="error-message"><?php printf(__('Section UID "%s" is not unique!', 'fields-framework'), $uid); ?></p><?php
+				if($_POST['action'] == 'create') {
+					if(empty($uid)) {
+						if($area == 'sections') {
+							?><p class="error-message"><?php _e('Section UID cannot be blank!', 'fields-framework'); ?></p><?php
+						}
+						elseif($area == 'fields') {
+							?><p class="error-message"><?php _e('Field UID cannot be blank!', 'fields-framework'); ?></p><?php
+						}
+						
+						return;
 					}
-					elseif($area == 'fields') {
-						?><p class="error-message"><?php printf(__('Field UID "%s" is not unique!', 'fields-framework'), $uid); ?></p><?php
+
+					if(!empty($builder[$area][$uid])) {
+						if($area == 'sections') {
+							?><p class="error-message"><?php printf(__('Section UID "%s" is not unique!', 'fields-framework'), $uid); ?></p><?php
+						}
+						elseif($area == 'fields') {
+							?><p class="error-message"><?php printf(__('Field UID "%s" is not unique!', 'fields-framework'), $uid); ?></p><?php
+						}
+						
+						return;
 					}
-					
-					return;
 				}
 				else {
 					$builder[$area][$uid] = array('type' => $type, 'arguments' => $_POST['arguments']);

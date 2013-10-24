@@ -45,6 +45,22 @@
 	vertical-align: middle;
 	cursor: pointer;
 }
+.ff-fields .ff-repeatable > table > tbody {
+	counter-reset: i;
+}
+.ff-fields .ff-repeatable > table > tbody > tr {
+	counter-increment: i;
+}
+.ff-fields .ff-repeatable > table > tbody > tr > th:before {
+	display: inline-block;
+	margin: 0 0.5em 0.5em 0; padding: 0.25em 0.5em;
+	vertical-align: -0.15em;
+	background-color: #fffbcc;
+	border: 0.1em solid #e6db55;
+	font-size: 1.2em; font-weight: bold;
+	color: #555;
+	content: counter(i);
+}
 div[id*="ff_wp_widget"] {
 	overflow: auto !important;
 }

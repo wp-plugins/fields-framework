@@ -754,7 +754,7 @@ function ff_builder_before($section_uid) {
 
 				$type = $_POST['type'];
 
-				if($_POST['action'] == 'create') {
+				if($_POST['action'] == 'create' || $_POST['action'] == 'edit') {
 					if(empty($uid)) {
 						if($area == 'sections') {
 							?><p class="error-message"><?php _e('Section UID cannot be blank!', 'fields-framework'); ?></p><?php
@@ -776,8 +776,7 @@ function ff_builder_before($section_uid) {
 						
 						return;
 					}
-				}
-				else {
+
 					$builder[$area][$uid] = array('type' => $type, 'arguments' => $_POST['arguments']);
 				}
 			}

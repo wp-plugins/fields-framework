@@ -3,7 +3,7 @@
 Plugin Name: Fields Framework
 Plugin URI: http://www.rhyzz.com/fields-framework.html
 Description: A framework which can be used by developers to add fields to various areas of the administration panel.
-Version: 0.8.2
+Version: 0.14.3
 Author: Naif Amoodi
 Author URI: http://www.rhyzz.com/
 */
@@ -19,14 +19,14 @@ add_action('after_setup_theme', 'ff_load');
 
 if(!function_exists('ff_load')) {
 	function ff_load() {
-		$files = array('classes.php', 'functions.php');
+		$files = array('classes.php', 'functions.php', 'admin-menu.php');
 
 		foreach($files as $file) {
 			require_once(plugin_dir_path(__FILE__) . 'php/' . $file);
 		}
 
 		if(strpos(plugins_url(__FILE__), str_replace(ABSPATH, null, get_template_directory())) !== false) {
-			// This must be loading as a standlone plugin from within a theme
+			// Plugin is being loaded from inside a theme (as an embedded standalone version)
 			FF_Registry::$plugins_url = get_template_directory_uri() . '/' . basename(dirname(__FILE__));
 		}
 		else {
@@ -35,19 +35,10 @@ if(!function_exists('ff_load')) {
 
 		load_plugin_textdomain('fields-framework', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 
-		/* This actions are only used in the backend so putting them inside a conditional */
+		/* Adding to the widgets_init action from an init action would be too late hence register the widget here itself */
+		add_action('widgets_init', array('FF_Widget', 'add'));
+
 		if(is_admin()) {
-			/* Priority set to 1 so that this is called before any other call */
-			add_action('admin_menu', 'ff_admin_menu', 1);
-
-			add_action('wp_loaded', 'ff_save_options');
-
-			add_action('created_term', 'ff_save_term', 10, 3);
-
-			add_action('edited_term', 'ff_save_term', 10, 3);
-
-			add_action('delete_term', 'ff_delete_term', 10, 4);
-
 			add_action('admin_enqueue_scripts', 'ff_admin_enqueue_scripts');
 		}
 	}

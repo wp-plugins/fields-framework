@@ -569,7 +569,7 @@ if(!class_exists('FF_Field')) {
 
 		public function admin_enqueue_scripts() {
 			if($this->repeatable == true) {
-				wp_enqueue_script('repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
+				wp_enqueue_script('ff-repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
 			}
 			
 			if(!empty($this->validator)) {

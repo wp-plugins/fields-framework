@@ -13,6 +13,8 @@ function ff_builder_admin_enqueue_scripts() {
 	wp_enqueue_script('ff-validationEngine-en', FF_Registry::$plugins_url . '/js/jquery.validationEngine-en.js', array('jquery'));
 
 	wp_enqueue_script('ff-validationEngine', FF_Registry::$plugins_url . '/js/jquery.validationEngine.js', array('jquery'));
+
+	wp_enqueue_script('ff-repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
 }
 
 function ff_builder_before($section_uid) {

@@ -569,7 +569,7 @@ if(!class_exists('FF_Field')) {
 
 		public function admin_enqueue_scripts() {
 			if($this->repeatable == true) {
-				wp_enqueue_script('repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
+				wp_enqueue_script('ff-repeatable-fields', FF_Registry::$plugins_url . '/js/repeatable-fields.js', array('jquery'));
 			}
 			
 			if(!empty($this->validator)) {
@@ -1194,8 +1194,6 @@ if(!class_exists('FF_Field_Editor')) {
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
-
-			$this->settings = wp_parse_args($this->settings, $settings);
 
 			/* Editor cannot be made repeatable so force it to be false in case the user has tried setting it to true */
 			$this->repeatable = false;

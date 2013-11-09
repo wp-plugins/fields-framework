@@ -1195,8 +1195,6 @@ if(!class_exists('FF_Field_Editor')) {
 		public function __construct($arguments) {
 			parent::__construct($arguments);
 
-			$this->settings = wp_parse_args($this->settings, $settings);
-
 			/* Editor cannot be made repeatable so force it to be false in case the user has tried setting it to true */
 			$this->repeatable = false;
 		}

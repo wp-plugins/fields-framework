@@ -900,6 +900,8 @@ if(!class_exists('FF_Field_DateTime')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-ui-timepicker', FF_Registry::$plugins_url . '/css/jquery-ui-timepicker-addon.css');
@@ -930,6 +932,8 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
@@ -972,6 +976,8 @@ if(!class_exists('FF_Field_Media')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_media();
 	
 			wp_enqueue_script('ff-media-uploader', FF_Registry::$plugins_url . '/js/media-uploader.js');

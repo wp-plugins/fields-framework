@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-11-09 18:28+0530\n"
-"PO-Revision-Date: 2013-11-09 18:28+0530\n"
+"POT-Creation-Date: 2013-12-09 20:20+0530\n"
+"PO-Revision-Date: 2013-12-09 20:20+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Empty Meta Section Title"
 msgstr ""
 
-#: ../php/classes.php:300 ../php/classes.php:1151
+#: ../php/classes.php:300 ../php/classes.php:1157
 msgid "Empty Taxonomies"
 msgstr ""
 
@@ -566,11 +566,11 @@ msgstr ""
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:989
+#: ../php/classes.php:995
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:1161
+#: ../php/classes.php:1167
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 

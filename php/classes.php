@@ -710,96 +710,102 @@ if(!class_exists('FF_Field')) {
 					<tr>
 						<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
 						
-						<td <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
+						<td>
 				<?php endif; ?>
-							<table>
-								<?php if($this->repeatable == true) : ?>
-								<thead>
-									<tr>
-										<th>Move</th>
-					
-										<th>Field</th>
-					
-										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
-									</tr>
-								</thead>
-								<?php endif; ?>
+
+				<?php if($this->repeatable == true) echo '<div class="ff-repeatable">'; ?>
+
+				<table>
+					<?php if($this->repeatable == true) : ?>
+					<thead>
+						<tr>
+							<th>Move</th>
 		
-								<tbody>
+							<th>Field</th>
+		
+							<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
+						</tr>
+					</thead>
+					<?php endif; ?>
+
+					<tbody>
+						<?php
+							if($this->repeatable == true) {
+								$original_name = $this->name;
+
+								$original_id = $this->id;
+								?>
+								<tr class="ff-add-template">
+									<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+				
+									<td>
 									<?php
-										if($this->repeatable == true) {
-											$original_name = $this->name;
-		
-											$original_id = $this->id;
-											?>
-											<tr class="ff-add-template">
-												<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-							
-												<td>
-												<?php
-													$this->name = "{$original_name}[{{row-count-placeholder}}]";
-		
-													$this->id = "{$original_id}-{{row-count-placeholder}}";
-	
-													/* Reset this object's instance to the default value */
-													$this->use_value('default');
-	
-													$this->html();
-												?>
-												</td>
-				
-												<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-											</tr>
-											<?php
-											$values = $this->saved_value;
-	
-											if(ff_empty($values)) {
-												$values = array(null);
-											}
-											elseif(!is_array($values)) {
-												$values = array($values);
-											}
+										$this->name = "{$original_name}[{{row-count-placeholder}}]";
 
-											$i = 0;
+										$this->id = "{$original_id}-{{row-count-placeholder}}";
 
-											foreach($values as $value) {
-												?>
-												<tr>
-													<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-		
-													<td>
-													<?php
-														$this->name = "{$original_name}[{$i}]";
-				
-														$this->id = "{$original_id}-{$i}";
-		
-														$i++;
-	
-														$this->set_saved_value($value);
-	
-														$this->html();
-													?>
-													</td>
-		
-													<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-												</tr>
-												<?php
-											}
-	
-											$this->name = $original_name;
-		
-											$this->id = $original_id;
-										}
-										else {
-											echo '<tr><td>';
-	
-											$this->html();
-					
-											echo '</td></tr>';
-										}
+										/* Reset this object's instance to the default value */
+										$this->use_value('default');
+
+										$this->html();
 									?>
-								</tbody>
-							</table>
+									</td>
+	
+									<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+								</tr>
+								<?php
+								$values = $this->saved_value;
+
+								if(ff_empty($values)) {
+									$values = array(null);
+								}
+								elseif(!is_array($values)) {
+									$values = array($values);
+								}
+
+								$i = 0;
+
+								foreach($values as $value) {
+									?>
+									<tr>
+										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+
+										<td>
+										<?php
+											$this->name = "{$original_name}[{$i}]";
+	
+											$this->id = "{$original_id}-{$i}";
+
+											$i++;
+
+											$this->set_saved_value($value);
+
+											$this->html();
+										?>
+										</td>
+
+										<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+									</tr>
+									<?php
+								}
+
+								$this->name = $original_name;
+
+								$this->id = $original_id;
+							}
+							else {
+								echo '<tr><td>';
+
+								$this->html();
+		
+								echo '</td></tr>';
+							}
+						?>
+					</tbody>
+				</table>
+
+				<?php if($this->repeatable == true) echo '</div>'; ?>
+
 				<?php if($this->minimal == false) : ?>
 							<?php echo wpautop($this->description); ?>
 						</td>
@@ -900,6 +906,8 @@ if(!class_exists('FF_Field_DateTime')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-ui-timepicker', FF_Registry::$plugins_url . '/css/jquery-ui-timepicker-addon.css');
@@ -930,6 +938,8 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
@@ -972,6 +982,8 @@ if(!class_exists('FF_Field_Media')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_media();
 	
 			wp_enqueue_script('ff-media-uploader', FF_Registry::$plugins_url . '/js/media-uploader.js');

@@ -839,7 +839,9 @@ if(!class_exists('FF_Field_Group')) {
 					foreach($this->fields as $field) {
 						$set_saved_value = !ff_empty($value) && is_array($value) && array_key_exists($field->name, $value) ? $value[$field->name] : null;
 
-						$value[$field->name] = $field->set_saved_value($set_saved_value);
+						if(ff_empty($value) || is_array($value)) {
+							$value[$field->name] = $field->set_saved_value($set_saved_value);
+						}
 					}
 				}
 			}

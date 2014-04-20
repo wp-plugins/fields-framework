@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 0.14.10
+Stable tag: 0.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,10 @@ If you feel the need for an additional field type then please use the [support f
 27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.15 =
+* Added new post_ids, post_titles, post_slugs properties and their respective post_ids_not, post_titles_not, post_slugs_not boolean properties which if set to true will inverse the check
+* Modified repeatable-fields.js and changed wrapper variable from global to local
 
 = 0.14.10 =
 * Changed value for "Tested up to" tag

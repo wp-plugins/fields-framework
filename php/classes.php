@@ -149,6 +149,10 @@ if(!class_exists('FF_Post')) {
 		
 		protected $page_templates_not = false, $post_formats_not = false;
 
+		protected $post_ids = array(), $post_titles = array(), $post_slugs = array();
+
+		protected $post_ids_not = false, $post_titles_not = false, $post_slugs_not = false;
+
 		protected $hide_content_editor = false;
 
 		public function __construct($arguments) {
@@ -178,7 +182,7 @@ if(!class_exists('FF_Post')) {
 		public function add($post_type, $post) {
 			foreach($this->post_types as $post_type) {
 				/* Post meta box will be displayed even on posts or pages not saved hence such posts can't have a page template or post format, because they aren't saved. */
-				if((!empty($this->page_templates) || !empty($this->post_formats)) && $post->post_status == 'auto-draft') {
+				if((!empty($this->page_templates) || !empty($this->post_formats) || !empty($this->post_ids) || !empty($this->post_titles) || !empty($this->post_slugs)) && $post->post_status == 'auto-draft') {
 					return;
 				}
 
@@ -206,6 +210,48 @@ if(!class_exists('FF_Post')) {
 					}
 					/* Selected post has the required post format to be ignored hence return */
 					elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post ID. */
+				if(!empty($this->post_ids)) {
+					$post_id = $post->ID;
+
+					/* Selected post does not have the required post ID hence return */
+					if($this->post_ids_not == false && !in_array($post_id, $this->post_ids)) {
+						return;
+					}
+					/* Selected post has the required post ID to be ignored hence return */
+					elseif($this->post_ids_not == true && in_array($post_id, $this->post_ids)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Title. */
+				if(!empty($this->post_titles)) {
+					$post_title = $post->post_title;
+
+					/* Selected post does not have the required post Title hence return */
+					if($this->post_titles_not == false && !in_array($post_title, $this->post_titles)) {
+						return;
+					}
+					/* Selected post has the required post Title to be ignored hence return */
+					elseif($this->post_titles_not == true && in_array($post_title, $this->post_titles)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Slug. */
+				if(!empty($this->post_slugs)) {
+					$post_slug = $post->post_name;
+
+					/* Selected post does not have the required post Slug hence return */
+					if($this->post_slugs_not == false && !in_array($post_slug, $this->post_slugs)) {
+						return;
+					}
+					/* Selected post has the required post Slug to be ignored hence return */
+					elseif($this->post_slugs_not == true && in_array($post_slug, $this->post_slugs)) {
 						return;
 					}
 				}

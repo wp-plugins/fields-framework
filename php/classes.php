@@ -149,6 +149,10 @@ if(!class_exists('FF_Post')) {
 		
 		protected $page_templates_not = false, $post_formats_not = false;
 
+		protected $post_ids = array(), $post_titles = array(), $post_slugs = array();
+
+		protected $post_ids_not = false, $post_titles_not = false, $post_slugs_not = false;
+
 		protected $hide_content_editor = false;
 
 		public function __construct($arguments) {
@@ -178,7 +182,7 @@ if(!class_exists('FF_Post')) {
 		public function add($post_type, $post) {
 			foreach($this->post_types as $post_type) {
 				/* Post meta box will be displayed even on posts or pages not saved hence such posts can't have a page template or post format, because they aren't saved. */
-				if((!empty($this->page_templates) || !empty($this->post_formats)) && $post->post_status == 'auto-draft') {
+				if((!empty($this->page_templates) || !empty($this->post_formats) || !empty($this->post_ids) || !empty($this->post_titles) || !empty($this->post_slugs)) && $post->post_status == 'auto-draft') {
 					return;
 				}
 
@@ -206,6 +210,48 @@ if(!class_exists('FF_Post')) {
 					}
 					/* Selected post has the required post format to be ignored hence return */
 					elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post ID. */
+				if(!empty($this->post_ids)) {
+					$post_id = $post->ID;
+
+					/* Selected post does not have the required post ID hence return */
+					if($this->post_ids_not == false && !in_array($post_id, $this->post_ids)) {
+						return;
+					}
+					/* Selected post has the required post ID to be ignored hence return */
+					elseif($this->post_ids_not == true && in_array($post_id, $this->post_ids)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Title. */
+				if(!empty($this->post_titles)) {
+					$post_title = $post->post_title;
+
+					/* Selected post does not have the required post Title hence return */
+					if($this->post_titles_not == false && !in_array($post_title, $this->post_titles)) {
+						return;
+					}
+					/* Selected post has the required post Title to be ignored hence return */
+					elseif($this->post_titles_not == true && in_array($post_title, $this->post_titles)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Slug. */
+				if(!empty($this->post_slugs)) {
+					$post_slug = $post->post_name;
+
+					/* Selected post does not have the required post Slug hence return */
+					if($this->post_slugs_not == false && !in_array($post_slug, $this->post_slugs)) {
+						return;
+					}
+					/* Selected post has the required post Slug to be ignored hence return */
+					elseif($this->post_slugs_not == true && in_array($post_slug, $this->post_slugs)) {
 						return;
 					}
 				}
@@ -710,96 +756,102 @@ if(!class_exists('FF_Field')) {
 					<tr>
 						<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
 						
-						<td <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
+						<td>
 				<?php endif; ?>
-							<table>
-								<?php if($this->repeatable == true) : ?>
-								<thead>
-									<tr>
-										<th>Move</th>
-					
-										<th>Field</th>
-					
-										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
-									</tr>
-								</thead>
-								<?php endif; ?>
+
+				<?php if($this->repeatable == true) echo '<div class="ff-repeatable">'; ?>
+
+				<table>
+					<?php if($this->repeatable == true) : ?>
+					<thead>
+						<tr>
+							<th>Move</th>
 		
-								<tbody>
+							<th>Field</th>
+		
+							<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
+						</tr>
+					</thead>
+					<?php endif; ?>
+
+					<tbody>
+						<?php
+							if($this->repeatable == true) {
+								$original_name = $this->name;
+
+								$original_id = $this->id;
+								?>
+								<tr class="ff-add-template">
+									<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+				
+									<td>
 									<?php
-										if($this->repeatable == true) {
-											$original_name = $this->name;
-		
-											$original_id = $this->id;
-											?>
-											<tr class="ff-add-template">
-												<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-							
-												<td>
-												<?php
-													$this->name = "{$original_name}[{{row-count-placeholder}}]";
-		
-													$this->id = "{$original_id}-{{row-count-placeholder}}";
-	
-													/* Reset this object's instance to the default value */
-													$this->use_value('default');
-	
-													$this->html();
-												?>
-												</td>
-				
-												<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-											</tr>
-											<?php
-											$values = $this->saved_value;
-	
-											if(ff_empty($values)) {
-												$values = array(null);
-											}
-											elseif(!is_array($values)) {
-												$values = array($values);
-											}
+										$this->name = "{$original_name}[{{row-count-placeholder}}]";
 
-											$i = 0;
+										$this->id = "{$original_id}-{{row-count-placeholder}}";
 
-											foreach($values as $value) {
-												?>
-												<tr>
-													<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-		
-													<td>
-													<?php
-														$this->name = "{$original_name}[{$i}]";
-				
-														$this->id = "{$original_id}-{$i}";
-		
-														$i++;
-	
-														$this->set_saved_value($value);
-	
-														$this->html();
-													?>
-													</td>
-		
-													<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-												</tr>
-												<?php
-											}
-	
-											$this->name = $original_name;
-		
-											$this->id = $original_id;
-										}
-										else {
-											echo '<tr><td>';
-	
-											$this->html();
-					
-											echo '</td></tr>';
-										}
+										/* Reset this object's instance to the default value */
+										$this->use_value('default');
+
+										$this->html();
 									?>
-								</tbody>
-							</table>
+									</td>
+	
+									<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+								</tr>
+								<?php
+								$values = $this->saved_value;
+
+								if(ff_empty($values)) {
+									$values = array(null);
+								}
+								elseif(!is_array($values)) {
+									$values = array($values);
+								}
+
+								$i = 0;
+
+								foreach($values as $value) {
+									?>
+									<tr>
+										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+
+										<td>
+										<?php
+											$this->name = "{$original_name}[{$i}]";
+	
+											$this->id = "{$original_id}-{$i}";
+
+											$i++;
+
+											$this->set_saved_value($value);
+
+											$this->html();
+										?>
+										</td>
+
+										<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+									</tr>
+									<?php
+								}
+
+								$this->name = $original_name;
+
+								$this->id = $original_id;
+							}
+							else {
+								echo '<tr><td>';
+
+								$this->html();
+		
+								echo '</td></tr>';
+							}
+						?>
+					</tbody>
+				</table>
+
+				<?php if($this->repeatable == true) echo '</div>'; ?>
+
 				<?php if($this->minimal == false) : ?>
 							<?php echo wpautop($this->description); ?>
 						</td>
@@ -833,7 +885,9 @@ if(!class_exists('FF_Field_Group')) {
 					foreach($this->fields as $field) {
 						$set_saved_value = !ff_empty($value) && is_array($value) && array_key_exists($field->name, $value) ? $value[$field->name] : null;
 
-						$value[$field->name] = $field->set_saved_value($set_saved_value);
+						if(ff_empty($value) || is_array($value)) {
+							$value[$field->name] = $field->set_saved_value($set_saved_value);
+						}
 					}
 				}
 			}
@@ -900,6 +954,8 @@ if(!class_exists('FF_Field_DateTime')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-ui-timepicker', FF_Registry::$plugins_url . '/css/jquery-ui-timepicker-addon.css');
@@ -930,6 +986,8 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
@@ -972,6 +1030,8 @@ if(!class_exists('FF_Field_Media')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_media();
 	
 			wp_enqueue_script('ff-media-uploader', FF_Registry::$plugins_url . '/js/media-uploader.js');

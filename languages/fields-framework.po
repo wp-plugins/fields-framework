@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Fields Framework\n"
-"POT-Creation-Date: 2013-11-09 18:28+0530\n"
-"PO-Revision-Date: 2013-11-09 18:28+0530\n"
+"POT-Creation-Date: 2014-04-20 18:54+0530\n"
+"PO-Revision-Date: 2014-04-20 18:54+0530\n"
 "Last-Translator: Naif Amoodi <naif@rhyzz.com>\n"
 "Language-Team: Rhyzz <support@rhyzz.com>\n"
 "Language: English\n"
@@ -98,7 +98,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: ../php/builder.php:157 ../php/classes.php:466
+#: ../php/builder.php:157 ../php/classes.php:512
 msgid "Title"
 msgstr ""
 
@@ -530,47 +530,47 @@ msgstr ""
 msgid "Empty Sub Menu Section Menu Title"
 msgstr ""
 
-#: ../php/classes.php:159
+#: ../php/classes.php:163
 msgid "Empty Post Types"
 msgstr ""
 
-#: ../php/classes.php:164
+#: ../php/classes.php:168
 msgid "Empty Meta Section Title"
 msgstr ""
 
-#: ../php/classes.php:300 ../php/classes.php:1151
+#: ../php/classes.php:346 ../php/classes.php:1211
 msgid "Empty Taxonomies"
 msgstr ""
 
-#: ../php/classes.php:424
+#: ../php/classes.php:470
 msgid "Empty Widget Section Title"
 msgstr ""
 
-#: ../php/classes.php:437
+#: ../php/classes.php:483
 msgid "Fields Framework Widget"
 msgstr ""
 
-#: ../php/classes.php:508
+#: ../php/classes.php:554
 msgid "Section"
 msgstr ""
 
-#: ../php/classes.php:723
+#: ../php/classes.php:772
 msgid "Add Row"
 msgstr ""
 
-#: ../php/classes.php:736 ../php/classes.php:768
+#: ../php/classes.php:785 ../php/classes.php:817
 msgid "Move Row"
 msgstr ""
 
-#: ../php/classes.php:751 ../php/classes.php:784
+#: ../php/classes.php:800 ../php/classes.php:833
 msgid "Remove Row"
 msgstr ""
 
-#: ../php/classes.php:989
+#: ../php/classes.php:1049
 msgid "Upload"
 msgstr ""
 
-#: ../php/classes.php:1161
+#: ../php/classes.php:1221
 msgid "One of the Specified Taxonomy is not valid"
 msgstr ""
 

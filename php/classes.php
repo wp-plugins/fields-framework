@@ -1032,7 +1032,15 @@ if(!class_exists('FF_Field_Media')) {
 		public function admin_enqueue_scripts() {
 			parent::admin_enqueue_scripts();
 
-			wp_enqueue_media();
+			$arguments = array();
+
+			global $post;
+
+			if(!empty($post->ID)) {
+				$arguments['post'] = $post->ID;
+			}
+
+			wp_enqueue_media($arguments);
 	
 			wp_enqueue_script('ff-media-uploader', FF_Registry::$plugins_url . '/js/media-uploader.js');
 		}

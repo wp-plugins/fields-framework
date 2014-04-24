@@ -3,8 +3,8 @@ Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 0.15.1
+Tested up to: 3.9
+Stable tag: 0.15.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,9 @@ If you feel the need for an additional field type then please use the [support f
 27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.15.2 =
+Uploaded media not attaching correctly to respective posts
 
 = 0.15.1 =
 Updated readme.txt file

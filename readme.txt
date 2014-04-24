@@ -3,8 +3,8 @@ Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
-Tested up to: 3.7
-Stable tag: 0.14.6
+Tested up to: 3.9
+Stable tag: 0.15.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,7 @@ This plugin can be used to add fields to:
 * Custom [Widgets](http://codex.wordpress.org/WordPress_Widgets)
 * User Profiles
 
-Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats)
+Sections for Posts and Pages can also be displayed conditionally depending on whether a Page uses a certain [Page Template](http://codex.wordpress.org/Page_Templates) or whether a Post uses a certain [Post Format](http://codex.wordpress.org/Post_Formats). Sections can also be displayed conditionally depending on the Post IDs, Titles or Slugs.
 
 * The plugin supports client side validation using JavaScript
 * The plugin can also be placed inside a theme. This is useful if you would like to bundle this plugin with a theme
@@ -99,6 +99,28 @@ If you feel the need for an additional field type then please use the [support f
 27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.15.2 =
+Uploaded media not attaching correctly to respective posts
+
+= 0.15.1 =
+Updated readme.txt file
+
+= 0.15 =
+* Added new post_ids, post_titles, post_slugs properties and their respective post_ids_not, post_titles_not, post_slugs_not boolean properties which if set to true will inverse the check
+* Modified repeatable-fields.js and changed wrapper variable from global to local
+
+= 0.14.10 =
+* Changed value for "Tested up to" tag
+
+= 0.14.9 =
+* Fixed bug related to fields that can accept multiple values
+
+= 0.14.8 =
+* Fixed bug where repeating doesn't work for minimal fields
+
+= 0.14.7 =
+* Fixed bug pertaining to enqueueing of administration scripts
 
 = 0.14.6 =
 * Fixed an undefined variable warning message related to the Editor field

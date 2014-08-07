@@ -3,8 +3,8 @@ Contributors: naifamoodi
 Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
-Tested up to: 3.9
-Stable tag: 0.15.2
+Tested up to: 3.9.2
+Stable tag: 0.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ A framework which can be used by developers to add fields to various areas of th
 
 == Description ==
 
-*Update*: ***Now featuring a visual builder*** to help developers create sections and fields with ease!
+*Update*: ***Now works with PHP 5.2!***
 
 Please show your support for this plugin by giving it [a rating](http://wordpress.org/support/view/plugin-reviews/fields-framework?rate=5#postform)!
 
@@ -99,6 +99,9 @@ If you feel the need for an additional field type then please use the [support f
 27. Builder - Fields By Sections
 
 == Changelog ==
+
+= 0.16 =
+Plugin now works with PHP 5.2. Added new default_value_return_on_front argument which is by default set to true
 
 = 0.15.2 =
 Uploaded media not attaching correctly to respective posts

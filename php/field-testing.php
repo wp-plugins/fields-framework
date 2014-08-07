@@ -14,7 +14,7 @@ ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-text-field');
 
 ff_create_field('ff-field-testing-a-text-field-with-default', 'text', array(
 	'label' => __('A text field with default', 'fields-framework'),
-	'value' => __('Here is a default value for this text field', 'fields-framework')
+	'default_value_return_on_front' => false, 'value' => __('Here is a default value for this text field', 'fields-framework')
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-text-field-with-default');
@@ -29,7 +29,7 @@ ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-text-
 ff_create_field('ff-field-testing-a-repeatable-text-field-with-default', 'text', array(
 	'label' => __('A repeatable text field with default', 'fields-framework'),
 	'repeatable' => true,
-	'value' => __('Here is a default value for this repeatable text field', 'fields-framework')
+	'default_value_return_on_front' => false, 'value' => __('Here is a default value for this repeatable text field', 'fields-framework')
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-text-field-with-default');
@@ -46,7 +46,7 @@ ff_create_field('ff-field-testing-a-select-field-with-default', 'select', array(
 	'label' => __('A select field with default', 'fields-framework'),
 	'options' => array('Duis at nunc a sapien pharetra pretium', 'Aliquam sed risus at eros cursus iaculis', 'Fusce non odio at nisi eleifend gravida', 'Donec condimentum libero vitae tellus vestibulum', 'Non consequat nisl ornare'),
 	'prepend_blank' => true,
-	'value' => 2
+	'default_value_return_on_front' => false, 'value' => 2
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-select-field-with-default');
@@ -65,7 +65,7 @@ ff_create_field('ff-field-testing-a-repeatable-select-field-with-default', 'sele
 	'options' => array('Duis at nunc a sapien pharetra pretium', 'Aliquam sed risus at eros cursus iaculis', 'Fusce non odio at nisi eleifend gravida', 'Donec condimentum libero vitae tellus vestibulum', 'Non consequat nisl ornare'),
 	'prepend_blank' => true,
 	'repeatable' => true,
-	'value' => 4
+	'default_value_return_on_front' => false, 'value' => 4
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-select-field-with-default');
@@ -84,7 +84,7 @@ ff_create_field('ff-field-testing-a-multi-select-field-with-default', 'select', 
 	'options' => array('Duis at nunc a sapien pharetra pretium', 'Aliquam sed risus at eros cursus iaculis', 'Fusce non odio at nisi eleifend gravida', 'Donec condimentum libero vitae tellus vestibulum', 'Non consequat nisl ornare'),
 	'prepend_blank' => true,
 	'multiple' => true,
-	'value' => array(3, 5)
+	'default_value_return_on_front' => false, 'value' => array(3, 5)
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-multi-select-field-with-default');
@@ -94,7 +94,7 @@ ff_create_field('ff-field-testing-a-multi-select-field-with-multi-default', 'sel
 	'options' => array('Duis at nunc a sapien pharetra pretium', 'Aliquam sed risus at eros cursus iaculis', 'Fusce non odio at nisi eleifend gravida', 'Donec condimentum libero vitae tellus vestibulum', 'Non consequat nisl ornare'),
 	'prepend_blank' => true,
 	'multiple' => true,
-	'value' => array(2, 4)
+	'default_value_return_on_front' => false, 'value' => array(2, 4)
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-multi-select-field-with-multi-default');
@@ -115,7 +115,7 @@ ff_create_field('ff-field-testing-a-repeatable-multi-select-field-with-default',
 	'prepend_blank' => true,
 	'repeatable' => true,
 	'multiple' => true,
-	'value' => array(4)
+	'default_value_return_on_front' => false, 'value' => array(4)
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-multi-select-field-with-default');
@@ -126,7 +126,7 @@ ff_create_field('ff-field-testing-a-repeatable-multi-select-field-with-multi-def
 	'prepend_blank' => true,
 	'repeatable' => true,
 	'multiple' => true,
-	'value' => array(2, 4)
+	'default_value_return_on_front' => false, 'value' => array(2, 4)
 ));
 
 ff_add_field_to_section('ff-field-testing', 'ff-field-testing-a-repeatable-multi-select-field-with-multi-default');

@@ -1,5 +1,5 @@
 /*
- * jQuery Repeatable Fields v1.0
+ * jQuery Repeatable Fields (custom version)
  * http://www.rhyzz.com/repeatable-fields.html
  *
  * Copyright (c) 2013 Rhyzz
@@ -30,7 +30,7 @@
 
 		function initialize(parent) {
 			$(settings.wrapper, parent).each(function(index, element) {
-				wrapper = this;
+				var wrapper = this;
 
 				var container = $(wrapper).children(settings.container);
 

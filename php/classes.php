@@ -14,7 +14,7 @@ if(!class_exists('FF_Registry')) {
 
 if(!class_exists('FF_Section')) {
 	abstract class FF_Section {
-		protected $uid, $skip_save = false;
+		public $uid, $skip_save = false;
 
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
@@ -86,7 +86,7 @@ if(!class_exists('FF_Admin_Menus')) {
 
 if(!class_exists('FF_Admin_Menu')) {	
 	class FF_Admin_Menu extends FF_Admin_Menus {
-		protected $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
+		public $page_title, $menu_title, $capability = 'manage_options', $menu_uid, $icon_url, $position;
 		
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -112,7 +112,7 @@ if(!class_exists('FF_Admin_Menu')) {
 
 if(!class_exists('FF_Admin_Sub_Menu')) {
 	class FF_Admin_Sub_Menu extends FF_Admin_Menus {
-		protected $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
+		public $menu_uid, $parent_uid, $page_title, $menu_title, $capability = 'manage_options';
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -143,13 +143,17 @@ if(!class_exists('FF_Admin_Sub_Menu')) {
 
 if(!class_exists('FF_Post')) {
 	class FF_Post extends FF_Section {
-		protected $id, $title, $context = 'advanced', $priority = 'default';
+		public $id, $title, $context = 'advanced', $priority = 'default';
 		
-		protected $post_types = array(), $page_templates = array(), $post_formats = array();
+		public $post_types = array(), $page_templates = array(), $post_formats = array();
 		
-		protected $page_templates_not = false, $post_formats_not = false;
+		public $page_templates_not = false, $post_formats_not = false;
 
-		protected $hide_content_editor = false;
+		public $post_ids = array(), $post_titles = array(), $post_slugs = array();
+
+		public $post_ids_not = false, $post_titles_not = false, $post_slugs_not = false;
+
+		public $hide_content_editor = false;
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -178,7 +182,7 @@ if(!class_exists('FF_Post')) {
 		public function add($post_type, $post) {
 			foreach($this->post_types as $post_type) {
 				/* Post meta box will be displayed even on posts or pages not saved hence such posts can't have a page template or post format, because they aren't saved. */
-				if((!empty($this->page_templates) || !empty($this->post_formats)) && $post->post_status == 'auto-draft') {
+				if((!empty($this->page_templates) || !empty($this->post_formats) || !empty($this->post_ids) || !empty($this->post_titles) || !empty($this->post_slugs)) && $post->post_status == 'auto-draft') {
 					return;
 				}
 
@@ -206,6 +210,48 @@ if(!class_exists('FF_Post')) {
 					}
 					/* Selected post has the required post format to be ignored hence return */
 					elseif($this->post_formats_not == true && in_array($post_format, $this->post_formats)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post ID. */
+				if(!empty($this->post_ids)) {
+					$post_id = $post->ID;
+
+					/* Selected post does not have the required post ID hence return */
+					if($this->post_ids_not == false && !in_array($post_id, $this->post_ids)) {
+						return;
+					}
+					/* Selected post has the required post ID to be ignored hence return */
+					elseif($this->post_ids_not == true && in_array($post_id, $this->post_ids)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Title. */
+				if(!empty($this->post_titles)) {
+					$post_title = $post->post_title;
+
+					/* Selected post does not have the required post Title hence return */
+					if($this->post_titles_not == false && !in_array($post_title, $this->post_titles)) {
+						return;
+					}
+					/* Selected post has the required post Title to be ignored hence return */
+					elseif($this->post_titles_not == true && in_array($post_title, $this->post_titles)) {
+						return;
+					}
+				}
+
+				/* Check if this section requires a post Slug. */
+				if(!empty($this->post_slugs)) {
+					$post_slug = $post->post_name;
+
+					/* Selected post does not have the required post Slug hence return */
+					if($this->post_slugs_not == false && !in_array($post_slug, $this->post_slugs)) {
+						return;
+					}
+					/* Selected post has the required post Slug to be ignored hence return */
+					elseif($this->post_slugs_not == true && in_array($post_slug, $this->post_slugs)) {
 						return;
 					}
 				}
@@ -290,7 +336,7 @@ if(!class_exists('FF_Post')) {
 
 if(!class_exists('FF_Taxonomy')) {
 	class FF_Taxonomy extends FF_Section {
-		protected $taxonomies = array();
+		public $taxonomies = array();
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -414,7 +460,7 @@ if(!class_exists('FF_User')) {
 
 if(!class_exists('FF_Widget')) {
 	class FF_Widget extends FF_Section {
-		protected $title;
+		public $title;
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -495,8 +541,6 @@ if(!class_exists('FF_WP_Widget')) {
 					$class = new ReflectionClass($section);
 
 					$property = $class->getProperty('title');
-					
-					$property->setAccessible(true);
 
 					$options[$section_uid] = $property->getValue($section);
 				}
@@ -530,8 +574,6 @@ if(!class_exists('FF_WP_Widget')) {
 				$class = new ReflectionClass($section);
 
 				$property = $class->getProperty('skip_save');
-				
-				$property->setAccessible(true);
 
 				if($property->getValue($section) == false && !empty(FF_Registry::$fields_by_sections[$section_uid])) {
 					foreach(FF_Registry::$fields_by_sections[$section_uid] as $field) {
@@ -552,9 +594,9 @@ if(!class_exists('FF_Field')) {
 		default_value is a property which holds the field's default value
 		value is a property which is either set to use saved_value or if that's empty then it uses default_value
 		*/
-		protected $uid, $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $placeholder, $repeatable = false, $minimal = false;
+		public $uid, $name, $label, $id, $class, $description, $value, $saved_value, $default_value, $default_value_return_on_front = true, $placeholder, $repeatable = false, $minimal = false;
 
-		protected $validator = array();
+		public $validator = array();
 
 		public function __construct($arguments) {
 			ff_set_object_defaults($this, $arguments);
@@ -600,7 +642,12 @@ if(!class_exists('FF_Field')) {
 					$value = $this->value = $this->saved_value;
 				}
 				elseif($this->repeatable != true) {
-					$value = $this->value = $this->default_value;
+					if(is_admin()) {
+						$value = $this->value = $this->default_value;
+					}
+					elseif($this->default_value_return_on_front == true) {
+						$value = $this->value = $this->default_value;
+					}
 				}
 			}
 
@@ -710,96 +757,102 @@ if(!class_exists('FF_Field')) {
 					<tr>
 						<th><label for="<?php echo $this->id; ?>"><?php echo $this->label; ?></label></th>
 						
-						<td <?php if($this->repeatable == true) echo 'class="ff-repeatable"'; ?>>
+						<td>
 				<?php endif; ?>
-							<table>
-								<?php if($this->repeatable == true) : ?>
-								<thead>
-									<tr>
-										<th>Move</th>
-					
-										<th>Field</th>
-					
-										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
-									</tr>
-								</thead>
-								<?php endif; ?>
+
+				<?php if($this->repeatable == true) echo '<div class="ff-repeatable">'; ?>
+
+				<table>
+					<?php if($this->repeatable == true) : ?>
+					<thead>
+						<tr>
+							<th>Move</th>
 		
-								<tbody>
+							<th>Field</th>
+		
+							<th><img src="<?php echo FF_Registry::$plugins_url . '/images/add.png'; ?>" class="ff-add-row" alt="<?php _e('Add Row', 'fields-framework'); ?>" /></th>
+						</tr>
+					</thead>
+					<?php endif; ?>
+
+					<tbody>
+						<?php
+							if($this->repeatable == true) {
+								$original_name = $this->name;
+
+								$original_id = $this->id;
+								?>
+								<tr class="ff-add-template">
+									<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+				
+									<td>
 									<?php
-										if($this->repeatable == true) {
-											$original_name = $this->name;
-		
-											$original_id = $this->id;
-											?>
-											<tr class="ff-add-template">
-												<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-							
-												<td>
-												<?php
-													$this->name = "{$original_name}[{{row-count-placeholder}}]";
-		
-													$this->id = "{$original_id}-{{row-count-placeholder}}";
-	
-													/* Reset this object's instance to the default value */
-													$this->use_value('default');
-	
-													$this->html();
-												?>
-												</td>
-				
-												<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-											</tr>
-											<?php
-											$values = $this->saved_value;
-	
-											if(ff_empty($values)) {
-												$values = array(null);
-											}
-											elseif(!is_array($values)) {
-												$values = array($values);
-											}
+										$this->name = "{$original_name}[{{row-count-placeholder}}]";
 
-											$i = 0;
+										$this->id = "{$original_id}-{{row-count-placeholder}}";
 
-											foreach($values as $value) {
-												?>
-												<tr>
-													<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
-		
-													<td>
-													<?php
-														$this->name = "{$original_name}[{$i}]";
-				
-														$this->id = "{$original_id}-{$i}";
-		
-														$i++;
-	
-														$this->set_saved_value($value);
-	
-														$this->html();
-													?>
-													</td>
-		
-													<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
-												</tr>
-												<?php
-											}
-	
-											$this->name = $original_name;
-		
-											$this->id = $original_id;
-										}
-										else {
-											echo '<tr><td>';
-	
-											$this->html();
-					
-											echo '</td></tr>';
-										}
+										/* Reset this object's instance to the default value */
+										$this->use_value('default');
+
+										$this->html();
 									?>
-								</tbody>
-							</table>
+									</td>
+	
+									<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+								</tr>
+								<?php
+								$values = $this->saved_value;
+
+								if(ff_empty($values)) {
+									$values = array(null);
+								}
+								elseif(!is_array($values)) {
+									$values = array($values);
+								}
+
+								$i = 0;
+
+								foreach($values as $value) {
+									?>
+									<tr>
+										<th><img src="<?php echo FF_Registry::$plugins_url . '/images/move.png'; ?>" class="ff-move-row" alt="<?php _e('Move Row', 'fields-framework'); ?>" /></th>
+
+										<td>
+										<?php
+											$this->name = "{$original_name}[{$i}]";
+	
+											$this->id = "{$original_id}-{$i}";
+
+											$i++;
+
+											$this->set_saved_value($value);
+
+											$this->html();
+										?>
+										</td>
+
+										<td><img src="<?php echo FF_Registry::$plugins_url . '/images/remove.png'; ?>" class="ff-remove-row" alt="<?php _e('Remove Row', 'fields-framework'); ?>" /></td>
+									</tr>
+									<?php
+								}
+
+								$this->name = $original_name;
+
+								$this->id = $original_id;
+							}
+							else {
+								echo '<tr><td>';
+
+								$this->html();
+		
+								echo '</td></tr>';
+							}
+						?>
+					</tbody>
+				</table>
+
+				<?php if($this->repeatable == true) echo '</div>'; ?>
+
 				<?php if($this->minimal == false) : ?>
 							<?php echo wpautop($this->description); ?>
 						</td>
@@ -816,7 +869,7 @@ if(!class_exists('FF_Field')) {
 
 if(!class_exists('FF_Field_Group')) {
 	class FF_Field_Group extends FF_Field {
-		protected $fields = array();
+		public $fields = array();
 
 		public function set_saved_value($saved_value) {
 			$saved_value = parent::set_saved_value($saved_value);
@@ -833,7 +886,9 @@ if(!class_exists('FF_Field_Group')) {
 					foreach($this->fields as $field) {
 						$set_saved_value = !ff_empty($value) && is_array($value) && array_key_exists($field->name, $value) ? $value[$field->name] : null;
 
-						$value[$field->name] = $field->set_saved_value($set_saved_value);
+						if(ff_empty($value) || is_array($value)) {
+							$value[$field->name] = $field->set_saved_value($set_saved_value);
+						}
 					}
 				}
 			}
@@ -875,7 +930,7 @@ if(!class_exists('FF_Field_Group')) {
 
 if(!class_exists('FF_Field_Text')) {
 	class FF_Field_Text extends FF_Field {
-		protected $class = 'large-text';
+		public $class = 'large-text';
 	
 		public function html() {
 			echo '<input type="text" name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" value="' . esc_attr($this->value) . '" class="' . esc_attr($this->class) . '"';
@@ -891,7 +946,7 @@ if(!class_exists('FF_Field_Text')) {
 
 if(!class_exists('FF_Field_DateTime')) {
 	class FF_Field_DateTime extends FF_Field {
-		protected $class = 'large-text ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
+		public $class = 'large-text ff-datetime', $date_format = 'mm/dd/yy', $time_format = 'hh:mm:ss tt';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -900,6 +955,8 @@ if(!class_exists('FF_Field_DateTime')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-ui-timepicker', FF_Registry::$plugins_url . '/css/jquery-ui-timepicker-addon.css');
@@ -921,7 +978,7 @@ if(!class_exists('FF_Field_DateTime')) {
 
 if(!class_exists('FF_Field_ColorPicker')) {
 	class FF_Field_ColorPicker extends FF_Field {
-		protected $class = 'large-text ff-colorpicker';
+		public $class = 'large-text ff-colorpicker';
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -930,6 +987,8 @@ if(!class_exists('FF_Field_ColorPicker')) {
 		}
 	
 		public function admin_enqueue_scripts() {
+			parent::admin_enqueue_scripts();
+
 			wp_enqueue_style('ff-ui-custom', FF_Registry::$plugins_url . '/css/jquery-ui.custom.css');
 
 			wp_enqueue_style('ff-colorpicker', FF_Registry::$plugins_url . '/css/jquery.colorpicker.css');
@@ -963,7 +1022,7 @@ if(!class_exists('FF_Field_Hidden')) {
 
 if(!class_exists('FF_Field_Media')) {
 	class FF_Field_Media extends FF_Field {
-		protected $class = 'large-text', $library;
+		public $class = 'large-text', $library;
 	
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -972,7 +1031,17 @@ if(!class_exists('FF_Field_Media')) {
 		}
 	
 		public function admin_enqueue_scripts() {
-			wp_enqueue_media();
+			parent::admin_enqueue_scripts();
+
+			$arguments = array();
+
+			global $post;
+
+			if(!empty($post->ID)) {
+				$arguments['post'] = $post->ID;
+			}
+
+			wp_enqueue_media($arguments);
 	
 			wp_enqueue_script('ff-media-uploader', FF_Registry::$plugins_url . '/js/media-uploader.js');
 		}
@@ -993,7 +1062,7 @@ if(!class_exists('FF_Field_Media')) {
 
 if(!class_exists('FF_Field_Textarea')) {
 	class FF_Field_Textarea extends FF_Field {
-		protected $class = 'large-text', $rows = 5, $cols = 50;
+		public $class = 'large-text', $rows = 5, $cols = 50;
 
 		public function html() {
 			echo '<textarea name="' . esc_attr($this->name) . '" id="' . esc_attr($this->id) . '" placeholder="' . esc_attr($this->placeholder) . '" class="' . esc_attr($this->class) . '" rows="' . esc_attr($this->rows) . '" cols="' . esc_attr($this->cols) . '"';
@@ -1009,7 +1078,7 @@ if(!class_exists('FF_Field_Textarea')) {
 
 if(!class_exists('FF_Field_Multiple')) {
 	abstract class FF_Field_Multiple extends FF_Field {
-		protected $multiple;
+		public $multiple;
 
 		public function use_value($type = null) {
 			$value = parent::use_value($type);
@@ -1035,7 +1104,7 @@ if(!class_exists('FF_Field_Multiple')) {
 
 if(!class_exists('FF_Field_Checkbox')) {
 	class FF_Field_Checkbox extends FF_Field_Multiple {
-		protected $options = array(), $multiple = true;
+		public $options = array(), $multiple = true;
 
 		public function html() {
 			$name = $this->get_name();
@@ -1063,7 +1132,7 @@ if(!class_exists('FF_Field_Checkbox')) {
 
 if(!class_exists('FF_Field_Radio')) {
 	class FF_Field_Radio extends FF_Field {
-		protected $options = array();
+		public $options = array();
 
 		public function html() {
 			$options = $this->options;
@@ -1089,7 +1158,7 @@ if(!class_exists('FF_Field_Radio')) {
 
 if(!class_exists('FF_Field_Select')) {
 	class FF_Field_Select extends FF_Field_Multiple {
-		protected $options = array(), $multiple = false, $size = 5, $prepend_blank = true;
+		public $options = array(), $multiple = false, $size = 5, $prepend_blank = true;
 
 		public function html() {
 			$name = $this->get_name();
@@ -1121,7 +1190,7 @@ if(!class_exists('FF_Field_Select')) {
 
 if(!class_exists('FF_Field_Select_Posts')) {
 	class FF_Field_Select_Posts extends FF_Field_Select {
-		protected $parameters = array();
+		public $parameters = array();
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -1141,7 +1210,7 @@ if(!class_exists('FF_Field_Select_Posts')) {
 
 if(!class_exists('FF_Field_Select_Terms')) {
 	class FF_Field_Select_Terms extends FF_Field_Select {
-		protected $taxonomies, $parameters = array();
+		public $taxonomies, $parameters = array();
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -1170,7 +1239,7 @@ if(!class_exists('FF_Field_Select_Terms')) {
 
 if(!class_exists('FF_Field_Select_Users')) {
 	class FF_Field_Select_Users extends FF_Field_Select {
-		protected $parameters = array();
+		public $parameters = array();
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);
@@ -1190,7 +1259,7 @@ if(!class_exists('FF_Field_Select_Users')) {
 
 if(!class_exists('FF_Field_Editor')) {
 	class FF_Field_Editor extends FF_Field {
-		protected $settings = array();
+		public $settings = array();
 
 		public function __construct($arguments) {
 			parent::__construct($arguments);

@@ -1,9 +1,9 @@
 /*
- * jQuery Repeatable Fields v1.0
+ * jQuery Repeatable Fields v1.2
  * http://www.rhyzz.com/repeatable-fields.html
  *
- * Copyright (c) 2013 Rhyzz
- * License GPL
+ * Copyright (c) 2014 Rhyzz
+ * License MIT
 */
 
 (function($) {
@@ -21,6 +21,7 @@
 			after_add: after_add,
 			before_remove: null,
 			after_remove: null,
+			sortable_options: null,
 		}
 
 		var settings = $.extend(default_settings, custom_settings);
@@ -30,13 +31,27 @@
 
 		function initialize(parent) {
 			$(settings.wrapper, parent).each(function(index, element) {
-				wrapper = this;
+				var wrapper = this;
 
 				var container = $(wrapper).children(settings.container);
 
 				// Disable all form elements inside the row template
-				$(container).children(settings.template).find(':input').each(function() {
-					jQuery(this).prop('disabled', true);
+				$(container).children(settings.template).hide().find(':input').each(function() {
+					$(this).prop('disabled', true);
+				});
+
+				var row_count = 1;
+
+				$(container).children(settings.row).each(function() {
+					if($(this).hasClass(settings.template.replace('.', '')) === true) {
+						return true;
+					}
+
+					var current_row_count = $(this).data('rf-row-count');
+
+					$(this).attr('data-rf-row-count', row_count);
+
+					row_count++;
 				});
 
 				$(wrapper).on('click', settings.add, function(event) {
@@ -45,8 +60,8 @@
 					var row_template = $($(container).children(settings.template).clone().removeClass(settings.template.replace('.', ''))[0].outerHTML);
 
 					// Enable all form elements inside the row template
-					jQuery(row_template).find(':input').each(function() {
-						jQuery(this).prop('disabled', false);
+					$(row_template).find(':input').each(function() {
+						$(this).prop('disabled', false);
 					});
 
 					if(typeof settings.before_add === 'function') {
@@ -79,19 +94,42 @@
 					}
 				});
 
-				if(settings.is_sortable == true && typeof $.ui !== 'undefined' && typeof $.ui.sortable !== 'undefined') {
-					$(wrapper).find(settings.container).sortable({
-						handle: settings.move,
-						row: $(settings.row, '>')
-					});
+				if(settings.is_sortable === true && typeof $.ui !== 'undefined' && typeof $.ui.sortable !== 'undefined') {
+					var sortable_options = settings.sortable_options !== null ? settings.sortable_options : {};
+
+					sortable_options.handle = settings.move;
+
+					$(wrapper).find(settings.container).sortable(sortable_options);
 				}
 			});
 		}
 
 		function after_add(container, new_row) {
-			var row_count = $(container).children(settings.row).filter(function() {
-				return !jQuery(this).hasClass(settings.template.replace('.', ''));
-			}).length;
+			var row_count;
+
+			$(new_row).parent(settings.container).children(settings.row).each(function() {
+				if($(this).hasClass(settings.template.replace('.', '')) === true) {
+					return true;
+				}
+
+				var current_row_count = $(this).data('rf-row-count');
+
+				if(typeof current_row_count === 'undefined') {
+					var current_row_count = $(container).children(settings.row).filter(function() {
+						return !$(this).hasClass(settings.template.replace('.', ''));
+					}).length;
+				}
+				else {
+					current_row_count++;
+				}
+
+				if(typeof row_count === 'undefined' || current_row_count > row_count) {
+					row_count = current_row_count;
+				}
+
+			});
+
+			$(new_row).attr('data-rf-row-count', row_count);
 
 			$('*', new_row).each(function() {
 				$.each(this.attributes, function(index, element) {

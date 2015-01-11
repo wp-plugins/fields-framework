@@ -4,7 +4,7 @@ Donate link: http://www.rhyzz.com/donate.html
 Tags: fields-framework, field-framework, custom-fields, custom-field, fields, field, advanced-custom-fields, magic-fields, more-fields, repeater, meta-box, metabox, cck, user-meta, repeater, repeater-fields, admin-fields, group-fields, field-groups, taxonomy-fields, taxonomy-field, widgets-fields, widget-fields, admin-menu-fields, post-fields, page-fields, custom-post-fields, custom-post-type-fields, category-fields, tag-fields, custom-taxonomy-fields, user-fields, profile-fields, field-sets, field-set, field-section, field-sections
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 0.18
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,20 +100,24 @@ If you feel the need for an additional field type then please use the [support f
 
 == Changelog ==
 
+= 1.0 =
+* Using new version of jQuery repeatable fields plugin
+* Changing major version number from 0 to 1
+
 = 0.18 =
-Fixed bug related to the jQuery repeatable fields plugin. Also changed value for Tested up to 4.1
+* Fixed bug related to the jQuery repeatable fields plugin. Also changed value for Tested up to 4.1
 
 = 0.17.1 =
-Changed value for Tested up to to 4.0
+* Changed value for Tested up to to 4.0
 
 = 0.16.1 =
-Plugin now works with PHP 5.2. Added new default_value_return_on_front argument which is by default set to true
+* Plugin now works with PHP 5.2. Added new default_value_return_on_front argument which is by default set to true
 
 = 0.15.2 =
-Uploaded media not attaching correctly to respective posts
+* Uploaded media not attaching correctly to respective posts
 
 = 0.15.1 =
-Updated readme.txt file
+* Updated readme.txt file
 
 = 0.15 =
 * Added new post_ids, post_titles, post_slugs properties and their respective post_ids_not, post_titles_not, post_slugs_not boolean properties which if set to true will inverse the check

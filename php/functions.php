@@ -352,8 +352,6 @@ if(!function_exists('ff_set_object_defaults')) {
 		$properties = $reflection->getProperties();
 
 		foreach($properties as $property) {
-			$property->setAccessible(true);
-
 			$property_name = $property->getName();
 
 			if(isset($arguments[$property_name])) {
